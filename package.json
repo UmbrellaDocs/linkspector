@@ -1,7 +1,7 @@
 {
   "name": "@umbrelladocs/linkspector",
   "version": "0.1.0",
-  "description": "Check all hyperlinks in multiple markup languages.",
+  "description": "Uncover broken links in your content.",
   "type": "module",
   "main": "index.js",
   "repository": {
