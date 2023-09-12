@@ -1,5 +1,8 @@
-# Linkspector
-> Uncover broken links in your content.
+<p align="center">
+  <a href="https://bun.sh"><img src="https://github.com/UmbrellaDocs/linkspector/assets/23069445/ec17bf78-2979-4195-b770-1ef0cf5c7c87" alt="Logo" height=170></a>
+</p>
+<h3 align="center">Uncover broken links in your content.</h3>
+<h1 align="center">Linkspector</h1>
 
 Linkspector is a CLI app that checks for dead hyperlinks in files.
 It supports multiple markup languages such as Markdown, AsciiDoc (coming soon), and ReStructured Text (coming soon).
@@ -112,7 +115,7 @@ The `ignorePatterns` section allows you to define regular expressions that match
 ```yaml
 ignorePatterns:
   - pattern: "^https://example.com/skip/.*$"
-  - pattern: "^(https?|ftp)://[^\s/$.?#].[^\s]*$"
+  - pattern: "^(ftp)://[^\\s/$?#]*\\.[^\\s]*$"
 ```
 
 In this example, URLs matching the specified patterns will be skipped during link checking.
@@ -169,7 +172,7 @@ excludedDirs:
 baseUrl: https://example.com
 ignorePatterns:
   - pattern: "^https://example.com/skip/.*$"
-  - pattern: "^(https?|ftp)://[^\s/$.?#].[^\s]*$"
+  - pattern: "^(ftp)://[^\\s/$?#]*\\.[^\\s]*$"
 replacementPatterns:
   - pattern: "(https?://example.com)/(\\w+)/(\\d+)"
     replacement: "$1/id/$3"
