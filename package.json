@@ -1,0 +1,35 @@
+{
+  "name": "@umbrelladocs/linkspector",
+  "version": "0.1.0",
+  "description": "Check all hyperlinks in multiple markup languages.",
+  "type": "module",
+  "main": "index.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/UmbrellaDocs/linkspector.git"
+  },
+  "keywords": [
+    "linkspector"
+  ],
+  "bin": {
+    "linkspector": "./index.js"
+  },
+  "author": "Gaurav Nelson",
+  "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/UmbrellaDocs/linkspector/issues"
+  },
+  "homepage": "https://github.com/UmbrellaDocs/linkspector#readme",
+  "dependencies": {
+    "commander": "^11.0.0",
+    "glob": "^10.3.4",
+    "ignore": "^5.2.4",
+    "joi": "^17.10.1",
+    "js-yaml": "^4.1.0",
+    "kleur": "^4.1.5",
+    "puppeteer": "^21.1.1",
+    "remark-gfm": "^3.0.1",
+    "remark-parse": "^10.0.2",
+    "unified": "^11.0.3"
+  }
+}
