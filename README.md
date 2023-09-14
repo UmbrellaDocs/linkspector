@@ -24,7 +24,7 @@ Linkspector is a powerful tool for anyone who creates content using markup langu
 Before you can use Linkspector, you need to install it. You can do this using the following command:
 
 ```bash
-npm install -g linkspector
+npm install -g @umbrelladocs/linkspector
 ```
 
 This command installs Linkspector globally, allowing you to use it from anywhere in your terminal. If you don't want to install using `npm` you can download the binary from GitHub releases.
