@@ -8,6 +8,7 @@ import kleur from "kleur";
 import { validateConfig } from "./lib/validate-config.js";
 import { prepareFilesList } from "./lib/prepare-file-list.js";
 import { extractMarkdownHyperlinks } from "./lib/extract-markdown-hyperlinks.js";
+import { extractAsciiDocLinks } from "./lib/extract-asciidoc-hyperlinks.js";
 import { getUniqueLinks } from "./lib/get-unique-links.js";
 import { checkHyperlinks } from "./lib/batch-check-links.js";
 import { updateLinkstatusObj } from "./lib/update-linkstatus-obj.js";
@@ -24,7 +25,11 @@ program
 
     // Check if the config file exists
     if (!existsSync(configFile)) {
-      console.error(kleur.red("Error: Configuration file not found. Create a '.linkspector.yml' file at the root of your project or use the '--config' option to specify another configuration file."));
+      console.error(
+        kleur.red(
+          "Error: Configuration file not found. Create a '.linkspector.yml' file at the root of your project or use the '--config' option to specify another configuration file."
+        )
+      );
       process.exit(1);
     }
 
@@ -64,10 +69,23 @@ program
       // Process each file
       for (const file of filesToCheck) {
         const relativeFilePath = path.relative(process.cwd(), file);
-        const fileContent = readFileSync(file, "utf8");
 
-        // Extract hyperlinks from the Markdown file
-        const astNodes = extractMarkdownHyperlinks(fileContent);
+        // Get the file extension
+        const fileExtension = path.extname(file).substring(1).toLowerCase(); // Get the file extension without the leading dot and convert to lowercase
+
+        let astNodes;
+
+        // Check the file extension and use the appropriate function to extract links
+        if (
+          ["asciidoc", "adoc", "asc"].includes(fileExtension) &&
+          config.fileExtensions &&
+          config.fileExtensions.includes(fileExtension)
+        ) {
+          astNodes = await extractAsciiDocLinks(file);
+        } else {
+          const fileContent = readFileSync(file, "utf8");
+          astNodes = extractMarkdownHyperlinks(fileContent);
+        }
 
         // Get unique hyperlinks
         const uniqueLinks = getUniqueLinks(astNodes);
