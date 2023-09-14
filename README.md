@@ -5,7 +5,7 @@
 <h1 align="center">Linkspector</h1>
 
 Linkspector is a CLI app that checks for dead hyperlinks in files.
-It supports multiple markup languages such as Markdown, AsciiDoc (coming soon), and ReStructured Text (coming soon).
+It supports multiple markup languages such as Markdown, AsciiDoc (limited - hyperlinks only), and ReStructured Text (coming soon).
 
 With Linkspector, you can easily check all hyperlinks in your files, ensuring that they are not broken and that your readers can access all the relevant content.
 The app allows you to quickly and easily identify any broken links, so you can fix them before publishing your content.
