@@ -2,7 +2,7 @@
 
 name: Publish on NPM
 
-on:  
+on:
   push:
     tags:
       - '*'
@@ -16,6 +16,7 @@ jobs:
         with:
           node-version: 16
           registry-url: https://registry.npmjs.org/
+      - run: npm install && rm -rf node_modules
       - run: npm ci
       - run: npm publish --access public
         env:
