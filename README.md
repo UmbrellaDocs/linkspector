@@ -201,10 +201,10 @@ If there are no errors, linkspector shows the following message:
 ```
 
 ## What's planned
-- [ ] Spinner for local runs.
+- [x] Spinner for local runs.
 - [ ] Create a GitHub action.
 - [ ] Modified files only check in pull requests.
-- [ ] Asciidoc support.
+- [x] Asciidoc support.
 - [ ] ReStructured Text support.
 - [ ] Disable binary files downlaod.
 - [ ] JSON output for `failed-only` or `all` links.

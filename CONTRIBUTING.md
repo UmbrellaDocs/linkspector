@@ -60,4 +60,4 @@ Follow these guidelines for commit messages:
 
 ## License
 
-By contributing to this project, you agree that your contributions will be licensed under the project's [LICENSE](LICENSE.md).
+By contributing to this project, you agree that your contributions will be licensed under the project's [LICENSE](LICENSE).
