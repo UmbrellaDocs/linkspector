@@ -3,7 +3,7 @@
   "version": "0.2.2",
   "description": "Uncover broken links in your content.",
   "type": "module",
-  "main": "index.js",
+  "main": "linkspector.js",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/UmbrellaDocs/linkspector.git"
