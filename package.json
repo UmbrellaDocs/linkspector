@@ -1,6 +1,6 @@
 {
   "name": "@umbrelladocs/linkspector",
-  "version": "0.2.1",
+  "version": "0.2.2",
   "description": "Uncover broken links in your content.",
   "type": "module",
   "main": "index.js",

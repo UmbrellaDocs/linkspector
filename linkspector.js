@@ -1,3 +1,4 @@
+import { execSync } from "child_process";
 import { readFileSync, existsSync } from "fs";
 import path from "path";
 import yaml from "js-yaml";
@@ -8,6 +9,16 @@ import { extractAsciiDocLinks } from "./lib/extract-asciidoc-hyperlinks.js";
 import { getUniqueLinks } from "./lib/get-unique-links.js";
 import { checkHyperlinks } from "./lib/batch-check-links.js";
 import { updateLinkstatusObj } from "./lib/update-linkstatus-obj.js";
+
+// Function to check if git is installed
+function isGitInstalled() {
+  try {
+    execSync("git --version", { stdio: "ignore" });
+    return true;
+  } catch (error) {
+    return false;
+  }
+}
 
 export async function* linkspector(configFile) {
   // Check if the config file exists
@@ -45,7 +56,38 @@ export async function* linkspector(configFile) {
   }
 
   // Prepare the list of files to check
-  const filesToCheck = prepareFilesList(config);
+  let filesToCheck = prepareFilesList(config);
+
+  // Convert all paths in filesToCheck to relative paths
+  filesToCheck = filesToCheck.map(file => path.relative(process.cwd(), file));
+
+  // Check if only modified files should be checked
+  if (config.modifiedFilesOnly) {
+    // Check if git is installed
+    if (!isGitInstalled()) {
+      console.error("Error: Git is not installed or not found in the system path.");
+      process.exit(1);
+    }
+
+    // Get the list of modified files from the last git commit
+    const modifiedFiles = execSync("git diff --name-only HEAD HEAD~1", { encoding: "utf8" }).split("\n");
+
+    // Filter out files that are not in the list of files to check or do not have the correct extension
+    const modifiedFilesToCheck = modifiedFiles.filter(file => {
+      const fileExtension = path.extname(file).substring(1).toLowerCase();
+      return filesToCheck.includes(file) && (config.fileExtensions || ["md"]).includes(fileExtension);
+    });
+
+    // If no modified files are in the list of files to check, exit with a message
+    if (modifiedFilesToCheck.length === 0) {
+      console.log("Skipped link checking. Modified files are not specified in the configuration.");
+      process.exit(0);
+    }
+
+    // Otherwise, only check the modified files
+    filesToCheck = modifiedFilesToCheck;
+    console.log(filesToCheck)
+  }
 
   // Initialize an array to store link status objects
   let linkStatusObjects = [];
@@ -73,7 +115,6 @@ export async function* linkspector(configFile) {
 
     // Get unique hyperlinks
     const uniqueLinks = getUniqueLinks(astNodes);
-    //console.log(JSON.stringify(uniqueLinks))
 
     // Check the status of hyperlinks
     const linkStatus = await checkHyperlinks(uniqueLinks);

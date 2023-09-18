@@ -154,6 +154,17 @@ useGitIgnore: true
 
 When enabled, the app will respect the `.gitignore` rules during link checking.
 
+### Check Modified Files Only
+The `modifiedFilesOnly` option, when set to `true`, indicates that Linkspector should only check the files that have been modified in the last git commit. For example:
+
+```yaml
+modifiedFilesOnly: true
+```
+When enabled, Linkspector will use `git` to find the list of modified files and only check those files. Please note that this option requires `git` to be installed and available on your system path. If `git` is not installed or not found in the system path, Linkspector will throw an error.
+
+Also, if no modified files are found in the list of files to check, Linkspector will skip link checking and exit with a message indicating that modified files are not specified in the configuration.
+
+
 ### Sample configuration
 ```yml
 files:
@@ -203,7 +214,7 @@ If there are no errors, linkspector shows the following message:
 ## What's planned
 - [x] Spinner for local runs.
 - [ ] Create a GitHub action.
-- [ ] Modified files only check in pull requests.
+- [x] Modified files only check.
 - [x] Asciidoc support.
 - [ ] ReStructured Text support.
 - [ ] Disable binary files downlaod.

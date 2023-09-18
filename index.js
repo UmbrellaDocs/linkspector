@@ -7,7 +7,7 @@ import { linkspector } from "./linkspector.js";
 
 // Define the program and its options
 program
-  .version("0.2.1")
+  .version("0.2.2")
   .description("🔍 Uncover broken links in your content.")
   .command("check")
   .description("Check hyperlinks based on the configuration file.")
