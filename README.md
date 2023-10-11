@@ -1,5 +1,5 @@
 <p align="center">
-  <a href="https://github.com/UmbrellaDocs/linkspector"><img src="https://i.ibb.co/B2xdzv4/linkspector.png" alt="Logo" height=170></a>
+  <a href="https://github.com/UmbrellaDocs/linkspector"><img src="https://i.ibb.co/VD70DX3/linkspectorelogonewtransparentupscale.png" alt="Logo" height=170></a>
 </p>
 <h3 align="center">Uncover broken links in your content.</h3>
 <h1 align="center">Linkspector</h1>
