@@ -37,7 +37,7 @@ To check hyperlinks in your markup language files, follow these steps:
 
 1. Navigate to the directory containing the files you want to check.
 
-1. Create a [configuration](#configuration) file called `.linkspector.yml`. By default, Linkspector looks for a configuration file named `.linkspector.yml` in the current directory. If you have a custom configuration file or want to specify its path, you can use the `-c` or `--config` option.
+1. (**Optional**) Create a [configuration](#configuration) file called `.linkspector.yml`. By default, Linkspector looks for a configuration file named `.linkspector.yml` in the current directory. If you have a custom configuration file or want to specify its path, you can use the `-c` or `--config` option.
 
 1. Use the `linkspector check` command to initiate the hyperlink check. For example:
 
@@ -51,17 +51,27 @@ To check hyperlinks in your markup language files, follow these steps:
    linkspector check -c /path/to/custom-config.yml
    ```
 
-1. Linkspector will start checking the hyperlinks in your files based on the configuration provided in the configuration file. It will display the results in your terminal.
+1. Linkspector starts checking the hyperlinks in your files based on the configuration provided in the configuration file or using the default configuration. It then displays the results in your terminal.
 
-1. After the check is complete, Linkspector will provide a summary of the results. If any dead links are found, they will be listed in the terminal, along with their status codes and error messages.
+1. After the check is complete, Linkspector provides a summary of the results. If any dead links are found, they are listed in the terminal, along with their status codes and error messages.
 
-1. If no dead links are found, Linkspector will display a success message, indicating that all links are working.
+1. If no dead links are found, Linkspector displays a success message, indicating that all links are working.
 
 ## Configuration
 
-The configuration file allows you to customize the behavior of Linkspector according to your specific needs. You can adjust the file paths, URL patterns, and other settings to ensure accurate and relevant link checking.
+Linkspector uses a configuration file named `.linkspector.yml` to customize its behavior. If this file is not found in the current directory when the program is run, Linkspector displays a message saying "Configuration file not found. Using default configuration." and uses a default configuration.
 
-Use the following configuration options:
+### Default Configuration
+
+The default configuration is as follows:
+
+```yaml
+dirs:
+  - .
+useGitIgnore: true
+```
+
+Following are the available configuration options:
 
 ### Files to Check
 The `files` section specifies the Markdown files that Linkspector should check for broken links. You can add the file paths you want to include in this list. For example:
