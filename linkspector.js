@@ -134,7 +134,7 @@ export async function* linkspector(configFile) {
     const uniqueLinks = getUniqueLinks(astNodes);
 
     // Check the status of hyperlinks
-    const linkStatus = await checkHyperlinks(uniqueLinks);
+    const linkStatus = await checkHyperlinks(uniqueLinks, config);
 
     // Update linkStatusObjects with information about removed links
     linkStatusObjects = await updateLinkstatusObj(
