@@ -127,7 +127,7 @@ export async function* linkspector(configFile) {
       astNodes = await extractAsciiDocLinks(file);
     } else {
       const fileContent = readFileSync(file, "utf8");
-      astNodes = extractMarkdownHyperlinks(fileContent);
+      astNodes = extractMarkdownHyperlinks(fileContent, config);
     }
 
     // Get unique hyperlinks
