@@ -51,6 +51,27 @@ To check hyperlinks in your markup language files, follow these steps:
    linkspector check -c /path/to/custom-config.yml
    ```
 
+1. The `linkspector check` command can also be issued from a docker container.
+
+   To build the docker image locally, while being at the root (`.`) of this project:
+   ```bash
+   docker build --no-cache --pull -t umbrelladocs/linkspector .
+   ```
+
+   To perform a check using the default configuration, while being at the root (`$PWD`) of the project to be checked:
+   ```bash
+   docker run --rm -it -v $PWD:/app \
+          --name linkspector umbrelladocs/linkspector \
+          bash -c 'linkspector check'
+   ```
+
+   To specify a custom configuration file path:
+   ```bash
+   docker run --rm -it -v $PWD:/app -v $PWD/custom-config.yml:/path/to/custom-config.yml \
+          --name linkspector umbrelladocs/linkspector \
+          bash -c 'linkspector check -c /path/to/custom-config.yml'
+   ```
+
 1. Linkspector starts checking the hyperlinks in your files based on the configuration provided in the configuration file or using the default configuration. It then displays the results in your terminal.
 
 1. After the check is complete, Linkspector provides a summary of the results. If any dead links are found, they are listed in the terminal, along with their status codes and error messages.
