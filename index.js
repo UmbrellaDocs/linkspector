@@ -4,10 +4,14 @@ import { program } from "commander";
 import kleur from "kleur";
 import ora from "ora";
 import { linkspector } from "./linkspector.js";
+import fs from 'fs';
+import path from 'path';
+
+const packageJson = JSON.parse(fs.readFileSync(path.resolve(process.cwd(), './package.json'), 'utf8'));
 
 // Define the program and its options
 program
-  .version("0.2.3")
+  .version(packageJson.version)
   .description("🔍 Uncover broken links in your content.")
   .command("check")
   .description("Check hyperlinks based on the configuration file.")
