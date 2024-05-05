@@ -4,64 +4,89 @@ import { program } from "commander";
 import kleur from "kleur";
 import ora from "ora";
 import { linkspector } from "./linkspector.js";
-import { createRequire } from 'module';
+import { createRequire } from "module";
 const require = createRequire(import.meta.url);
-const pkg = require('./package.json');
+const pkg = require("./package.json");
 
-// Define the program and its options
 program
   .version(pkg.version)
   .description("🔍 Uncover broken links in your content.")
   .command("check")
   .description("Check hyperlinks based on the configuration file.")
   .option("-c, --config <path>", "Specify a custom configuration file path")
+  .option("-j, --json", "Output the results in JSON format")
   .action(async (cmd) => {
     const configFile = cmd.config || ".linkspector.yml"; // Use custom config file path if provided
 
     let currentFile = ""; // Variable to store the current file name
+    let results = []; // Array to store the results if json is true
+
+    const spinner = cmd.json ? null : ora().start();
 
     try {
       let hasErrorLinks = false;
 
-      // Start the loading spinner with the first file name
-      const spinner = ora().start();
-
-      for await (const { file, result } of linkspector(configFile)) {
+      for await (const { file, result } of linkspector(configFile, cmd)) {
         // Update the current file name
         currentFile = file;
+        if (!cmd.json) {
+          spinner.text = `Checking ${currentFile}...\n`;
+        }
 
         for (const linkStatusObj of result) {
-          spinner.text = `Checking ${currentFile}...`;
+          // If json is true, store the results in the results array
+          if (cmd.json) {
+            results.push({
+              file: currentFile,
+              link: linkStatusObj.link,
+              status_code: linkStatusObj.status_code,
+              line_number: linkStatusObj.line_number,
+              position: linkStatusObj.position,
+              status: linkStatusObj.status,
+              error_message: linkStatusObj.error_message,
+            });
+          } else {
+            // If json is false, print the results in the console
+            if (linkStatusObj.status === "error") {
+              spinner.stop();
+              console.log(
+                kleur.red(
+                  `💥 ${currentFile} - Line ${linkStatusObj.line_number}: ${linkStatusObj.error_message}`
+                )
+              );
+              spinner.start(`Checking ${currentFile}...\n`);
+            }
+          }
+
           if (linkStatusObj.status === "error") {
             hasErrorLinks = true;
-            // Stop the spinner before printing an error message
-            spinner.stop();
-            console.error(
-              kleur.red(
-                `🚫 ${currentFile}, ${linkStatusObj.link} , ${linkStatusObj.status_code}, ${linkStatusObj.line_number}, ${linkStatusObj.error_message}`
-              )
-            );
-            // Start the spinner again after printing an error message
-            spinner.start(`Checking ${currentFile}...`);
           }
         }
       }
 
-      spinner.stop();
+      if (cmd.json) {
+        console.log(JSON.stringify(results, null, 2));
+      }
 
       if (!hasErrorLinks) {
-        console.log(
-          kleur.green(
-            "✨ Success: All hyperlinks in the specified files are valid."
-          )
-        );
+        if (!cmd.json) {
+          spinner.stop();
+          console.log(
+            kleur.green(
+              "✨ Success: All hyperlinks in the specified files are valid."
+            )
+          );
+        }
         process.exit(0);
       } else {
-        console.error(
-          kleur.red(
-            "❌ Error: Some links in the specified files are not valid."
-          )
-        );
+        if (!cmd.json) {
+          spinner.stop();
+          console.error(
+            kleur.red(
+              "💥 Error: Some hyperlinks in the specified files are invalid."
+            )
+          );
+        }
         process.exit(1);
       }
     } catch (error) {

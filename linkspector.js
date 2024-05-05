@@ -20,7 +20,7 @@ function isGitInstalled() {
   }
 }
 
-export async function* linkspector(configFile) {
+export async function* linkspector(configFile, cmd) {
   //Use default configuration if no config file is specified
   let config = {};
   let defaultConfig = {
@@ -56,7 +56,9 @@ export async function* linkspector(configFile) {
     }
   } catch (err) {
     if (err.code === "ENOENT") {
-      console.log("Configuration file not found. Using default configuration.");
+      if (!cmd.json) {
+        console.log("Configuration file not found. Using default configuration.");
+      }
       config = defaultConfig;
     } else {
       throw new Error(err);
