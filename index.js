@@ -38,7 +38,7 @@ program
             spinner.stop();
             console.error(
               kleur.red(
-                `🚫 ${currentFile}, ${linkStatusObj.link}, ${linkStatusObj.status_code}, ${linkStatusObj.line_number}, ${linkStatusObj.error_message}`
+                `🚫 ${currentFile}, ${linkStatusObj.link} , ${linkStatusObj.status_code}, ${linkStatusObj.line_number}, ${linkStatusObj.error_message}`
               )
             );
             // Start the spinner again after printing an error message
