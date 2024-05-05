@@ -16,18 +16,18 @@ Before you begin, make sure you have the following prerequisites installed on yo
 
    You should see the installed Node.js version.
 
-2. **Bun (Package Manager)**: Although `npm` is included with Node.js and is used to manage project dependencies. In this project, we are using `bun` as a package manager. See [Bun Installation](https://bun.sh/docs/installation) for more information on installing `bun`.
-    To check if `bun` is installed, open your terminal and run:
+2. **pnpm**: Although `npm` is included with Node.js and is used to manage project dependencies. In this project, we are using `pnpm` as a package manager. See [pnpm Installation](https://pnpm.io/installation) for more information on installing `pnpm`.
+    To check if `pnpm` is installed, open your terminal and run:
 
    ```bash
    bun -v
    ```
 
-   Make sure `bun` is up to date.
+   Make sure `pnpm` is up to date.
 
 ## Installation
 
-After ensuring you have Node.js and `bun` installed, follow these steps to set up your development environment:
+After ensuring you have Node.js and `pnpm` installed, follow these steps to set up your development environment:
 
 1. **Clone the Repository**: Fork and clone this repository to your local machine:
 
@@ -41,10 +41,10 @@ After ensuring you have Node.js and `bun` installed, follow these steps to set u
    cd linkspector
    ```
 
-3. **Install Dependencies**: Use `bun` to install project dependencies:
+3. **Install Dependencies**: Use `pnpm` to install project dependencies:
 
    ```bash
-   bun install
+   pnpm install
    ```
 
    This command will download and install all the required packages specified in the `package.json` file.

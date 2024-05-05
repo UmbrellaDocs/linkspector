@@ -4,10 +4,13 @@ import { program } from "commander";
 import kleur from "kleur";
 import ora from "ora";
 import { linkspector } from "./linkspector.js";
+import { createRequire } from 'module';
+const require = createRequire(import.meta.url);
+const pkg = require('./package.json');
 
 // Define the program and its options
 program
-  .version("0.2.3")
+  .version(pkg.version)
   .description("🔍 Uncover broken links in your content.")
   .command("check")
   .description("Check hyperlinks based on the configuration file.")
@@ -35,7 +38,7 @@ program
             spinner.stop();
             console.error(
               kleur.red(
-                `🚫 ${currentFile}, ${linkStatusObj.link}, ${linkStatusObj.status_code}, ${linkStatusObj.line_number}, ${linkStatusObj.error_message}`
+                `🚫 ${currentFile}, ${linkStatusObj.link} , ${linkStatusObj.status_code}, ${linkStatusObj.line_number}, ${linkStatusObj.error_message}`
               )
             );
             // Start the spinner again after printing an error message

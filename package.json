@@ -1,6 +1,6 @@
 {
   "name": "@umbrelladocs/linkspector",
-  "version": "0.2.7",
+  "version": "0.3.0",
   "description": "Uncover broken links in your content.",
   "type": "module",
   "main": "linkspector.js",
@@ -31,6 +31,7 @@
     "puppeteer": "^21.7.0",
     "remark-gfm": "^4.0.0",
     "remark-parse": "^11.0.0",
-    "unified": "^11.0.4"
+    "unified": "^11.0.4",
+    "unist-util-visit": "^5.0.0"
   }
 }
