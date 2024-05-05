@@ -4,7 +4,9 @@ import { program } from "commander";
 import kleur from "kleur";
 import ora from "ora";
 import { linkspector } from "./linkspector.js";
-import pkg from "./package.json";
+import { createRequire } from 'module';
+const require = createRequire(import.meta.url);
+const pkg = require('./package.json');
 
 // Define the program and its options
 program
