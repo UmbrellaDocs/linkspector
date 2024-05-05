@@ -51,6 +51,12 @@ To check hyperlinks in your markup language files, follow these steps:
    linkspector check -c /path/to/custom-config.yml
    ```
 
+   To get the output in JSON format:
+
+   ```bash
+    linkspector check --json
+    ```
+
 1. Linkspector starts checking the hyperlinks in your files based on the configuration provided in the configuration file or using the default configuration. It then displays the results in your terminal.
 
 1. After the check is complete, Linkspector provides a summary of the results. If any dead links are found, they are listed in the terminal, along with their status codes and error messages.
@@ -213,12 +219,12 @@ If there are failed links, linkspector shows the output as comma-seprated values
 
 ```
 REDISTRIBUTED.md, https://unlicense.org/, null, 186, net::ERR_SSL_VERSION_OR_CIPHER_MISMATCH at https://unlicense.org/]
-❌ Found link errors in one or more files.
+💥 Error: Some hyperlinks in the specified files are invalid.
 ```
 
 If there are no errors, linkspector shows the following message:
 ```
-✅ All links are working.
+✨ Success: All hyperlinks in the specified files are valid.
 ```
 
 ## What's planned
