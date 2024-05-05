@@ -4,10 +4,11 @@ import { program } from "commander";
 import kleur from "kleur";
 import ora from "ora";
 import { linkspector } from "./linkspector.js";
+import pkg from "./package.json";
 
 // Define the program and its options
 program
-  .version("0.2.3")
+  .version(pkg.version)
   .description("🔍 Uncover broken links in your content.")
   .command("check")
   .description("Check hyperlinks based on the configuration file.")
