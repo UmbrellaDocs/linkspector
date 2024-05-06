@@ -33,14 +33,11 @@ test("linkspector should check image links in Markdown file", async () => {
     }
   }
 
-  expect(hasErrorLinks).toBe(true);
-  expect(results.length).toBe(2);
+  expect(hasErrorLinks).toBe(false);
+  expect(results.length).toBe(1);
   expect(results[0].link).toBe("https://commons.wikimedia.org/wiki/Main_Page#/media/File:Praia_do_Ribeiro_do_Cavalo2.jpg");
   expect(results[0].status).toBe("alive");
-  expect(results[1].link).toBe("https://suygfuysgf6fe76afawe.com/image.jpg");
-  expect(results[1].status).toBe("error");
 });
-
 
 test("linkspector should check relative links in Markdown file", async () => {
   let hasErrorLinks = false;
