@@ -14,6 +14,9 @@
   "bin": {
     "linkspector": "./index.js"
   },
+  "scripts": {
+    "test": "vitest"
+  },
   "author": "Gaurav Nelson",
   "license": "Apache-2.0",
   "bugs": {
@@ -33,5 +36,8 @@
     "remark-parse": "^11.0.0",
     "unified": "^11.0.4",
     "unist-util-visit": "^5.0.0"
+  },
+  "devDependencies": {
+    "vitest": "^1.6.0"
   }
 }
