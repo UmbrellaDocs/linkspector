@@ -10,11 +10,9 @@ Thank you for considering contributing to Linkspector! We welcome contributions 
     - [Reporting Issues](#reporting-issues)
     - [Submitting Pull Requests](#submitting-pull-requests)
 4. [Development Setup](#development-setup)
-5. [Coding Guidelines](#coding-guidelines)
-6. [Testing](#testing)
-7. [Documentation](#documentation)
-8. [Commit Messages](#commit-messages)
-9. [License](#license)
+5. [Testing](#testing)
+6. [Commit Messages](#commit-messages)
+7. [License](#license)
 
 ## Getting Started
 
@@ -49,6 +47,14 @@ Our maintainers will review your PR as soon as possible and provide feedback if 
 ## Development Setup
 
 To set up a development environment, follow the instructions in the [Development Setup](DEV_SETUP.md) document. This will guide you through the process of installing dependencies and configuring your development environment.
+
+## Testing
+
+Before submitting a pull request, make sure to run the test suite to ensure that your changes do not introduce any regressions. To run the tests, use the following command:
+
+```bash
+npm test
+```
 
 ## Commit Messages
 
