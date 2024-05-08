@@ -2,7 +2,7 @@
 
 This is a paragraph in the first file in a first level heading.
 
-[Link to Relative 2 Heading Level One](relative2.md#relative-2-heading-level-one)
+[Link to Relative 1 Heading Level Two](#relative-1-heading-level-two)
 
 ## Relative 1 Heading Level Two
 
