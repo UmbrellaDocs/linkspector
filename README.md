@@ -239,3 +239,7 @@ If there are no errors, linkspector shows the following message:
 - [ ] Experimaental mode to gather all links and check them in batches to study performance gains.
 - [ ] Proxy support to connect puppeteer to a remote service.
 - [ ] Puppeteer config support.
+
+## Contributing
+
+If you would like to contribute to Linkspector, please read the [contributing guidelines](/CONTRIBUTING.md).
