@@ -57,12 +57,6 @@ To check hyperlinks in your markup language files, follow these steps:
     linkspector check --json
     ```
 
-1. Linkspector starts checking the hyperlinks in your files based on the configuration provided in the configuration file or using the default configuration. It then displays the results in your terminal.
-
-1. After the check is complete, Linkspector provides a summary of the results. If any dead links are found, they are listed in the terminal, along with their status codes and error messages.
-
-1. If no dead links are found, Linkspector displays a success message, indicating that all links are working.
-
 ## Configuration
 
 Linkspector uses a configuration file named `.linkspector.yml` to customize its behavior. If this file is not found in the current directory when the program is run, Linkspector displays a message saying "Configuration file not found. Using default configuration." and uses a default configuration.
@@ -226,6 +220,40 @@ If there are no errors, linkspector shows the following message:
 ```
 ✨ Success: All hyperlinks in the specified files are valid.
 ```
+
+## Using Linkspector with Docker
+
+To use Linkspector with Docker, follow these steps:
+
+1. Clone the Linkspector repository to your local machine and switch to the cloned directory:
+   ```bash
+   git clone git@github.com:UmbrellaDocs/linkspector.git
+   cd linkspector
+   ```
+1. Build the docker image locally, while being at the root (`.`) of this project:
+   ```bash
+   docker build --no-cache --pull --build-arg LINKSPECTOR_PACKAGE= -t umbrelladocs/linkspector .
+   ```
+
+1. To perform a check using the default configuration, while being at the root (`$PWD`) of the project to be checked:
+   ```bash
+   docker run --rm -it -v $PWD:/app \
+          --name linkspector umbrelladocs/linkspector \
+          bash -c 'linkspector check'
+   ```
+
+   To specify a custom configuration file path:
+   ```bash
+   docker run --rm -it -v $PWD:/app -v $PWD/custom-config.yml:/path/to/custom-config.yml \
+          --name linkspector umbrelladocs/linkspector \
+          bash -c 'linkspector check -c /path/to/custom-config.yml'
+   ```
+
+1. Linkspector starts checking the hyperlinks in your files based on the configuration provided in the configuration file or using the default configuration. It then displays the results in your terminal.
+
+1. After the check is complete, Linkspector provides a summary of the results. If any dead links are found, they are listed in the terminal, along with their status codes and error messages.
+
+1. If no dead links are found, Linkspector displays a success message, indicating that all links are working.
 
 ## What's planned
 - [x] Spinner for local runs.
