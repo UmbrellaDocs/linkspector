@@ -16,8 +16,12 @@ This is a paragraph in the first file in a third level heading.
 
 [Link to Relative 2 Heading Level Three](relative2.md#custom-id-level-three)
 
-### Relative 1 Heading Level Four
+#### Relative 1 Heading Level Four
 
 This is a paragraph in the first file in a fourth level heading.
 
 [Link to Relative 3 Broken link](relative3.md#relative-3-heading-level-one)
+
+##### Relative 1 Heading Level Five
+
+[Link to broken section](#broken-section)

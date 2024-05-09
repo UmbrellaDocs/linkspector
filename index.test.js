@@ -70,7 +70,7 @@ test("linkspector should check relative links in Markdown file", async () => {
   }
 
   expect(hasErrorLinks).toBe(true);
-  expect(results.length).toBe(7);
+  expect(results.length).toBe(8);
   expect(results[0].status).toBe("alive");
   expect(results[1].status).toBe("alive");
   expect(results[2].status).toBe("alive");
@@ -78,6 +78,7 @@ test("linkspector should check relative links in Markdown file", async () => {
   expect(results[4].status).toBe("alive");
   expect(results[5].status).toBe("alive");
   expect(results[6].status).toBe("error");
+  expect(results[7].status).toBe("error");
 });
 
 test("linkspector should check top-level relative links in Markdown file", async () => {
