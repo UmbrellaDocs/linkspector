@@ -25,6 +25,15 @@ program
 
     try {
       let hasErrorLinks = false;
+      // Initialize the results object
+      let results = {
+        source: {
+          name: "linkspector",
+          url: "https://github.com/UmbrellaDocs/linkspector",
+        },
+        severity: "ERROR",
+        diagnostics: [],
+      };
 
       for await (const { file, result } of linkspector(configFile, cmd)) {
         // Update the current file name
@@ -34,20 +43,27 @@ program
         }
 
         for (const linkStatusObj of result) {
-          // If json is true, store the results in the results array
-          if (cmd.json) {
-            results.push({
-              file: currentFile,
-              link: linkStatusObj.link,
-              status_code: linkStatusObj.status_code,
-              line_number: linkStatusObj.line_number,
-              position: linkStatusObj.position,
-              status: linkStatusObj.status,
-              error_message: linkStatusObj.error_message,
-            });
-          } else {
-            // If json is false, print the results in the console
-            if (linkStatusObj.status === "error") {
+          if (linkStatusObj.status === "error") {
+            if (cmd.json) {
+              results.diagnostics.push({
+                message: linkStatusObj.error_message,
+                location: {
+                  path: currentFile,
+                  range: {
+                    start: {
+                      line: linkStatusObj.line_number,
+                      column: linkStatusObj.position.start.column
+                    },
+                    end: {
+                      line: linkStatusObj.position.end.line,
+                      column: linkStatusObj.position.end.column
+                    }
+                  },
+                },
+                severity: linkStatusObj.status.toUpperCase()
+              });
+            } else {
+              // If json is false, print the results in the console
               spinner.stop();
               console.log(
                 kleur.red(
@@ -56,16 +72,18 @@ program
               );
               spinner.start(`Checking ${currentFile}...\n`);
             }
-          }
-
-          if (linkStatusObj.status === "error") {
             hasErrorLinks = true;
           }
         }
       }
 
       if (cmd.json) {
-        console.log(JSON.stringify(results, null, 2));
+        // If there are no links with a status of "error", print a blank object
+        if (results.diagnostics.length === 0) {
+          console.log("{}");
+        } else {
+          console.log(JSON.stringify(results, null, 2));
+        }
       }
 
       if (!hasErrorLinks) {
