@@ -8,7 +8,7 @@ import { extractMarkdownHyperlinks } from "./lib/extract-markdown-hyperlinks.js"
 import { extractAsciiDocLinks } from "./lib/extract-asciidoc-hyperlinks.js";
 import { getUniqueLinks } from "./lib/get-unique-links.js";
 import { checkHyperlinks } from "./lib/batch-check-links.js";
-import { updateLinkstatusObj } from "./lib/update-linkstatus-obj.js";
+import { updateLinkStatusObj } from "./lib/update-linkstatus-obj.js";
 
 // Function to check if git is installed
 function isGitInstalled() {
@@ -57,7 +57,9 @@ export async function* linkspector(configFile, cmd) {
   } catch (err) {
     if (err.code === "ENOENT") {
       if (!cmd.json) {
-        console.log("Configuration file not found. Using default configuration.");
+        console.log(
+          "Configuration file not found. Using default configuration."
+        );
       }
       config = defaultConfig;
     } else {
@@ -138,15 +140,12 @@ export async function* linkspector(configFile, cmd) {
     const linkStatus = await checkHyperlinks(uniqueLinks, config, file);
 
     // Update linkStatusObjects with information about removed links
-    linkStatusObjects = await updateLinkstatusObj(
-      linkStatusObjects,
-      linkStatus
-    );
+    const updatedLinkStatus = updateLinkStatusObj(astNodes, linkStatus);
 
     // Yield an object with the relative file path and its result
     yield {
       file: relativeFilePath,
-      result: linkStatusObjects,
+      result: updatedLinkStatus,
     };
   }
 }
