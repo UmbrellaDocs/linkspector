@@ -110,7 +110,7 @@ test("linkspector should check top-level relative links in Markdown file", async
   }
 
   expect(hasErrorLinks).toBe(false);
-  expect(results.length).toBe(4);
+  expect(results.length).toBe(5);
 });
 
 test("linkspector should add back the removed duplicates when returning the results", async () => {
