@@ -45,17 +45,24 @@ To check hyperlinks in your markup language files, follow these steps:
    linkspector check
    ```
 
-   To specify a custom configuration file path:
+   * To specify a custom configuration file path:
 
-   ```bash
-   linkspector check -c /path/to/custom-config.yml
-   ```
+     ```bash
+     linkspector check -c /path/to/custom-config.yml
+     ```
 
-   To get the output in JSON format:
+   * To output the results in JSON format:
 
-   ```bash
-    linkspector check --json
-    ```
+     ```bash
+     linkspector check -j
+     ```
+      The JSON output follows [rdjson](https://github.com/reviewdog/reviewdog/tree/master/proto/rdf#rdjson) format.
+
+1. Linkspector starts checking the hyperlinks in your files based on the configuration provided in the configuration file or using the default configuration. It then displays the results in your terminal.
+
+1. After the check is complete, Linkspector provides a summary of the results. If any dead links are found, they are listed in the terminal, along with their status codes and error messages.
+
+1. If no dead links are found, Linkspector displays a success message, indicating that all links are working.
 
 ## Configuration
 
@@ -249,24 +256,18 @@ To use Linkspector with Docker, follow these steps:
           bash -c 'linkspector check -c /path/to/custom-config.yml'
    ```
 
-1. Linkspector starts checking the hyperlinks in your files based on the configuration provided in the configuration file or using the default configuration. It then displays the results in your terminal.
-
-1. After the check is complete, Linkspector provides a summary of the results. If any dead links are found, they are listed in the terminal, along with their status codes and error messages.
-
-1. If no dead links are found, Linkspector displays a success message, indicating that all links are working.
-
 ## What's planned
 - [x] Spinner for local runs.
 - [ ] Create a GitHub action.
 - [x] Modified files only check.
-- [x] Asciidoc support.
+- [!] Asciidoc support. (Limited to hyperlinks only)
 - [ ] ReStructured Text support.
 - [ ] Disable binary files downlaod.
-- [ ] JSON output for `failed-only` or `all` links.
-- [ ] CSV output for `all` links.
-- [ ] Experimaental mode to gather all links and check them in batches to study performance gains.
-- [ ] Proxy support to connect puppeteer to a remote service.
-- [ ] Puppeteer config support.
+- [x] JSON output for `failed-only` ~~or `all`~~ links.
+- ~~[ ] CSV output for `all` links.~~ (dropped for now)
+- ~~[ ] Experimaental mode to gather all links and check them in batches to study performance gains.~~ (dropped for now)
+- ~~[ ] Proxy support to connect puppeteer to a remote service.~~ (dropped for now)
+- ~~[ ] Puppeteer config support.~~ (dropped for now)
 
 ## Contributing
 
