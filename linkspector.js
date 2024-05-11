@@ -105,7 +105,6 @@ export async function* linkspector(configFile, cmd) {
 
     // Otherwise, only check the modified files
     filesToCheck = modifiedFilesToCheck;
-    console.log(filesToCheck);
   }
 
   // Initialize an array to store link status objects
