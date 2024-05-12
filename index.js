@@ -46,7 +46,7 @@ program
           if (linkStatusObj.status === "error") {
             if (cmd.json) {
               results.diagnostics.push({
-                message: linkStatusObj.error_message,
+                message: `Connot reach ${linkStatusObj.link}. Status: ${linkStatusObj.status_code}${linkStatusObj.error_message ? ` ${linkStatusObj.error_message}` : ''}`,
                 location: {
                   path: currentFile,
                   range: {
@@ -67,7 +67,7 @@ program
               spinner.stop();
               console.log(
                 kleur.red(
-                  `💥 ${currentFile} - Line ${linkStatusObj.line_number}: ${linkStatusObj.error_message}`
+                  `🚫 ${currentFile}, ${linkStatusObj.link} , ${linkStatusObj.status_code}, ${linkStatusObj.line_number}, ${linkStatusObj.error_message}`
                 )
               );
               spinner.start(`Checking ${currentFile}...\n`);
