@@ -1,0 +1,5 @@
+dirs:
+  - ./test/fixtures/asciidoc/hyperlinks/
+fileExtensions:
+  - adoc
+useGitIgnore: true

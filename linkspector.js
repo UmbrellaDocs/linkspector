@@ -109,9 +109,6 @@ export async function* linkspector(configFile, cmd) {
     filesToCheck = modifiedFilesToCheck;
   }
 
-  // Initialize an array to store link status objects
-  let linkStatusObjects = [];
-
   // Process each file
   for (const file of filesToCheck) {
     const relativeFilePath = path.relative(process.cwd(), file);
