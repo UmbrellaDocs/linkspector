@@ -5,7 +5,7 @@ import yaml from "js-yaml";
 import { validateConfig } from "./lib/validate-config.js";
 import { prepareFilesList } from "./lib/prepare-file-list.js";
 import { extractMarkdownHyperlinks } from "./lib/extract-markdown-hyperlinks.js";
-import { extractAsciiDocLinks } from "./lib/extract-asciidoc-hyperlinks.js";
+import { extractAsciiDocLinks } from "./lib/extract-asciidoc-links.js";
 import { getUniqueLinks } from "./lib/get-unique-links.js";
 import { checkHyperlinks } from "./lib/batch-check-links.js";
 import { updateLinkStatusObj } from "./lib/update-linkstatus-obj.js";
@@ -127,7 +127,7 @@ export async function* linkspector(configFile, cmd) {
       config.fileExtensions &&
       config.fileExtensions.includes(fileExtension)
     ) {
-      astNodes = await extractAsciiDocLinks(file);
+      astNodes = await extractAsciiDocLinks(file, config);
     } else {
       const fileContent = readFileSync(file, "utf8");
       astNodes = extractMarkdownHyperlinks(fileContent, config);
