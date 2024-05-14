@@ -29,6 +29,9 @@ npm install -g @umbrelladocs/linkspector
 
 This command installs Linkspector globally, allowing you to use it from anywhere in your terminal. If you don't want to install using `npm` you can download the binary from GitHub releases.
 
+### GitHub action
+For more details, see [action-linkspector](https://github.com/UmbrellaDocs/action-linkspector)
+
 ## Checking Hyperlinks
 
 To check hyperlinks in your markup language files, follow these steps:
