@@ -14,7 +14,7 @@ Linkspector is a powerful tool for anyone who creates content using markup langu
 
 ## How this is different from existing tools?
 
-1. **Enhanced Link Checking with Puppeteer** :It uses [Puppeteer](https://pptr.dev/) to check links in Chrome's headless mode, reducing the number of false positives.
+1. **Enhanced Link Checking with Puppeteer**: It uses [Puppeteer](https://pptr.dev/) to check links in Chrome's headless mode, reducing the number of false positives.
 2. **Addresses limitations and adds user-requested features**: It is built to adress the shortcomings in [GitHub Action - Markdown link check](https://github.com/gaurav-nelson/github-action-markdown-link-check) and adds many user requested features.
 3. **Single repository for seamless collaboration**: All the code it needs to run is in a single repository, making it easier for community to collaborate.
 4. **Focused for CI/CD use**: Linkspector is purposefully tailored to run into your CI/CD pipelines. This ensures that link checking becomes an integral part of your development workflow.
