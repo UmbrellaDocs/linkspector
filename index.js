@@ -46,7 +46,7 @@ program
           if (linkStatusObj.status === "error") {
             if (cmd.json) {
               results.diagnostics.push({
-                message: `Connot reach ${linkStatusObj.link}. Status: ${linkStatusObj.status_code}${linkStatusObj.error_message ? ` ${linkStatusObj.error_message}` : ''}`,
+                message: `Cannot reach ${linkStatusObj.link}. Status: ${linkStatusObj.status_code}${linkStatusObj.error_message ? ` ${linkStatusObj.error_message}` : ''}`,
                 location: {
                   path: currentFile,
                   range: {
