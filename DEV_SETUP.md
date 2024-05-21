@@ -6,15 +6,15 @@ To contribute to this project, you'll need to set up your development environmen
 
 Before you begin, make sure you have the following prerequisites installed on your system:
 
-* **Node.js**: This project requires Node.js, a JavaScript runtime, to build and run. You can download and install Node.js from the official website: [Node.js Download](https://nodejs.org/).
+- **Node.js**: This project requires Node.js, a JavaScript runtime, to build and run. You can download and install Node.js from the official website: [Node.js Download](https://nodejs.org/).
 
-   To check if Node.js is installed, open your terminal and run:
+  To check if Node.js is installed, open your terminal and run:
 
-   ```bash
-   node -v
-   ```
+  ```bash
+  node -v
+  ```
 
-   You should see the installed Node.js version.
+  You should see the installed Node.js version.
 
 ## Installation
 

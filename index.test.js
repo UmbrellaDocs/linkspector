@@ -1,20 +1,20 @@
-import { expect, test } from "vitest";
-import { linkspector } from "./linkspector.js";
+import { expect, test } from 'vitest'
+import { linkspector } from './linkspector.js'
 
 let cmd = {
   json: true,
-};
+}
 
-test("linkspector should check image links in Markdown file", async () => {
-  let hasErrorLinks = false;
-  let currentFile = ""; // Variable to store the current file name
-  let results = []; // Array to store the results if json is true
+test('linkspector should check image links in Markdown file', async () => {
+  let hasErrorLinks = false
+  let currentFile = '' // Variable to store the current file name
+  let results = [] // Array to store the results if json is true
 
   for await (const { file, result } of linkspector(
-    "./test/fixtures/markdown/image/imageTest.yml",
+    './test/fixtures/markdown/image/imageTest.yml',
     cmd
   )) {
-    currentFile = file;
+    currentFile = file
     for (const linkStatusObj of result) {
       if (cmd.json) {
         results.push({
@@ -25,32 +25,32 @@ test("linkspector should check image links in Markdown file", async () => {
           position: linkStatusObj.position,
           status: linkStatusObj.status,
           error_message: linkStatusObj.error_message,
-        });
+        })
       }
-      if (linkStatusObj.status === "error") {
-        hasErrorLinks = true;
+      if (linkStatusObj.status === 'error') {
+        hasErrorLinks = true
       }
     }
   }
 
-  expect(hasErrorLinks).toBe(false);
-  expect(results.length).toBe(1);
+  expect(hasErrorLinks).toBe(false)
+  expect(results.length).toBe(1)
   expect(results[0].link).toBe(
-    "https://commons.wikimedia.org/wiki/Main_Page#/media/File:Praia_do_Ribeiro_do_Cavalo2.jpg"
-  );
-  expect(results[0].status).toBe("alive");
-});
+    'https://commons.wikimedia.org/wiki/Main_Page#/media/File:Praia_do_Ribeiro_do_Cavalo2.jpg'
+  )
+  expect(results[0].status).toBe('alive')
+})
 
-test("linkspector should check relative links in Markdown file", async () => {
-  let hasErrorLinks = false;
-  let currentFile = ""; // Variable to store the current file name
-  let results = []; // Array to store the results if json is true
+test('linkspector should check relative links in Markdown file', async () => {
+  let hasErrorLinks = false
+  let currentFile = '' // Variable to store the current file name
+  let results = [] // Array to store the results if json is true
 
   for await (const { file, result } of linkspector(
-    "./test/fixtures/markdown/relative/.relativeTest.yml",
+    './test/fixtures/markdown/relative/.relativeTest.yml',
     cmd
   )) {
-    currentFile = file;
+    currentFile = file
     for (const linkStatusObj of result) {
       if (cmd.json) {
         results.push({
@@ -61,36 +61,36 @@ test("linkspector should check relative links in Markdown file", async () => {
           position: linkStatusObj.position,
           status: linkStatusObj.status,
           error_message: linkStatusObj.error_message,
-        });
+        })
       }
-      if (linkStatusObj.status === "error") {
-        hasErrorLinks = true;
+      if (linkStatusObj.status === 'error') {
+        hasErrorLinks = true
       }
     }
   }
 
-  expect(hasErrorLinks).toBe(true);
-  expect(results.length).toBe(8);
-  expect(results[0].status).toBe("alive");
-  expect(results[1].status).toBe("alive");
-  expect(results[2].status).toBe("alive");
-  expect(results[3].status).toBe("alive");
-  expect(results[4].status).toBe("alive");
-  expect(results[5].status).toBe("alive");
-  expect(results[6].status).toBe("error");
-  expect(results[7].status).toBe("error");
-});
+  expect(hasErrorLinks).toBe(true)
+  expect(results.length).toBe(8)
+  expect(results[0].status).toBe('alive')
+  expect(results[1].status).toBe('alive')
+  expect(results[2].status).toBe('alive')
+  expect(results[3].status).toBe('alive')
+  expect(results[4].status).toBe('alive')
+  expect(results[5].status).toBe('alive')
+  expect(results[6].status).toBe('error')
+  expect(results[7].status).toBe('error')
+})
 
-test("linkspector should check top-level relative links in Markdown file", async () => {
-  let hasErrorLinks = false;
-  let currentFile = ""; // Variable to store the current file name
-  let results = []; // Array to store the results if json is true
+test('linkspector should check top-level relative links in Markdown file', async () => {
+  let hasErrorLinks = false
+  let currentFile = '' // Variable to store the current file name
+  let results = [] // Array to store the results if json is true
 
   for await (const { file, result } of linkspector(
-    "./.linkspector.test.yml",
+    './.linkspector.test.yml',
     cmd
   )) {
-    currentFile = file;
+    currentFile = file
     for (const linkStatusObj of result) {
       if (cmd.json) {
         results.push({
@@ -101,28 +101,28 @@ test("linkspector should check top-level relative links in Markdown file", async
           position: linkStatusObj.position,
           status: linkStatusObj.status,
           error_message: linkStatusObj.error_message,
-        });
+        })
       }
-      if (linkStatusObj.status === "error") {
-        hasErrorLinks = true;
+      if (linkStatusObj.status === 'error') {
+        hasErrorLinks = true
       }
     }
   }
 
-  expect(hasErrorLinks).toBe(false);
-  expect(results.length).toBe(6);
-});
+  expect(hasErrorLinks).toBe(false)
+  expect(results.length).toBe(6)
+})
 
-test("linkspector should add back the removed duplicates when returning the results", async () => {
-  let hasErrorLinks = false;
-  let currentFile = ""; // Variable to store the current file name
-  let results = []; // Array to store the results if json is true
+test('linkspector should add back the removed duplicates when returning the results', async () => {
+  let hasErrorLinks = false
+  let currentFile = '' // Variable to store the current file name
+  let results = [] // Array to store the results if json is true
 
   for await (const { file, result } of linkspector(
-    "./test/fixtures/markdown/duplicates/duplicateTest.yml",
+    './test/fixtures/markdown/duplicates/duplicateTest.yml',
     cmd
   )) {
-    currentFile = file;
+    currentFile = file
     for (const linkStatusObj of result) {
       if (cmd.json) {
         results.push({
@@ -133,32 +133,32 @@ test("linkspector should add back the removed duplicates when returning the resu
           position: linkStatusObj.position,
           status: linkStatusObj.status,
           error_message: linkStatusObj.error_message,
-        });
+        })
       }
-      if (linkStatusObj.status === "error") {
-        hasErrorLinks = true;
+      if (linkStatusObj.status === 'error') {
+        hasErrorLinks = true
       }
     }
   }
 
-  expect(hasErrorLinks).toBe(true);
-  expect(results.length).toBe(4);
-  expect(results[0].status).toBe("alive");
-  expect(results[1].status).toBe("error");
-  expect(results[2].status).toBe("alive");
-  expect(results[3].status).toBe("error");
-});
+  expect(hasErrorLinks).toBe(true)
+  expect(results.length).toBe(4)
+  expect(results[0].status).toBe('alive')
+  expect(results[1].status).toBe('error')
+  expect(results[2].status).toBe('alive')
+  expect(results[3].status).toBe('error')
+})
 
-test(" linkspector should check hyperlinks in AsciiDoc files", async () => {
-  let hasErrorLinks = false;
-  let currentFile = ""; // Variable to store the current file name
-  let results = []; // Array to store the results if json is true
+test(' linkspector should check hyperlinks in AsciiDoc files', async () => {
+  let hasErrorLinks = false
+  let currentFile = '' // Variable to store the current file name
+  let results = [] // Array to store the results if json is true
 
   for await (const { file, result } of linkspector(
-    "./test/fixtures/asciidoc/hyperlinks/hyperlinksTest.yml",
+    './test/fixtures/asciidoc/hyperlinks/hyperlinksTest.yml',
     cmd
   )) {
-    currentFile = file;
+    currentFile = file
     for (const linkStatusObj of result) {
       if (cmd.json) {
         results.push({
@@ -169,18 +169,18 @@ test(" linkspector should check hyperlinks in AsciiDoc files", async () => {
           position: linkStatusObj.position,
           status: linkStatusObj.status,
           error_message: linkStatusObj.error_message,
-        });
+        })
       }
-      if (linkStatusObj.status === "error") {
-        hasErrorLinks = true;
+      if (linkStatusObj.status === 'error') {
+        hasErrorLinks = true
       }
     }
   }
 
-  expect(hasErrorLinks).toBe(true);
-  expect(results.length).toBe(4);
-  expect(results[0].status).toBe("error");
-  expect(results[1].status).toBe("alive");
-  expect(results[2].status).toBe("error");
-  expect(results[3].status).toBe("alive");
-});
+  expect(hasErrorLinks).toBe(true)
+  expect(results.length).toBe(4)
+  expect(results[0].status).toBe('error')
+  expect(results[1].status).toBe('alive')
+  expect(results[2].status).toBe('error')
+  expect(results[3].status).toBe('alive')
+})

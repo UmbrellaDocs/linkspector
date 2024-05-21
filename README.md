@@ -30,6 +30,7 @@ npm install -g @umbrelladocs/linkspector
 This command installs Linkspector globally, allowing you to use it from anywhere in your terminal. If you don't want to install using `npm` you can download the binary from GitHub releases.
 
 ### GitHub action
+
 For more details, see [action-linkspector](https://github.com/UmbrellaDocs/action-linkspector)
 
 ## Checking Hyperlinks
@@ -48,18 +49,19 @@ To check hyperlinks in your markup language files, follow these steps:
    linkspector check
    ```
 
-   * To specify a custom configuration file path:
+   - To specify a custom configuration file path:
 
      ```bash
      linkspector check -c /path/to/custom-config.yml
      ```
 
-   * To output the results in JSON format:
+   - To output the results in JSON format:
 
      ```bash
      linkspector check -j
      ```
-      The JSON output follows [rdjson](https://github.com/reviewdog/reviewdog/tree/master/proto/rdf#rdjson) format.
+
+     The JSON output follows [rdjson](https://github.com/reviewdog/reviewdog/tree/master/proto/rdf#rdjson) format.
 
 1. Linkspector starts checking the hyperlinks in your files based on the configuration provided in the configuration file or using the default configuration. It then displays the results in your terminal.
 
@@ -84,6 +86,7 @@ useGitIgnore: true
 Following are the available configuration options:
 
 ### Files to Check
+
 The `files` section specifies the Markdown files that Linkspector should check for broken links. You can add the file paths you want to include in this list. For example:
 
 ```yaml
@@ -94,6 +97,7 @@ files:
 ```
 
 ### Directories to Search
+
 The `dirs` section lists the directories where Linkspector should search for Markdown files. You can specify directories relative to the current working directory. For example:
 
 ```yaml
@@ -103,6 +107,7 @@ dirs:
 ```
 
 ### Excluded Files
+
 The `excludedFiles` section allows you to specify Markdown files that should be excluded from the link checking process. Add the paths of the files you want to exclude. For example:
 
 ```yaml
@@ -112,6 +117,7 @@ excludedFiles:
 ```
 
 ### Excluded Directories
+
 The `excludedDirs` section lets you specify directories that should be excluded from the link checking process. Provide the paths of the directories you want to exclude. For example:
 
 ```yaml
@@ -121,6 +127,7 @@ excludedDirs:
 ```
 
 ### Base URL
+
 The `baseUrl` option sets the base URL that will be used when checking relative links in Markdown files. In this example:
 
 ```yaml
@@ -130,30 +137,33 @@ baseUrl: https://example.com
 The base URL is set to `https://example.com`.
 
 ### Ignore Patterns
+
 The `ignorePatterns` section allows you to define regular expressions that match URLs to be ignored during the link checking process. For example:
 
 ```yaml
 ignorePatterns:
-  - pattern: "^https://example.com/skip/.*$"
+  - pattern: '^https://example.com/skip/.*$'
   - pattern: "^(ftp)://[^\\s/$?#]*\\.[^\\s]*$"
 ```
 
 In this example, URLs matching the specified patterns will be skipped during link checking.
 
 ### Replacement Patterns
+
 The `replacementPatterns` section lets you define regular expressions and replacement strings to modify URLs during link checking. For example:
 
 ```yaml
 replacementPatterns:
   - pattern: "(https?://example.com)/(\\w+)/(\\d+)"
-    replacement: "$1/id/$3"
+    replacement: '$1/id/$3'
   - pattern: "\\[([^\\]]+)\\]\\((https?://example.com)/file\\)"
-    replacement: "<a href=\"$2/file\">$1</a>"
+    replacement: '<a href="$2/file">$1</a>'
 ```
 
 These patterns and replacements will be applied to URLs found in the Markdown files.
 
 ### Alive Status Codes
+
 The `aliveStatusCodes` section allows you to specify a list of HTTP status codes that are considered as "alive" links. In this example:
 
 ```yaml
@@ -166,6 +176,7 @@ aliveStatusCodes:
 Links returning any of these status codes will be considered valid.
 
 ### Use .gitignore
+
 The `useGitIgnore` option, when set to `true`, indicates that Linkspector should use the rules defined in the `.gitignore` file to exclude files and directories. For example:
 
 ```yaml
@@ -175,17 +186,19 @@ useGitIgnore: true
 When enabled, the app will respect the `.gitignore` rules during link checking.
 
 ### Check Modified Files Only
+
 The `modifiedFilesOnly` option, when set to `true`, indicates that Linkspector should only check the files that have been modified in the last git commit. For example:
 
 ```yaml
 modifiedFilesOnly: true
 ```
+
 When enabled, Linkspector will use `git` to find the list of modified files and only check those files. Please note that this option requires `git` to be installed and available on your system path. If `git` is not installed or not found in the system path, Linkspector will throw an error.
 
 Also, if no modified files are found in the list of files to check, Linkspector will skip link checking and exit with a message indicating that modified files are not specified in the configuration.
 
-
 ### Sample configuration
+
 ```yml
 files:
   - README.md
@@ -202,13 +215,13 @@ excludedDirs:
   - excluded-folder2
 baseUrl: https://example.com
 ignorePatterns:
-  - pattern: "^https://example.com/skip/.*$"
+  - pattern: '^https://example.com/skip/.*$'
   - pattern: "^(ftp)://[^\\s/$?#]*\\.[^\\s]*$"
 replacementPatterns:
   - pattern: "(https?://example.com)/(\\w+)/(\\d+)"
-    replacement: "$1/id/$3"
+    replacement: '$1/id/$3'
   - pattern: "\\[([^\\]]+)\\]\\((https?://example.com)/file\\)"
-    replacement: "<a href=\"$2/file\">$1</a>"
+    replacement: '<a href="$2/file">$1</a>'
 aliveStatusCodes:
   - 200
   - 201
@@ -227,6 +240,7 @@ REDISTRIBUTED.md, https://unlicense.org/, null, 186, net::ERR_SSL_VERSION_OR_CIP
 ```
 
 If there are no errors, linkspector shows the following message:
+
 ```
 ✨ Success: All hyperlinks in the specified files are valid.
 ```
@@ -241,11 +255,13 @@ To use Linkspector with Docker, follow these steps:
    cd linkspector
    ```
 1. Build the docker image locally, while being at the root (`.`) of this project:
+
    ```bash
    docker build --no-cache --pull --build-arg LINKSPECTOR_PACKAGE= -t umbrelladocs/linkspector .
    ```
 
 1. To perform a check using the default configuration, while being at the root (`$PWD`) of the project to be checked:
+
    ```bash
    docker run --rm -it -v $PWD:/app \
           --name linkspector umbrelladocs/linkspector \
@@ -253,6 +269,7 @@ To use Linkspector with Docker, follow these steps:
    ```
 
    To specify a custom configuration file path:
+
    ```bash
    docker run --rm -it -v $PWD:/app -v $PWD/custom-config.yml:/path/to/custom-config.yml \
           --name linkspector umbrelladocs/linkspector \
@@ -260,6 +277,7 @@ To use Linkspector with Docker, follow these steps:
    ```
 
 ## What's planned
+
 - [x] Spinner for local runs.
 - [ ] Create a GitHub action.
 - [x] Modified files only check.
