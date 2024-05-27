@@ -25,6 +25,7 @@
   "homepage": "https://github.com/UmbrellaDocs/linkspector#readme",
   "dependencies": {
     "commander": "^12.0.0",
+    "github-slugger": "^2.0.0",
     "glob": "^10.3.12",
     "ignore": "^5.3.1",
     "joi": "^17.13.1",
