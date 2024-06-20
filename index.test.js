@@ -214,7 +214,9 @@ test('linkspector should check HTML encoded section links', async () => {
   }
 
   expect(hasErrorLinks).toBe(false)
-  expect(results.length).toBe(2)
+  expect(results.length).toBe(4)
   expect(results[0].status).toBe('alive')
   expect(results[1].status).toBe('alive')
+  expect(results[2].status).toBe('alive')
+  expect(results[3].status).toBe('alive')
 })
