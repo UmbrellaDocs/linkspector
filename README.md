@@ -279,7 +279,7 @@ To use Linkspector with Docker, follow these steps:
 ## What's planned
 
 - [x] Spinner for local runs.
-- [ ] Create a GitHub action.
+- [x] Create a GitHub action. See [action-linkspector](https://github.com/UmbrellaDocs/action-linkspector)
 - [x] Modified files only check.
 - [!] Asciidoc support. (Limited to hyperlinks only)
 - [ ] ReStructured Text support.
