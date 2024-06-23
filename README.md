@@ -83,7 +83,22 @@ dirs:
 useGitIgnore: true
 ```
 
+If you are defining a custom configuration, you must include the `dirs` or `files` section in the configuration file.
+
 Following are the available configuration options:
+
+| Option                                            | Description                                                                                           | Required                          |
+| ------------------------------------------------- | ----------------------------------------------------------------------------------------------------- | --------------------------------- |
+| [`files`](#files-to-check)                        | The list of Markdown files to check for broken links.                                                 | Yes, if `dirs` is not specified.  |
+| [`dirs`](#directories-to-search)                  | The list of directories to search for Markdown files.                                                 | Yes, if `files` is not specified. |
+| [`excludedFiles`](#excluded-files)                | The list of Markdown files to exclude from the link checking process.                                 | No                                |
+| [`excludedDirs`](#excluded-directories)           | The list of directories to exclude from the link checking process.                                    | No                                |
+| [`baseUrl`](#base-url)                            | The base URL to use when checking relative links in Markdown files.                                   | No                                |
+| [`ignorePatterns`](#ignore-patterns)              | The list of regular expressions that match URLs to be ignored during link checking.                   | No                                |
+| [`replacementPatterns`](#replacement-patterns)    | The list of regular expressions and replacement strings to modify URLs during link checking.          | No                                |
+| [`aliveStatusCodes`](#alive-status-codes)         | The list of HTTP status codes that are considered as "alive" links.                                   | No                                |
+| [`useGitIgnore`](#use-gitignore)                  | Indicates whether to use the rules defined in the `.gitignore` file to exclude files and directories. | No                                |
+| [`modifiedFilesOnly`](#check-modified-files-only) | Indicates whether to check only the files that have been modified in the last git commit.             | No                                |
 
 ### Files to Check
 
