@@ -1,3 +1,7 @@
+[![GitHub Marketplace](https://img.shields.io/badge/GitHub%20Marketplace-action%20linkspector-brightgreen?style=for-the-badge)](https://github.com/marketplace/actions/run-linkspector-with-reviewdog)
+[![NPM](https://img.shields.io/npm/v/@umbrelladocs/linkspector?style=for-the-badge)](https://www.npmjs.com/package/@umbrelladocs/linkspector)
+<a href="https://liberapay.com/gaurav-nelson/donate"><img alt="Donate using Liberapay" src="https://liberapay.com/assets/widgets/donate.svg"></a>
+
 <p align="center">
   <a href="https://github.com/UmbrellaDocs/linkspector"><img src="https://i.ibb.co/VD70DX3/linkspectorelogonewtransparentupscale.png" alt="Logo" height=170></a>
 </p>
