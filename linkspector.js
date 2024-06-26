@@ -99,9 +99,13 @@ export async function* linkspector(configFile, cmd) {
 
     // If no modified files are in the list of files to check, exit with a message
     if (modifiedFilesToCheck.length === 0) {
-      console.log(
-        'Skipped link checking. Modified files are not specified in the configuration.'
-      )
+      if (cmd.json) {
+        console.log('{}')
+      } else {
+        console.log(
+          'Skipped link checking. Modified files are not specified in the configuration.'
+        )
+      }
       process.exit(0)
     }
 
