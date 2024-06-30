@@ -1,6 +1,6 @@
 {
   "name": "@umbrelladocs/linkspector",
-  "version": "0.3.11",
+  "version": "0.3.12",
   "description": "Uncover broken links in your content.",
   "type": "module",
   "main": "linkspector.js",
@@ -9,7 +9,22 @@
     "url": "git+https://github.com/UmbrellaDocs/linkspector.git"
   },
   "keywords": [
-    "linkspector"
+    "linkspector",
+    "links analysis",
+    "url inspection",
+    "link checker",
+    "link validation",
+    "link verification",
+    "link testing",
+    "link testing tool",
+    "link testing library",
+    "link testing utility",
+    "link testing package",
+    "markdown link testing",
+    "markdown link testing tool",
+    "markdown link check",
+    "markdown link checker",
+    "markdown link validation"
   ],
   "bin": {
     "linkspector": "./index.js"
