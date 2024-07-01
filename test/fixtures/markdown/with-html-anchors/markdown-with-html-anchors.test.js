@@ -5,13 +5,13 @@ let cmd = {
   json: true,
 }
 
-test('linkspector should check top-level relative links in Markdown file', async () => {
+test('linkspector should check HTML encoded section links and include anchor names', async () => {
   let hasErrorLinks = false
   let currentFile = '' // Variable to store the current file name
   let results = [] // Array to store the results if json is true
 
   for await (const { file, result } of linkspector(
-    './.linkspector.test.yml',
+    './test/fixtures/markdown/with-html-anchors/.withHtmlAnchorsTest.yml',
     cmd
   )) {
     currentFile = file
@@ -33,6 +33,8 @@ test('linkspector should check top-level relative links in Markdown file', async
     }
   }
 
+  // Test expectations for link checks
   expect(hasErrorLinks).toBe(false)
-  expect(results.length).toBe(21)
+  expect(results.length).toBe(1)
+  expect(results[0].status).toBe('alive')
 })
