@@ -108,7 +108,7 @@ program
         process.exit(1)
       }
     } catch (error) {
-      console.error(kleur.red(`💥 Error: ${error.message}`))
+      console.error(kleur.red(`💥 Main error: ${error.message}`))
       process.exit(1)
     }
   })
