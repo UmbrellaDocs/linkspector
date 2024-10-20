@@ -141,7 +141,7 @@ export async function* linkspector(configFile, cmd) {
     const linkStatus = await checkHyperlinks(uniqueLinks, config, file)
 
     // Update linkStatusObjects with information about removed links
-    const updatedLinkStatus = updateLinkStatusObj(astNodes, linkStatus)
+    const updatedLinkStatus = updateLinkStatusObj(astNodes, linkStatus, config)
 
     // Yield an object with the relative file path and its result
     yield {
