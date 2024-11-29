@@ -103,6 +103,7 @@ Following are the available configuration options:
 | [`aliveStatusCodes`](#alive-status-codes)         | The list of HTTP status codes that are considered as "alive" links.                                   | No                                |
 | [`useGitIgnore`](#use-gitignore)                  | Indicates whether to use the rules defined in the `.gitignore` file to exclude files and directories. | No                                |
 | [`modifiedFilesOnly`](#check-modified-files-only) | Indicates whether to check only the files that have been modified in the last git commit.             | No                                |
+| [`httpHeaders`](#http-headers)                    | The list of URLs and their corresponding HTTP headers to be used during link checking.                | No                                |
 
 ### Files to Check
 
@@ -216,6 +217,31 @@ When enabled, Linkspector will use `git` to find the list of modified files and 
 
 Also, if no modified files are found in the list of files to check, Linkspector will skip link checking and exit with a message indicating that modified files are not specified in the configuration.
 
+### HTTP headers
+
+The `httpHeaders` option allows you to specify HTTP headers for specific URLs that require authorization. You can use environment variables for secure values.
+
+1. Create a `.env` file in the root directory of your project and add the environment variables. For example:
+
+   ```env
+   AUTH_TOKEN=abcdef123456
+   ```
+
+1. Add the `httpHeaders` section to the configuration file and specify the URLs and headers. For example:
+
+   ```yaml
+   httpHeaders:
+   - url:
+     - https://example1.com
+     headers:
+       Foo: Bar
+   - url:
+     - https://example2.com
+     headers:
+       Authorization: ${AUTH_TOKEN}
+       Foo: Bar
+   ```
+
 ### Sample configuration
 
 ```yml
@@ -241,6 +267,12 @@ replacementPatterns:
     replacement: '$1/id/$3'
   - pattern: "\\[([^\\]]+)\\]\\((https?://example.com)/file\\)"
     replacement: '<a href="$2/file">$1</a>'
+httpHeaders:
+- url:
+  - https://example1.com
+  headers:
+    Authorization: Basic Zm9vOmJhcg==
+    Foo: Bar
 aliveStatusCodes:
   - 200
   - 201
@@ -294,20 +326,6 @@ To use Linkspector with Docker, follow these steps:
           --name linkspector umbrelladocs/linkspector \
           bash -c 'linkspector check -c /path/to/custom-config.yml'
    ```
-
-## What's planned
-
-- [x] Spinner for local runs.
-- [x] Create a GitHub action. See [action-linkspector](https://github.com/UmbrellaDocs/action-linkspector)
-- [x] Modified files only check.
-- [!] Asciidoc support. (Limited to hyperlinks only)
-- [ ] ReStructured Text support.
-- [ ] Disable binary files downlaod.
-- [x] JSON output for `failed-only` ~~or `all`~~ links.
-- ~~[ ] CSV output for `all` links.~~ (dropped for now)
-- ~~[ ] Experimaental mode to gather all links and check them in batches to study performance gains.~~ (dropped for now)
-- ~~[ ] Proxy support to connect puppeteer to a remote service.~~ (dropped for now)
-- ~~[ ] Puppeteer config support.~~ (dropped for now)
 
 ## Contributing
 
