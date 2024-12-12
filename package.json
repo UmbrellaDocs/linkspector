@@ -44,18 +44,18 @@
     "commander": "^12.1.0",
     "github-slugger": "^2.0.0",
     "glob": "^11.0.0",
-    "ignore": "^5.3.2",
+    "ignore": "^6.0.2",
     "joi": "^17.13.3",
     "js-yaml": "^4.1.0",
     "kleur": "^4.1.5",
-    "ora": "^8.1.0",
-    "puppeteer": "^23.2.1",
+    "ora": "^8.1.1",
+    "puppeteer": "^23.10.3",
     "remark-gfm": "^4.0.0",
     "remark-parse": "^11.0.0",
     "unified": "^11.0.5",
     "unist-util-visit": "^5.0.0"
   },
   "devDependencies": {
-    "vitest": "^2.0.5"
+    "vitest": "^2.1.8"
   }
 }
