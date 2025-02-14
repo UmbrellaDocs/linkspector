@@ -214,7 +214,7 @@ modifiedFilesOnly: true
 
 When enabled, Linkspector will use `git` to find the list of modified files and only check those files. Please note that this option requires `git` to be installed and available on your system path. If `git` is not installed or not found in the system path, Linkspector will throw an error.
 
-Also, if no modified files are found in the list of files to check, Linkspector will skip link checking and exit with a message indicating that modified files are not specified in the configuration.
+Also, if no modified files are found in the list of files to check, Linkspector will skip link checking and exit with a message indicating that no modified files have been edited so it will skip checking.
 
 ### Sample configuration
 
