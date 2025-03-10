@@ -103,7 +103,7 @@ export async function* linkspector(configFile, cmd) {
         console.log('{}')
       } else {
         console.log(
-          'Skipped link checking. Modified files are not specified in the configuration.'
+          'No modified files to check, skipping checking. To enable checking all files set modifiedFilesOnly: false and rerun the check.'
         )
       }
       process.exit(0)
