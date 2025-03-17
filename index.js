@@ -67,7 +67,7 @@ program
               spinner.stop()
               console.log(
                 kleur.red(
-                  `🚫 ${currentFile}, ${linkStatusObj.link} , ${linkStatusObj.status_code}, ${linkStatusObj.line_number}, ${linkStatusObj.error_message}`
+                  `${currentFile}:${linkStatusObj.line_number}:${linkStatusObj.position.start.column}: 🚫 ${linkStatusObj.link} Status:${linkStatusObj.status_code}${linkStatusObj.error_message ? ` ${linkStatusObj.error_message}` : ' Cannot reach link'}`
                 )
               )
               spinner.start(`Checking ${currentFile}...\n`)
