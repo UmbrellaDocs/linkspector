@@ -1,0 +1,2 @@
+dirs:
+  - ./test/fixtures/markdown/with-html-anchors-id
