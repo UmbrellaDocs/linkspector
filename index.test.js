@@ -36,3 +36,64 @@ test('linkspector should check top-level relative links in Markdown file', async
   expect(hasErrorLinks).toBe(false)
   expect(results.length).toBe(21)
 })
+
+test('linkspector should track statistics correctly when stats option is enabled', async () => {
+  let cmd = {
+    showstat: true,
+  }
+
+  // Initialize statistics counters
+  let stats = {
+    filesChecked: 0,
+    totalLinks: 0,
+    httpLinks: 0,
+    fileLinks: 0,
+    correctLinks: 0,
+    failedLinks: 0,
+  }
+
+  for await (const { file, result } of linkspector(
+    './.linkspector.test.yml',
+    cmd
+  )) {
+    // Increment file count for statistics
+    stats.filesChecked++
+
+    for (const linkStatusObj of result) {
+      // Count total links
+      stats.totalLinks++
+
+      // Count HTTP vs File links
+      if (linkStatusObj.link.match(/^https?:\/\//)) {
+        stats.httpLinks++
+      } else if (
+        !linkStatusObj.link.startsWith('#') &&
+        !linkStatusObj.link.startsWith('mailto:')
+      ) {
+        stats.fileLinks++
+      }
+
+      // Count correct vs failed links
+      if (linkStatusObj.status === 'error') {
+        stats.failedLinks++
+      } else if (
+        linkStatusObj.status === 'alive' ||
+        linkStatusObj.status === 'assumed alive'
+      ) {
+        stats.correctLinks++
+      }
+    }
+  }
+
+  // Verify statistics are being tracked correctly
+  expect(stats.filesChecked).toBeGreaterThan(0)
+  expect(stats.totalLinks).toBe(21)
+  expect(stats.totalLinks).toBe(
+    stats.httpLinks +
+      stats.fileLinks +
+      (stats.totalLinks - stats.httpLinks - stats.fileLinks)
+  )
+  expect(stats.totalLinks).toBe(stats.correctLinks + stats.failedLinks)
+  expect(stats.correctLinks).toBeGreaterThanOrEqual(0)
+  expect(stats.failedLinks).toBe(0)
+})
