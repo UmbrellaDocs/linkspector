@@ -71,6 +71,15 @@ To check hyperlinks in your markup language files, follow these steps:
 
 1. After the check is complete, Linkspector provides a summary of the results. If any dead links are found, they are listed in the terminal, along with their status codes and error messages.
 
+   - To display statistics about the checked links, use the `-s` or `--showstat` option:
+
+     ```bash
+     linkspector check -s
+     ```
+
+     This command shows a summary table with the number of files checked, total links, hyperlinks, file and header links, and the count of correct and failed links.
+     Note that this option cannot be used together with the JSON output option (`-j`).
+
 1. If no dead links are found, Linkspector displays a success message, indicating that all links are working.
 
 ## Configuration
