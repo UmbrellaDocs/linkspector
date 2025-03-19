@@ -1,6 +1,6 @@
 {
   "name": "@umbrelladocs/linkspector",
-  "version": "0.3.13",
+  "version": "0.4.0",
   "description": "Uncover broken links in your content.",
   "type": "module",
   "main": "linkspector.js",
@@ -24,7 +24,14 @@
     "markdown link testing tool",
     "markdown link check",
     "markdown link checker",
-    "markdown link validation"
+    "markdown link validation",
+    "markdown link verification",
+    "asciidoc link testing",
+    "asciidoc link testing tool",
+    "asciidoc link check",
+    "asciidoc link checker",
+    "asciidoc link validation",
+    "asciidoc link verification"
   ],
   "bin": {
     "linkspector": "./index.js"
