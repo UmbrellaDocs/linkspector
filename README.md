@@ -291,10 +291,11 @@ useGitIgnore: true
 
 ## Sample output
 
-If there are failed links, linkspector shows the output with detailed information in `errorformat`. For example:
+If there are failed links, linkspector shows the output as comma-seprated values and exit with error.
+`File, HTTP status code, Line number, Error message`
 
 ```
-test/fixtures/markdown/relative/relative1.md:23:1: 🚫 relative3.md#relative-3-heading-level-one Status:404 Cannot find: relative3.md#relative-3-heading-level-one test/fixtures/markdown/relative/relative1.md:27:1: 🚫 #broken-section Status:404 Cannot find section: #broken-section in file: test/fixtures/markdown/relative/relative1.md. test/fixtures/markdown/duplicates/duplicate1.md:3:19: 🚫 https://www.yahoo434234esdsadasd.com Status:null net::ERR_NAME_NOT_RESOLVED at https://www.yahoo434234esdsadasd.com test/fixtures/markdown/duplicates/duplicate1.md:7:19: 🚫 https://www.yahoo434234esdsadasd.com Status:null net::ERR_NAME_NOT_RESOLVED at https://www.yahoo434234esdsadasd.com
+REDISTRIBUTED.md, https://unlicense.org/, null, 186, net::ERR_SSL_VERSION_OR_CIPHER_MISMATCH at https://unlicense.org/]
 💥 Error: Some hyperlinks in the specified files are invalid.
 ```
 
@@ -313,13 +314,13 @@ To use Linkspector with Docker, follow these steps:
    git clone git@github.com:UmbrellaDocs/linkspector.git
    cd linkspector
    ```
-2. Build the docker image locally, while being at the root (`.`) of this project:
+1. Build the docker image locally, while being at the root (`.`) of this project:
 
    ```bash
    docker build --no-cache --pull --build-arg LINKSPECTOR_PACKAGE= -t umbrelladocs/linkspector .
    ```
 
-3. To perform a check using the default configuration, while being at the root (`$PWD`) of the project to be checked:
+1. To perform a check using the default configuration, while being at the root (`$PWD`) of the project to be checked:
 
    ```bash
    docker run --rm -it -v $PWD:/app \
