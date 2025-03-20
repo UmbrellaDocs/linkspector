@@ -1,6 +1,6 @@
 {
   "name": "@umbrelladocs/linkspector",
-  "version": "0.4.1",
+  "version": "0.4.2",
   "description": "Uncover broken links in your content.",
   "type": "module",
   "main": "linkspector.js",
@@ -56,7 +56,6 @@
     "joi": "^17.13.3",
     "js-yaml": "^4.1.0",
     "kleur": "^4.1.5",
-    "lodash-es": "^4.17.21",
     "ora": "^8.2.0",
     "puppeteer": "^24.4.0",
     "remark-gfm": "^4.0.1",
