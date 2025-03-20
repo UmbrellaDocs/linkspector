@@ -61,7 +61,7 @@ program
         // Update the current file name
         currentFile = file
         if (!cmd.json) {
-          spinner.text = `Checking ${currentFile}...\n`
+          spinner.text = `Checking ${currentFile}...`
         }
 
         // Increment file count for statistics
@@ -120,7 +120,7 @@ program
                   `${currentFile}:${linkStatusObj.line_number}:${linkStatusObj.position.start.column}: 🚫 ${linkStatusObj.link} Status:${linkStatusObj.status_code}${linkStatusObj.error_message ? ` ${linkStatusObj.error_message}` : ' Cannot reach link'}`
                 )
               )
-              spinner.start(`Checking ${currentFile}...\n`)
+              spinner.start(`Checking ${currentFile}...`)
             }
             hasErrorLinks = true
           } else if (

@@ -1,0 +1,10 @@
+dirs:
+  - ./test/fixtures/patterns
+ignorePatterns:
+  - pattern: '^https://ignored-domain.example.com/.*$'
+  - pattern: '^https://another-ignored.example.com/.*$'
+replacementPatterns:
+  - pattern: 'https://example.com/old/(.*)'
+    replacement: 'https://example.com/new/$1'
+  - pattern: 'https://replace-domain.example.com/(.*)'
+    replacement: 'https://new-domain.example.com/$1'
