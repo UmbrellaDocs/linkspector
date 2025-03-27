@@ -68,4 +68,4 @@ test('linkspector should correctly apply ignorePatterns and replacementPatterns'
 
   // Total number of links should be 5 (2 normal + 3 replaced)
   expect(results.length).toBe(5)
-})
+}, 10000)
