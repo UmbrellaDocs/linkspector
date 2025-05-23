@@ -16,6 +16,7 @@ program
   .option('-c, --config <path>', 'Specify a custom configuration file path')
   .option('-j, --json', 'Output the results in JSON format')
   .option('-s, --showstat', 'Display statistics about the links checked')
+  .option('-u, --usecache', 'Enable caching of link statuses (up to 1000 entries by default) for the current run')
   .action(async (cmd) => {
     // Validate that -j and -s options are not used together
     if (cmd.json && cmd.showstat) {

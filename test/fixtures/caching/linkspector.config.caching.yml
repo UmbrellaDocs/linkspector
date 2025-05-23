@@ -1,0 +1,4 @@
+dirs:
+  - test/fixtures/caching
+fileExtensions:
+  - md

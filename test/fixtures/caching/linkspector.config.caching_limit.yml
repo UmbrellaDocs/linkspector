@@ -1,0 +1,5 @@
+dirs:
+  - test/fixtures/caching # Assuming the new files will be placed here
+fileExtensions:
+  - md
+maxCacheSize: 2

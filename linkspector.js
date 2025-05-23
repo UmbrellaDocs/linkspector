@@ -35,6 +35,9 @@ function isGitInstalled() {
 }
 
 export async function* linkspector(configFile, cmd) {
+  const linkStatusCache = {};
+  let currentCacheSize = 0;
+  const DEFAULT_MAX_CACHE_SIZE = 1000;
   //Use default configuration if no config file is specified
   let config = {}
   let defaultConfig = {
@@ -71,6 +74,10 @@ export async function* linkspector(configFile, cmd) {
       console.error(`💥 Error: Please check your configuration file.`)
       process.exit(1)
     }
+
+    const maxCacheSizeToUse = (config.maxCacheSize !== undefined && Number.isInteger(config.maxCacheSize) && config.maxCacheSize >= 0)
+                              ? config.maxCacheSize
+                              : DEFAULT_MAX_CACHE_SIZE;
   } catch (err) {
     if (err.code === 'ENOENT') {
       if (!cmd.json) {
@@ -152,10 +159,45 @@ export async function* linkspector(configFile, cmd) {
     }
 
     // Get unique hyperlinks
-    const uniqueLinks = getUniqueLinks(astNodes)
+    const uniqueLinks = getUniqueLinks(astNodes);
+    let linkStatus; // Declare linkStatus outside the if/else
 
-    // Check the status of hyperlinks
-    const linkStatus = await checkHyperlinks(uniqueLinks, config, file)
+    if (cmd.useCache) {
+      // Caching is enabled
+      const cachedResults = [];
+      const linksToActuallyCheck = [];
+
+      for (const linkObj of uniqueLinks) {
+        if (linkStatusCache[linkObj.url]) { // Check cache
+          const cachedEntry = linkStatusCache[linkObj.url];
+          cachedResults.push({
+            ...cachedEntry,
+            link: linkObj.url,
+            line_number: linkObj.position ? linkObj.position.start.line : null,
+            position: linkObj.position
+          });
+        } else {
+          linksToActuallyCheck.push(linkObj);
+        }
+      }
+
+      const newlyCheckedStatuses = await checkHyperlinks(linksToActuallyCheck, config, file);
+
+      for (const statusObj of newlyCheckedStatuses) {
+        // Only add to cache if the link isn't already in there 
+        // (it shouldn't be if it's from newlyCheckedStatuses from linksToActuallyCheck)
+        // AND if the cache is not full.
+        if (!linkStatusCache.hasOwnProperty(statusObj.link) && currentCacheSize < maxCacheSizeToUse) {
+          linkStatusCache[statusObj.link] = statusObj;
+          currentCacheSize++;
+        }
+      }
+
+      linkStatus = [...cachedResults, ...newlyCheckedStatuses];
+    } else {
+      // Caching is disabled - check all unique links directly
+      linkStatus = await checkHyperlinks(uniqueLinks, config, file);
+    }
 
     // Update linkStatusObjects with information about removed links
     const updatedLinkStatus = updateLinkStatusObj(astNodes, linkStatus)
