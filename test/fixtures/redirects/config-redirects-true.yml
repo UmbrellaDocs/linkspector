@@ -1,0 +1,4 @@
+files:
+  - test/fixtures/redirects/redirects.md
+# followRedirects is true by default, so we can omit it or set it explicitly.
+# For clarity in testing, we can omit it to test the default behavior.
