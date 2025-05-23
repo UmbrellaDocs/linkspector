@@ -113,7 +113,7 @@ Following are the available configuration options:
 | [`useGitIgnore`](#use-gitignore)                  | Indicates whether to use the rules defined in the `.gitignore` file to exclude files and directories. | No                                |
 | [`modifiedFilesOnly`](#check-modified-files-only) | Indicates whether to check only the files that have been modified in the last git commit.             | No                                |
 | [`httpHeaders`](#http-headers)                    | The list of URLs and their corresponding HTTP headers to be used during link checking.                | No                                |
-| [`followRedirects`](#follow-redirects)            | Controls how HTTP redirects (e.g., 301, 302) are handled.                                           | No                                |
+| [`followRedirects`](#follow-redirects)            | Controls how HTTP redirects (e.g., 301, 302) are handled.                                             | No                                |
 
 ### Files to Check
 
@@ -256,16 +256,16 @@ The `httpHeaders` option allows you to specify HTTP headers for specific URLs th
 
 The `followRedirects` option controls how Linkspector handles HTTP redirects (e.g., status codes 301, 302).
 
--   **Type:** `boolean`
--   **Default:** `true`
+- **Type:** `boolean`
+- **Default:** `true`
 
 **Behavior:**
 
--   When `followRedirects: true` (default):
-    Linkspector will follow HTTP redirects to their final destination. The status of the link will be determined by the status code of this final destination. For example, if `http://example.com/old` redirects to `http://example.com/new` and `/new` returns a 200 OK, the original link `/old` will be reported as 'alive' (200), with a message indicating it was redirected.
+- When `followRedirects: true` (default):
+  Linkspector will follow HTTP redirects to their final destination. The status of the link will be determined by the status code of this final destination. For example, if `http://example.com/old` redirects to `http://example.com/new` and `/new` returns a 200 OK, the original link `/old` will be reported as 'alive' (200), with a message indicating it was redirected.
 
--   When `followRedirects: false`:
-    Linkspector will *not* follow HTTP redirects. If a link returns a redirect status code (e.g., 301, 302, 307, 308), it will be reported as an 'error'. The reported status code will be the original redirect status code (e.g., 301), and the error message will indicate that the link redirected but `followRedirects` was set to `false`.
+- When `followRedirects: false`:
+  Linkspector will _not_ follow HTTP redirects. If a link returns a redirect status code (e.g., 301, 302, 307, 308), it will be reported as an 'error'. The reported status code will be the original redirect status code (e.g., 301), and the error message will indicate that the link redirected but `followRedirects` was set to `false`.
 
 **Example:**
 
