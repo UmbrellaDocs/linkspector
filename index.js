@@ -95,18 +95,41 @@ program
           if (linkStatusObj.status === 'error') {
             stats.failedLinks++
             if (cmd.json) {
+              let startColumn = 1; // Default to 1 if not available
+              let endColumn = 0; // Default to 0 or handle as per your preference
+              let endLine = linkStatusObj.line_number; // Default to start line
+              let message = `Cannot reach ${linkStatusObj.link} Status: ${linkStatusObj.status_code}${linkStatusObj.error_message ? ` ${linkStatusObj.error_message}` : ''}`;
+
+              if (linkStatusObj.position && linkStatusObj.position.start && typeof linkStatusObj.position.start.column !== 'undefined') {
+                startColumn = linkStatusObj.position.start.column;
+              } else {
+                message = `Cannot reach ${linkStatusObj.link} (malformed link) Status: ${linkStatusObj.status_code}${linkStatusObj.error_message ? ` ${linkStatusObj.error_message}` : ''}`;
+              }
+
+              if (linkStatusObj.position && linkStatusObj.position.end && typeof linkStatusObj.position.end.column !== 'undefined') {
+                endColumn = linkStatusObj.position.end.column;
+              }
+
+              if (linkStatusObj.position && linkStatusObj.position.end && typeof linkStatusObj.position.end.line !== 'undefined') {
+                endLine = linkStatusObj.position.end.line;
+              } else if (linkStatusObj.position && linkStatusObj.position.start && typeof linkStatusObj.position.start.line !== 'undefined') {
+                // Fallback to start line if end line is not available
+                endLine = linkStatusObj.position.start.line;
+              }
+
+
               results.diagnostics.push({
-                message: `Cannot reach ${linkStatusObj.link} Status: ${linkStatusObj.status_code}${linkStatusObj.error_message ? ` ${linkStatusObj.error_message}` : ''}`,
+                message: message,
                 location: {
                   path: currentFile,
                   range: {
                     start: {
-                      line: linkStatusObj.line_number,
-                      column: linkStatusObj.position.start.column,
+                      line: linkStatusObj.line_number, // line_number is generally more reliable for the start
+                      column: startColumn,
                     },
                     end: {
-                      line: linkStatusObj.position.end.line,
-                      column: linkStatusObj.position.end.column,
+                      line: endLine,
+                      column: endColumn,
                     },
                   },
                 },
@@ -115,9 +138,16 @@ program
             } else {
               // If json is false, print the results in the console
               spinner.stop()
+              let columnToDisplay = '?';
+              let malformedIndicator = '';
+              if (linkStatusObj.position && linkStatusObj.position.start && typeof linkStatusObj.position.start.column !== 'undefined') {
+                columnToDisplay = linkStatusObj.position.start.column;
+              } else {
+                malformedIndicator = ' (malformed link)';
+              }
               console.log(
                 kleur.red(
-                  `${currentFile}:${linkStatusObj.line_number}:${linkStatusObj.position.start.column}: 🚫 ${linkStatusObj.link} Status:${linkStatusObj.status_code}${linkStatusObj.error_message ? ` ${linkStatusObj.error_message}` : ' Cannot reach link'}`
+                  `${currentFile}:${linkStatusObj.line_number}:${columnToDisplay}: 🚫 ${linkStatusObj.link}${malformedIndicator} Status:${linkStatusObj.status_code}${linkStatusObj.error_message ? ` ${linkStatusObj.error_message}` : ' Cannot reach link'}`
                 )
               )
               spinner.start(`Checking ${currentFile}...`)

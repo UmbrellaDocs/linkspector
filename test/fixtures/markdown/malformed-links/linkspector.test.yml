@@ -1,0 +1,4 @@
+files:
+  - test/fixtures/markdown/malformed-links/malformed-link-test.md # Path relative to CWD
+# Make the default status for skipped/assumed_alive links (like mailto, often 200) an error
+aliveStatusCodes: [201, 202, 203, 204, 205, 206, 207, 208, 226] # Exclude 200
