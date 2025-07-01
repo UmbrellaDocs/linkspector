@@ -70,7 +70,6 @@ To check hyperlinks in your markup language files, follow these steps:
 1. Linkspector starts checking the hyperlinks in your files based on the configuration provided in the configuration file or using the default configuration. It then displays the results in your terminal.
 
 1. After the check is complete, Linkspector provides a summary of the results. If any dead links are found, they are listed in the terminal, along with their status codes and error messages.
-
    - To display statistics about the checked links, use the `-s` or `--showstat` option:
 
      ```bash
