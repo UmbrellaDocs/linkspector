@@ -49,21 +49,21 @@
   "homepage": "https://github.com/UmbrellaDocs/linkspector#readme",
   "dependencies": {
     "commander": "^14.0.0",
-    "dotenv": "^16.5.0",
+    "dotenv": "^17.0.0",
     "github-slugger": "^2.0.0",
-    "glob": "^11.0.2",
-    "ignore": "^7.0.4",
+    "glob": "^11.0.3",
+    "ignore": "^7.0.5",
     "joi": "^17.13.3",
     "js-yaml": "^4.1.0",
     "kleur": "^4.1.5",
     "ora": "^8.2.0",
-    "puppeteer": "^24.9.0",
+    "puppeteer": "^24.11.1",
     "remark-gfm": "^4.0.1",
     "remark-parse": "^11.0.0",
     "unified": "^11.0.5",
     "unist-util-visit": "^5.0.0"
   },
   "devDependencies": {
-    "vitest": "^3.1.4"
+    "vitest": "^3.2.4"
   }
 }
