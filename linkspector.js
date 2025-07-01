@@ -2,7 +2,6 @@ import { execSync } from 'child_process'
 import { readFileSync } from 'fs'
 import path from 'path'
 import yaml from 'js-yaml'
-import dotenv from 'dotenv'
 import { validateConfig } from './lib/validate-config.js'
 import { prepareFilesList } from './lib/prepare-file-list.js'
 import { extractMarkdownHyperlinks } from './lib/extract-markdown-hyperlinks.js'
@@ -10,9 +9,6 @@ import { extractAsciiDocLinks } from './lib/extract-asciidoc-links.js'
 import { getUniqueLinks } from './lib/get-unique-links.js'
 import { checkHyperlinks } from './lib/batch-check-links.js'
 import { updateLinkStatusObj } from './lib/update-linkstatus-obj.js'
-
-// Load environment variables from .env file
-dotenv.config()
 
 // Function to replace placeholders with environment variables
 function replaceEnvVariables(config) {
