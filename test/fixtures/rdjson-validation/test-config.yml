@@ -1,0 +1,6 @@
+files:
+  - ./test/fixtures/rdjson-validation/test-links.md
+aliveStatusCodes:
+  - 200
+  - 301
+  - 302

@@ -65,7 +65,7 @@ To check hyperlinks in your markup language files, follow these steps:
      linkspector check -j
      ```
 
-     The JSON output follows [rdjson](https://github.com/reviewdog/reviewdog/tree/master/proto/rdf#rdjson) format.
+     The JSON output follows [rdjson](https://github.com/reviewdog/reviewdog/tree/master/proto/rdf#rdjson) format. Linkspector automatically validates and fixes the RDJSON output using the [@umbrelladocs/rdformat-validator](https://www.npmjs.com/package/@umbrelladocs/rdformat-validator) package to ensure compliance with the RDJSON specification.
 
 1. Linkspector starts checking the hyperlinks in your files based on the configuration provided in the configuration file or using the default configuration. It then displays the results in your terminal.
 

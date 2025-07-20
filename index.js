@@ -4,6 +4,11 @@ import { program } from 'commander'
 import kleur from 'kleur'
 import ora from 'ora'
 import { linkspector } from './linkspector.js'
+import {
+  validateAndFixRDJSON,
+  createEmptyRDJSON,
+  validateDiagnostic,
+} from './lib/validate-rdjson.js'
 import { createRequire } from 'module'
 const require = createRequire(import.meta.url)
 const pkg = require('./package.json')
@@ -95,23 +100,29 @@ program
           if (linkStatusObj.status === 'error') {
             stats.failedLinks++
             if (cmd.json) {
-              results.diagnostics.push({
-                message: `Cannot reach ${linkStatusObj.link} Status: ${linkStatusObj.status_code}${linkStatusObj.error_message ? ` ${linkStatusObj.error_message}` : ''}`,
-                location: {
-                  path: currentFile,
-                  range: {
-                    start: {
-                      line: linkStatusObj.line_number,
-                      column: linkStatusObj.position.start.column,
-                    },
-                    end: {
-                      line: linkStatusObj.position.end.line,
-                      column: linkStatusObj.position.end.column,
+              // Validate and fix the diagnostic before adding it
+              const diagnostic = validateDiagnostic(
+                {
+                  message: `Cannot reach ${linkStatusObj.link} Status: ${linkStatusObj.status_code}${linkStatusObj.error_message ? ` ${linkStatusObj.error_message}` : ''}`,
+                  location: {
+                    path: currentFile,
+                    range: {
+                      start: {
+                        line: linkStatusObj.line_number,
+                        column: linkStatusObj.position.start.column,
+                      },
+                      end: {
+                        line: linkStatusObj.position.end.line,
+                        column: linkStatusObj.position.end.column,
+                      },
                     },
                   },
+                  severity: linkStatusObj.status.toUpperCase(),
                 },
-                severity: linkStatusObj.status.toUpperCase(),
-              })
+                currentFile
+              )
+
+              results.diagnostics.push(diagnostic)
             } else {
               // If json is false, print the results in the console
               spinner.stop()
@@ -138,11 +149,52 @@ program
       }
 
       if (cmd.json) {
-        // If there are no links with a status of "error", print a blank object
+        let finalOutput
+
+        // If there are no links with a status of "error", use empty RDJSON structure
         if (results.diagnostics.length === 0) {
-          console.log('{}')
+          finalOutput = createEmptyRDJSON(hasErrorLinks)
         } else {
-          console.log(JSON.stringify(results, null, 2))
+          finalOutput = results
+        }
+
+        // Validate and fix the RDJSON before outputting
+        try {
+          const validationResult = await validateAndFixRDJSON(finalOutput)
+
+          if (validationResult.success) {
+            // Output the validated/fixed RDJSON
+            console.log(JSON.stringify(validationResult.data, null, 2))
+
+            // Log validation messages to stderr if there were fixes applied
+            if (
+              validationResult.appliedFixes &&
+              validationResult.appliedFixes.length > 0
+            ) {
+              console.error(
+                `\n# RDJSON Validation: ${validationResult.message}`
+              )
+              console.error(
+                `# Applied fixes: ${validationResult.appliedFixes.length}`
+              )
+            }
+          } else {
+            // If validation failed, output error message and fallback data
+            console.error(
+              `\n# RDJSON Validation Error: ${validationResult.message}`
+            )
+
+            // Try to output a minimal valid structure as fallback
+            const fallbackOutput = createEmptyRDJSON(hasErrorLinks)
+            console.log(JSON.stringify(fallbackOutput, null, 2))
+          }
+        } catch (error) {
+          // If validation process itself fails, output error and fallback
+          console.error(
+            `\n# RDJSON Validation Process Failed: ${error.message}`
+          )
+          const fallbackOutput = createEmptyRDJSON(hasErrorLinks)
+          console.log(JSON.stringify(fallbackOutput, null, 2))
         }
       }
 
