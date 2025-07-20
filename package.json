@@ -48,6 +48,7 @@
   },
   "homepage": "https://github.com/UmbrellaDocs/linkspector#readme",
   "dependencies": {
+    "@umbrelladocs/rdformat-validator": "^1.0.0",
     "commander": "^14.0.0",
     "github-slugger": "^2.0.0",
     "glob": "^11.0.3",
@@ -63,7 +64,7 @@
     "unist-util-visit": "^5.0.0"
   },
   "devDependencies": {
-    "vitest": "^3.2.4",
-    "prettier": "^3.6.2"
+    "prettier": "^3.6.2",
+    "vitest": "^3.2.4"
   }
 }
