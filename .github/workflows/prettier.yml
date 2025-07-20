@@ -1,5 +1,8 @@
 name: Run prettier check
 
+permissions:
+  contents: read
+
 on:
   push:
     branches:
