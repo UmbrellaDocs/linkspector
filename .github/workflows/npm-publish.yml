@@ -2,6 +2,9 @@
 
 name: Publish on NPM
 
+permissions:
+  contents: read
+
 on:
   push:
     tags:
