@@ -9,7 +9,7 @@
 <h1 align="center">Linkspector</h1>
 
 Linkspector is a CLI app that checks for dead hyperlinks in files.
-It supports multiple markup languages such as Markdown, AsciiDoc (limited - hyperlinks only), and ReStructured Text (coming soon).
+It supports multiple markup languages such as Markdown, AsciiDoc, and ReStructured Text (coming soon).
 
 With Linkspector, you can easily check all hyperlinks in your files, ensuring that they are not broken and that your readers can access all the relevant content.
 The app allows you to quickly and easily identify any broken links, so you can fix them before publishing your content.
@@ -328,6 +328,20 @@ If there are no errors, linkspector shows the following message:
 ```
 ✨ Success: All hyperlinks in the specified files are valid.
 ```
+
+## AsciiDoc Support
+
+Linkspector supports AsciiDoc hyperlink checking through the same CLI flow used for Markdown, including direct URLs and `link:` macros.
+
+The AsciiDoc parser also extracts additional reference data for:
+
+- Anchors (`[[...]]`, `[[[...]]]`, `[#...]`, `anchor:...[]`)
+- Internal references (`<<...>>`, `xref:...[]`)
+- External document references (`file.adoc#anchor`)
+- Local file targets from link macros
+- Comment-aware parsing (ignores `//` and `//// ... ////` content)
+
+Reference validation utilities for internal/external references and local files are available in the codebase (`lib/validate-asciidoc-references.js`) and are exercised by tests.
 
 ## Using Linkspector with Docker
 

@@ -1,0 +1,40 @@
+= Comment Handling Test
+
+This document tests that content in comments is properly ignored.
+
+[[valid-anchor]]
+== Valid Section
+
+This anchor should be found.
+
+////
+This is a block comment that should be completely ignored.
+All content here should not be processed:
+
+[[ignored-anchor]]
+Reference to ignored: <<ignored-anchor>>
+Ignored URL: https://ignored-url-in-block-comment.com
+link:https://ignored-link-macro.com[Ignored Link]
+xref:ignored-xref[Ignored XRef]
+////
+
+// This is a single line comment: <<ignored-ref>> https://ignored-line-comment.com
+
+Valid reference: <<valid-anchor>>
+
+// Another comment line with anchor: [[ignored-line-anchor]]
+
+Valid URL: https://github.com
+Broken URL for testing: https://broken-url-for-comment-test.com
+
+////
+Another block comment with various content:
+anchor:ignored-macro[Ignored Macro]
+[#ignored-inline]
+Text with ignored reference <<valid-anchor, but this ref should be ignored>>
+Multiple ignored URLs:
+- https://first-ignored.com
+- https://second-ignored.com
+////
+
+Final valid reference: <<valid-anchor, Valid Reference Text>> 

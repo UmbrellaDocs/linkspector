@@ -1,0 +1,5 @@
+dirs:
+  - ./test/fixtures/asciidoc/comments/
+fileExtensions:
+  - adoc
+useGitIgnore: true

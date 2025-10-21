@@ -1,0 +1,11 @@
+= Internal References
+
+[[my-anchor]]
+This is an anchor.
+
+Reference using shorthand: <<my-anchor>>
+Reference with text: <<my-anchor, custom text>>
+Reference using xref: xref:my-anchor[link text]
+
+// This should cause an error:
+Bad reference: <<non-existent-anchor>> 

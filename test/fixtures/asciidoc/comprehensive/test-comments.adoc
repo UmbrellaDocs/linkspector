@@ -1,0 +1,15 @@
+= Comments Test
+
+////
+This is a block comment.
+It should contain ignored content:
+<<ignored-reference>>
+link:https://ignored-url.com[Ignored Link]
+////
+
+// This is a single line comment with <<ignored-ref>>
+
+[[valid-anchor]]
+This anchor should be found.
+
+Reference to valid anchor: <<valid-anchor>> 
