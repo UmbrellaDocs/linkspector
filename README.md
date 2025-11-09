@@ -266,6 +266,8 @@ The `followRedirects` option controls how Linkspector handles HTTP redirects (e.
 - When `followRedirects: false`:
   Linkspector will _not_ follow HTTP redirects. If a link returns a redirect status code (e.g., 301, 302, 307, 308), it will be reported as an 'error'. The reported status code will be the original redirect status code (e.g., 301), and the error message will indicate that the link redirected but `followRedirects` was set to `false`.
 
+Test edits in this file.
+
 **Example:**
 
 To disable following redirects:

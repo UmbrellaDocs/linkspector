@@ -29,6 +29,7 @@ jobs:
           content_dir: .
           exclude_directories: |
             ./test
+          filter_mode: file
           ek_token: ${{ secrets.EK_TOKEN }}
           github_token: ${{ secrets.GITHUB_TOKEN }}
           reporter: github-pr-review
