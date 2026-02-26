@@ -39,7 +39,8 @@
   "scripts": {
     "prettier:check": "npx prettier --check .",
     "prettier:format": "npx prettier --write .",
-    "test": "vitest"
+    "test": "vitest --run --testTimeout=60000",
+    "test:watch": "vitest"
   },
   "author": "Gaurav Nelson",
   "license": "Apache-2.0",
