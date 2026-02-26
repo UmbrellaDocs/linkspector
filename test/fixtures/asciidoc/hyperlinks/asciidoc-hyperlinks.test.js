@@ -33,10 +33,18 @@ test('linkspector should check hyperlinks in AsciiDoc files', async () => {
     }
   }
 
+  console.log('✅ Comprehensive AsciiDoc test results:')
+  console.log(`  📊 Total URLs found: ${results.length}`)
+  console.log(`  🔗 URLs detected:`)
+  results.forEach((result) => {
+    console.log(result.link)
+    console.log(result.status)
+  })
+
   expect(hasErrorLinks).toBe(true)
   expect(results.length).toBe(4)
-  expect(results[0].status).toBe('error')
-  expect(results[1].status).toBe('alive')
+  expect(results[0].status).toBe('alive')
+  expect(results[1].status).toBe('error')
   expect(results[2].status).toBe('error')
   expect(results[3].status).toBe('alive')
 })

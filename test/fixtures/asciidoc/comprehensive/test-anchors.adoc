@@ -1,0 +1,16 @@
+= Test Document
+
+[[block-anchor]]
+This is a block anchor.
+
+[[block-with-desc, Block with description]]
+This is a block anchor with description.
+
+[#inline-anchor]
+This is an inline anchor.
+
+anchor:macro-anchor[Anchor with macro]
+
+List with bibliography:
+* [[[bib-ref]]] A bibliography reference
+* [[[bib-desc, Book Title]]] Bibliography with description 

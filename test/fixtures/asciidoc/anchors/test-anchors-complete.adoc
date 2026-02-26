@@ -1,0 +1,50 @@
+= Comprehensive Anchor Test Document
+
+[[main-section]]
+== Main Section
+
+This section has a block anchor.
+
+[[section-with-desc, Section with Description]]
+== Section with Description
+
+This section has a block anchor with description.
+
+[#custom-id-section]
+== Custom ID Section
+
+This section uses a custom ID.
+
+anchor:inline-anchor[Inline anchor text]
+
+Some content here.
+
+=== Bibliography Section
+
+Here are some bibliography references:
+
+* [[[knuth84]]] Donald Knuth. The TeXbook. Addison-Wesley, 1984.
+* [[[lamport94, LaTeX Manual]]] Leslie Lamport. LaTeX: A Document Preparation System. Addison-Wesley, 1994.
+
+== References Section
+
+Reference to main section: <<main-section>>
+Reference with custom text: <<section-with-desc, See the description section>>
+Reference using xref: xref:custom-id-section[Custom ID Section]
+Reference to inline anchor: <<inline-anchor>>
+
+Bibliography citations: <<knuth84>> and <<lamport94>>
+
+// This should cause validation errors in Phase 2:
+Invalid reference: <<non-existent-anchor>>
+Another invalid: xref:missing-anchor[Missing]
+
+== External References
+
+Reference to external file: <<other-document.adoc#section1, External Section>>
+XRef to external: xref:external.adoc#intro[Introduction in External Doc]
+
+== URLs for Current Testing
+
+Working URL: https://github.com
+Broken URL: https://this-will-fail-12345.com 
