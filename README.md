@@ -101,11 +101,12 @@ Following are the available configuration options:
 
 | Option                                            | Description                                                                                           | Required                          |
 | ------------------------------------------------- | ----------------------------------------------------------------------------------------------------- | --------------------------------- |
-| [`files`](#files-to-check)                        | The list of Markdown files to check for broken links.                                                 | Yes, if `dirs` is not specified.  |
-| [`dirs`](#directories-to-search)                  | The list of directories to search for Markdown files.                                                 | Yes, if `files` is not specified. |
-| [`excludedFiles`](#excluded-files)                | The list of Markdown files to exclude from the link checking process.                                 | No                                |
+| [`files`](#files-to-check)                        | The list of files to check for broken links.                                                          | Yes, if `dirs` is not specified.  |
+| [`dirs`](#directories-to-search)                  | The list of directories to search for files with configured extensions.                               | Yes, if `files` is not specified. |
+| [`fileExtensions`](#file-extensions)              | The list of file extensions to include when checking files.                                           | No                                |
+| [`excludedFiles`](#excluded-files)                | The list of files to exclude from the link checking process.                                          | No                                |
 | [`excludedDirs`](#excluded-directories)           | The list of directories to exclude from the link checking process.                                    | No                                |
-| [`baseUrl`](#base-url)                            | The base URL to use when checking relative links in Markdown files.                                   | No                                |
+| [`baseUrl`](#base-url)                            | The base URL to use when checking relative links in supported files.                                  | No                                |
 | [`ignorePatterns`](#ignore-patterns)              | The list of regular expressions that match URLs to be ignored during link checking.                   | No                                |
 | [`replacementPatterns`](#replacement-patterns)    | The list of regular expressions and replacement strings to modify URLs during link checking.          | No                                |
 | [`aliveStatusCodes`](#alive-status-codes)         | The list of HTTP status codes that are considered as "alive" links.                                   | No                                |
@@ -116,7 +117,7 @@ Following are the available configuration options:
 
 ### Files to Check
 
-The `files` section specifies the Markdown files that Linkspector should check for broken links. You can add the file paths you want to include in this list. For example:
+The `files` section specifies the files that Linkspector should check for broken links. You can add the file paths you want to include in this list. For example:
 
 ```yaml
 files:
@@ -127,7 +128,7 @@ files:
 
 ### Directories to Search
 
-The `dirs` section lists the directories where Linkspector should search for Markdown files. You can specify directories relative to the current working directory. For example:
+The `dirs` section lists the directories where Linkspector should search for files matching `fileExtensions`. You can specify directories relative to the current working directory. For example:
 
 ```yaml
 dirs:
@@ -135,9 +136,31 @@ dirs:
   - folder2
 ```
 
+### File Extensions
+
+The `fileExtensions` section specifies which file extensions Linkspector should include when checking files from `files` and `dirs`.
+
+- **Type:** `string[]`
+- **Default:** `['md']`
+
+For example, to check AsciiDoc files:
+
+```yaml
+fileExtensions:
+  - adoc
+```
+
+Or to check multiple file types:
+
+```yaml
+fileExtensions:
+  - md
+  - adoc
+```
+
 ### Excluded Files
 
-The `excludedFiles` section allows you to specify Markdown files that should be excluded from the link checking process. Add the paths of the files you want to exclude. For example:
+The `excludedFiles` section allows you to specify files that should be excluded from the link checking process. Add the paths of the files you want to exclude. For example:
 
 ```yaml
 excludedFiles:
@@ -157,7 +180,7 @@ excludedDirs:
 
 ### Base URL
 
-The `baseUrl` option sets the base URL that will be used when checking relative links in Markdown files. In this example:
+The `baseUrl` option sets the base URL that will be used when checking relative links in supported files. In this example:
 
 ```yaml
 baseUrl: https://example.com
@@ -189,7 +212,7 @@ replacementPatterns:
     replacement: '<a href="$2/file">$1</a>'
 ```
 
-These patterns and replacements will be applied to URLs found in the Markdown files.
+These patterns and replacements will be applied to URLs found in supported files.
 
 ### Alive Status Codes
 
