@@ -1,0 +1,9 @@
+= Links and URLs
+
+URL link: link:https://example.com[Example Site]
+
+Direct URL: https://direct-url.com
+Another direct URL in parentheses: (https://example.org)
+
+Local file link: link:../document.pdf[PDF Document]
+HTML link: link:page.html#section[HTML Page] 

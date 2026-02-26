@@ -48,6 +48,7 @@
   },
   "homepage": "https://github.com/UmbrellaDocs/linkspector#readme",
   "dependencies": {
+    "@umbrelladocs/linkspector": "github:UmbrellaDocs/linkspector#asciidoc-updates",
     "@umbrelladocs/rdformat-validator": "^1.0.0",
     "commander": "^14.0.3",
     "github-slugger": "^2.0.0",

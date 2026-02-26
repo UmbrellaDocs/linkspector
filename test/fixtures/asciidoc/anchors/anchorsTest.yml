@@ -1,0 +1,5 @@
+dirs:
+  - ./test/fixtures/asciidoc/anchors/
+fileExtensions:
+  - adoc
+useGitIgnore: true

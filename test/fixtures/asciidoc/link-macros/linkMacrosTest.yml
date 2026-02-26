@@ -1,0 +1,5 @@
+dirs:
+  - ./test/fixtures/asciidoc/link-macros/
+fileExtensions:
+  - adoc
+useGitIgnore: true

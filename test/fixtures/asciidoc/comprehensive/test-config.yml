@@ -1,0 +1,5 @@
+dirs:
+  - ./test/fixtures/asciidoc/comprehensive/
+fileExtensions:
+  - adoc
+useGitIgnore: true

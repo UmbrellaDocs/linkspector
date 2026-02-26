@@ -1,0 +1,9 @@
+= Links and URLs - All Failing
+
+URL link: link:https://this-domain-does-not-exist-12345.com[Example Site]
+
+Direct URL: https://another-nonexistent-domain-67890.com
+Another direct URL in parentheses: (https://third-fake-domain-abcde.net)
+
+Local file link: link:../nonexistent-document.pdf[PDF Document]
+HTML link: link:nonexistent-page.html#section[HTML Page] 

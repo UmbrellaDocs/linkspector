@@ -1,0 +1,28 @@
+= Link Macro Test Document
+
+This document tests various link macro formats.
+
+== HTTP/HTTPS Link Macros
+
+URL link with macro: link:http://www.google.com[Google]
+Broken URL for testing: link:http://www.yttftfftx.com[Broken Link]
+
+== Local File Link Macros
+
+Document link: link:../documents/manual.pdf[User Manual]
+HTML with fragment: link:index.html#section1[Index Section]
+
+== Mixed Content
+
+Multiple on same line: link:http://www.google.com[First] and link:http://www.yttftfftx.com[Second] links.
+
+== Direct URLs for Comparison
+
+Direct URL: http://www.google.com
+URL in parentheses: (http://www.yttftfftx.com)
+
+== Invalid Protocols (Should be ignored)
+
+FTP link: link:ftp://ftp.example.com[FTP Site]
+IRC link: link:irc://irc.example.com[IRC Server]
+Mailto link: link:mailto:test@example.com[Email] 
