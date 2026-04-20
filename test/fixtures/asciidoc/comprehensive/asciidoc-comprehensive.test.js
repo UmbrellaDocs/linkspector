@@ -18,10 +18,12 @@ test('linkspector should check all AsciiDoc reference types comprehensively', as
   let currentFile = ''
   let results = []
 
-  for await (const { file, result } of linkspector(
+  for await (const item of linkspector(
     './test/fixtures/asciidoc/comprehensive/test-config.yml',
     cmd
   )) {
+    if (item.type === 'meta') continue
+    const { file, result } = item
     currentFile = file
     for (const linkStatusObj of result) {
       if (cmd.json) {

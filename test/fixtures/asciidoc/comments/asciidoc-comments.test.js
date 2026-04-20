@@ -20,10 +20,12 @@ test('linkspector should ignore content in AsciiDoc comments', async () => {
   let currentFile = ''
   let results = []
 
-  for await (const { file, result } of linkspector(
+  for await (const item of linkspector(
     './test/fixtures/asciidoc/comments/commentsTest.yml',
     cmd
   )) {
+    if (item.type === 'meta') continue
+    const { file, result } = item
     currentFile = file
     for (const linkStatusObj of result) {
       if (cmd.json) {

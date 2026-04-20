@@ -18,10 +18,12 @@ test('linkspector should check AsciiDoc anchors and references (URLs only in Pha
   let currentFile = ''
   let results = []
 
-  for await (const { file, result } of linkspector(
+  for await (const item of linkspector(
     './test/fixtures/asciidoc/anchors/anchorsTest.yml',
     cmd
   )) {
+    if (item.type === 'meta') continue
+    const { file, result } = item
     currentFile = file
     for (const linkStatusObj of result) {
       if (cmd.json) {

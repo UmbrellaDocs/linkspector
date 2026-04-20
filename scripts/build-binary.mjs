@@ -3,6 +3,10 @@
 /**
  * Build script for creating a standalone linkspector binary using Node.js SEA.
  *
+ * Note: Node.js SEA requires CJS format, so the TUI renderer (ink/React)
+ * is replaced with a plain-text fallback. For a binary with full TUI support,
+ * use the Bun build instead: bun scripts/build-bun.mjs
+ *
  * Usage:
  *   node scripts/build-binary.mjs
  *
@@ -37,7 +41,9 @@ const arch = process.arch
 const binaryName = platform === 'win32' ? 'linkspector.exe' : 'linkspector'
 const outputPath = join(DIST, binaryName)
 
-console.log(`Building linkspector v${pkg.version} for ${platform}-${arch}...`)
+console.log(
+  `Building linkspector v${pkg.version} for ${platform}-${arch} (Node.js SEA)...`
+)
 
 // Step 1: Create dist directory
 if (!existsSync(DIST)) {
@@ -78,6 +84,16 @@ const seaCompatPlugin = {
   },
 }
 
+// Plugin to replace TUI renderer with a shim (ink can't be bundled as CJS)
+const tuiShimPlugin = {
+  name: 'tui-shim',
+  setup(build) {
+    build.onResolve({ filter: /tui-renderer\.js$/ }, () => ({
+      path: join(ROOT, 'scripts', 'tui-renderer-shim.js'),
+    }))
+  },
+}
+
 await esbuild.build({
   entryPoints: [join(ROOT, 'index.js')],
   bundle: true,
@@ -88,7 +104,8 @@ await esbuild.build({
   alias: {
     puppeteer: join(ROOT, 'scripts', 'puppeteer-shim.js'),
   },
-  plugins: [seaCompatPlugin],
+  external: ['undici'],
+  plugins: [seaCompatPlugin, tuiShimPlugin],
   banner: {
     js: [
       '// Linkspector standalone binary - https://github.com/UmbrellaDocs/linkspector',
@@ -99,7 +116,7 @@ await esbuild.build({
   logLevel: 'info',
 })
 
-// Step 4: Generate SEA blob
+// Step 3: Generate SEA blob
 console.log('Generating SEA blob...')
 writeFileSync(
   SEA_CONFIG,
@@ -120,17 +137,17 @@ execSync('node --experimental-sea-config sea-config.json', {
   stdio: 'inherit',
 })
 
-// Step 5: Copy node binary
+// Step 4: Copy node binary
 console.log('Copying Node.js binary...')
 copyFileSync(process.execPath, outputPath)
 
-// Step 6: Remove signature on macOS (required before injection)
+// Step 5: Remove signature on macOS (required before injection)
 if (platform === 'darwin') {
   console.log('Removing macOS code signature...')
   execSync(`codesign --remove-signature "${outputPath}"`, { stdio: 'inherit' })
 }
 
-// Step 7: Inject SEA blob
+// Step 6: Inject SEA blob
 console.log('Injecting SEA blob into binary...')
 execFileSync(
   'npx',
@@ -146,13 +163,13 @@ execFileSync(
   { cwd: ROOT, stdio: 'inherit' }
 )
 
-// Step 8: Re-sign on macOS
+// Step 7: Re-sign on macOS
 if (platform === 'darwin') {
   console.log('Re-signing binary for macOS...')
   execSync(`codesign --sign - "${outputPath}"`, { stdio: 'inherit' })
 }
 
-// Step 9: Make executable
+// Step 8: Make executable
 if (platform !== 'win32') {
   chmodSync(outputPath, 0o755)
 }

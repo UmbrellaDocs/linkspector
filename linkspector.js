@@ -205,6 +205,9 @@ export async function* linkspector(configFile, cmd) {
   }
 
   try {
+    // Yield metadata so consumers know total file count upfront
+    yield { type: 'meta', totalFiles: filesToCheck.length }
+
     // Process files in parallel batches
     const fileConcurrency = 5
     for (let i = 0; i < filesToCheck.length; i += fileConcurrency) {
@@ -216,7 +219,7 @@ export async function* linkspector(configFile, cmd) {
       )
 
       for (const result of results) {
-        yield result
+        yield { type: 'file', file: result.file, result: result.result }
       }
     }
   } finally {
