@@ -214,7 +214,7 @@ baseUrl: https://example.com
 
 ```yaml
 ignorePatterns:
-  - pattern: '^https://example.com/skip/.*$'
+  - pattern: '^https://example\\.com/skip/.*$'
   - pattern: "^(ftp)://[^\\s/$?#]*\\.[^\\s]*$"
 ```
 
@@ -222,7 +222,7 @@ ignorePatterns:
 
 ```yaml
 replacementPatterns:
-  - pattern: "(https?://example.com)/(\\w+)/(\\d+)"
+  - pattern: "(https?://example\\.com)/(\\w+)/(\\d+)"
     replacement: '$1/id/$3'
 ```
 
@@ -317,9 +317,9 @@ excludedDirs:
   - ./vendor
 baseUrl: https://example.com
 ignorePatterns:
-  - pattern: '^https://example.com/skip/.*$'
+  - pattern: '^https://example\\.com/skip/.*$'
 replacementPatterns:
-  - pattern: "(https?://example.com)/(\\w+)/(\\d+)"
+  - pattern: "(https?://example\\.com)/(\\w+)/(\\d+)"
     replacement: '$1/id/$3'
 httpHeaders:
   - url:
