@@ -8,36 +8,40 @@
 <h3 align="center">Uncover broken links in your content.</h3>
 <h1 align="center">Linkspector</h1>
 
-Linkspector is a CLI app that checks for dead hyperlinks in files.
-It supports multiple markup languages such as Markdown, AsciiDoc, and ReStructured Text (coming soon).
+Linkspector is a CLI tool that checks for dead hyperlinks in your files. It supports Markdown and AsciiDoc, with a rich interactive TUI for local use and clean output for CI/CD pipelines.
 
-With Linkspector, you can easily check all hyperlinks in your files, ensuring that they are not broken and that your readers can access all the relevant content.
-The app allows you to quickly and easily identify any broken links, so you can fix them before publishing your content.
+## Why Linkspector?
 
-Linkspector is a powerful tool for anyone who creates content using markup languages.
+- **Fewer false positives** - Uses [Puppeteer](https://pptr.dev/) headless Chrome as a fallback, so JavaScript-rendered pages and bot-protected links are checked correctly.
+- **Rich terminal UI** - Animated progress bar, live error stream, and grouped results when running interactively. Falls back to plain output in CI automatically.
+- **Built for CI/CD** - First-class [GitHub Action](https://github.com/UmbrellaDocs/action-linkspector) with [RDJSON](https://github.com/reviewdog/reviewdog/tree/master/proto/rdf#rdjson) output for reviewdog integration.
+- **Standalone binaries** - Download a single executable from [Releases](https://github.com/UmbrellaDocs/linkspector/releases). No Node.js required.
 
-## How this is different from existing tools?
+---
 
-1. **Enhanced Link Checking with Puppeteer**: It uses [Puppeteer](https://pptr.dev/) to check links in Chrome's headless mode, reducing the number of false positives.
-2. **Addresses limitations and adds user-requested features**: It is built to adress the shortcomings in [GitHub Action - Markdown link check](https://github.com/gaurav-nelson/github-action-markdown-link-check) and adds many user requested features.
-3. **Single repository for seamless collaboration**: All the code it needs to run is in a single repository, making it easier for community to collaborate.
-4. **Focused for CI/CD use**: Linkspector ([action-linkspector](https://github.com/UmbrellaDocs/action-linkspector)) is purposefully tailored to run into your CI/CD pipelines. This ensures that link checking becomes an integral part of your development workflow.
+## Table of Contents
+
+- [Installation](#installation)
+- [Usage](#usage)
+- [Configuration](#configuration)
+- [AsciiDoc Support](#asciidoc-support)
+- [Docker](#docker)
+- [Building from Source](#building-from-source)
+- [Contributing](#contributing)
+
+---
 
 ## Installation
 
-### Using npm
+### npm (recommended)
 
 ```bash
 npm install -g @umbrelladocs/linkspector
 ```
 
-This command installs Linkspector globally, allowing you to use it from anywhere in your terminal.
+### Standalone binary
 
-### Using standalone binary
-
-You can download a standalone binary from [GitHub Releases](https://github.com/UmbrellaDocs/linkspector/releases). No Node.js or npm installation required.
-
-Available binaries:
+Download a prebuilt binary from [GitHub Releases](https://github.com/UmbrellaDocs/linkspector/releases). No Node.js or npm required.
 
 | Platform | Architecture | File                          |
 | -------- | ------------ | ----------------------------- |
@@ -47,98 +51,90 @@ Available binaries:
 | macOS    | ARM64 (M1+)  | `linkspector-macos-arm64`     |
 | Windows  | x64          | `linkspector-windows-x64.exe` |
 
-After downloading, make the binary executable (Linux/macOS) and move it to a directory in your `PATH`:
-
 ```bash
+# Linux/macOS
 chmod +x linkspector-linux-x64
 sudo mv linkspector-linux-x64 /usr/local/bin/linkspector
 ```
 
-#### Chrome/Chromium requirement
+> **Note:** The standalone binary requires **Google Chrome** or **Chromium** installed on your system for the Puppeteer fallback pass. Linkspector auto-detects Chrome in common paths. For non-standard locations, set `PUPPETEER_EXECUTABLE_PATH`:
+>
+> ```bash
+> export PUPPETEER_EXECUTABLE_PATH=/path/to/chrome
+> linkspector check
+> ```
 
-The standalone binary requires **Google Chrome** or **Chromium** installed on your system. Linkspector uses it in headless mode to check links.
+### GitHub Action
 
-Linkspector auto-detects Chrome/Chromium in common installation paths. If Chrome is installed in a non-standard location, set the `PUPPETEER_EXECUTABLE_PATH` environment variable:
+See [action-linkspector](https://github.com/UmbrellaDocs/action-linkspector) for CI/CD integration.
+
+---
+
+## Usage
 
 ```bash
-# Linux/macOS
-export PUPPETEER_EXECUTABLE_PATH=/path/to/chrome
-linkspector check
-
-# Or inline
-PUPPETEER_EXECUTABLE_PATH=/path/to/chrome linkspector check
+linkspector check [options]
 ```
 
-```powershell
-# Windows (PowerShell)
-$env:PUPPETEER_EXECUTABLE_PATH="C:\path\to\chrome.exe"
+### Options
+
+| Flag                  | Description                                                  |
+| --------------------- | ------------------------------------------------------------ |
+| `-c, --config <path>` | Custom configuration file path (default: `.linkspector.yml`) |
+| `-j, --json`          | Output results in RDJSON format                              |
+| `-s, --showstat`      | Display link check statistics                                |
+| `-q, --quiet`         | No output, exit code only                                    |
+
+### Examples
+
+```bash
+# Check with default config
 linkspector check
+
+# Custom config file
+linkspector check -c /path/to/config.yml
+
+# JSON output for CI (RDJSON format)
+linkspector check -j
+
+# Show statistics table
+linkspector check -s
+
+# Quiet mode (exit code only, useful in scripts)
+linkspector check -q
 ```
 
-### GitHub action
+### Output modes
 
-For more details, see [action-linkspector](https://github.com/UmbrellaDocs/action-linkspector)
+**Interactive terminal (TUI)** - When running in a terminal, Linkspector shows an animated progress bar, live error stream grouped by file, and a summary bar:
 
-## Checking Hyperlinks
+```
+  > Linkspector v0.4.8
+  ──────────────────────────────────────────────
+  * Checking: docs/api/auth.md
+  Files   ████████████░░░░░░░░  12/47  25%
+  Links   89 checked . 2 failed
+  ──────────────────────────────────────────────
 
-To check hyperlinks in your markup language files, follow these steps:
+  docs/setup.md
+    L12:5  x https://example.com/old-page     404 Not Found
+    L34:3  x https://api.example.com/removed   ECONNREFUSED
+```
 
-1. Open your terminal.
+**CI / piped output** - Automatically detected via `stdout.isTTY` and the `CI` environment variable. Uses plain text output compatible with existing CI pipelines:
 
-1. Navigate to the directory containing the files you want to check.
+```
+docs/setup.md:12:5: https://example.com/old-page Status:404 Not Found
+Error: Some hyperlinks in the specified files are invalid.
+```
 
-1. (**Optional**) Create a [configuration](#configuration) file called `.linkspector.yml`. By default, Linkspector looks for a configuration file named `.linkspector.yml` in the current directory. If you have a custom configuration file or want to specify its path, you can use the `-c` or `--config` option.
+**JSON (`-j`)** - Outputs [RDJSON](https://github.com/reviewdog/reviewdog/tree/master/proto/rdf#rdjson) for reviewdog integration. Validated by [@umbrelladocs/rdformat-validator](https://www.npmjs.com/package/@umbrelladocs/rdformat-validator).
 
-1. Use the `linkspector check` command to initiate the hyperlink check. For example:
-
-   ```bash
-   linkspector check
-   ```
-
-   - To specify a custom configuration file path:
-
-     ```bash
-     linkspector check -c /path/to/custom-config.yml
-     ```
-
-   - To output the results in JSON format:
-
-     ```bash
-     linkspector check -j
-     ```
-
-     The JSON output follows [rdjson](https://github.com/reviewdog/reviewdog/tree/master/proto/rdf#rdjson) format. Linkspector automatically validates and fixes the RDJSON output using the [@umbrelladocs/rdformat-validator](https://www.npmjs.com/package/@umbrelladocs/rdformat-validator) package to ensure compliance with the RDJSON specification.
-
-1. Linkspector starts checking the hyperlinks in your files based on the configuration provided in the configuration file or using the default configuration. It then displays the results in your terminal.
-
-1. After the check is complete, Linkspector provides a summary of the results. If any dead links are found, they are listed in the terminal, along with their status codes and error messages.
-   - To display statistics about the checked links, use the `-s` or `--showstat` option:
-
-     ```bash
-     linkspector check -s
-     ```
-
-     This command shows a summary table with the number of files checked, total links, hyperlinks, file and header links, and the count of correct and failed links.
-     Note that this option cannot be used together with the JSON output option (`-j`).
-
-   - To run in quiet mode (no output, only exit code), use the `-q` or `--quiet` option:
-
-     ```bash
-     linkspector check -q
-     ```
-
-     In quiet mode, Linkspector suppresses all output and only communicates results through the exit code (0 for success, 1 for failures). This is useful in CI/CD pipelines where you only need the exit code.
-     Note that this option cannot be used together with `--json` or `--showstat`.
-
-1. If no dead links are found, Linkspector displays a success message, indicating that all links are working.
+---
 
 ## Configuration
 
-Linkspector uses a configuration file named `.linkspector.yml` to customize its behavior. If this file is not found in the current directory when the program is run, Linkspector displays a message saying "Configuration file not found. Using default configuration." and uses a default configuration.
-
-### Default Configuration
-
-The default configuration is as follows:
+Linkspector uses `.linkspector.yml` in the current directory. If not found, it uses the default configuration:
 
 ```yaml
 dirs:
@@ -146,83 +142,75 @@ dirs:
 useGitIgnore: true
 ```
 
-If you are defining a custom configuration, you must include the `dirs` or `files` section in the configuration file.
+### Configuration options
 
-Following are the available configuration options:
+| Option                                            | Description                                            | Required                   |
+| ------------------------------------------------- | ------------------------------------------------------ | -------------------------- |
+| [`files`](#files-to-check)                        | Files to check for broken links                        | Yes, if `dirs` is not set  |
+| [`dirs`](#directories-to-search)                  | Directories to search for files                        | Yes, if `files` is not set |
+| [`excludedFiles`](#excluded-files)                | Files to skip                                          | No                         |
+| [`excludedDirs`](#excluded-directories)           | Directories to skip                                    | No                         |
+| [`fileExtensions`](#file-extensions)              | File extensions to check (default: `['md']`)           | No                         |
+| [`baseUrl`](#base-url)                            | Base URL for relative links                            | No                         |
+| [`ignorePatterns`](#ignore-patterns)              | Regex patterns for URLs to skip                        | No                         |
+| [`replacementPatterns`](#replacement-patterns)    | Regex find/replace for URLs before checking            | No                         |
+| [`aliveStatusCodes`](#alive-status-codes)         | Additional HTTP status codes considered valid          | No                         |
+| [`useGitIgnore`](#use-gitignore)                  | Respect `.gitignore` rules (default: `true`)           | No                         |
+| [`modifiedFilesOnly`](#check-modified-files-only) | Only check git-modified files                          | No                         |
+| [`httpHeaders`](#http-headers)                    | Custom HTTP headers per domain                         | No                         |
+| [`followRedirects`](#follow-redirects)            | Follow HTTP redirects (default: `true`)                | No                         |
+| [`timeout`](#timeout)                             | Request timeout in ms (default: `30000`)               | No                         |
+| [`retryCount`](#retry-count)                      | Retry attempts with exponential backoff (default: `3`) | No                         |
+| [`userAgent`](#user-agent)                        | Custom User-Agent string                               | No                         |
+| [`ignoreSslErrors`](#ignore-ssl-errors)           | Skip SSL certificate validation                        | No                         |
 
-| Option                                            | Description                                                                                           | Required                          |
-| ------------------------------------------------- | ----------------------------------------------------------------------------------------------------- | --------------------------------- |
-| [`files`](#files-to-check)                        | The list of Markdown files to check for broken links.                                                 | Yes, if `dirs` is not specified.  |
-| [`dirs`](#directories-to-search)                  | The list of directories to search for Markdown files.                                                 | Yes, if `files` is not specified. |
-| [`excludedFiles`](#excluded-files)                | The list of Markdown files to exclude from the link checking process.                                 | No                                |
-| [`excludedDirs`](#excluded-directories)           | The list of directories to exclude from the link checking process.                                    | No                                |
-| [`baseUrl`](#base-url)                            | The base URL to use when checking relative links in Markdown files.                                   | No                                |
-| [`ignorePatterns`](#ignore-patterns)              | The list of regular expressions that match URLs to be ignored during link checking.                   | No                                |
-| [`replacementPatterns`](#replacement-patterns)    | The list of regular expressions and replacement strings to modify URLs during link checking.          | No                                |
-| [`aliveStatusCodes`](#alive-status-codes)         | The list of HTTP status codes that are considered as "alive" links.                                   | No                                |
-| [`useGitIgnore`](#use-gitignore)                  | Indicates whether to use the rules defined in the `.gitignore` file to exclude files and directories. | No                                |
-| [`modifiedFilesOnly`](#check-modified-files-only) | Indicates whether to check only the files that have been modified in the last git commit.             | No                                |
-| [`httpHeaders`](#http-headers)                    | The list of URLs and their corresponding HTTP headers to be used during link checking.                | No                                |
-| [`followRedirects`](#follow-redirects)            | Controls how HTTP redirects (e.g., 301, 302) are handled.                                             | No                                |
-| [`timeout`](#timeout)                             | Custom timeout in milliseconds for HTTP requests.                                                     | No                                |
-| [`retryCount`](#retry-count)                      | Number of retry attempts for failed requests with exponential backoff.                                | No                                |
-| [`userAgent`](#user-agent)                        | Custom User-Agent string used for HTTP requests.                                                      | No                                |
-| [`ignoreSslErrors`](#ignore-ssl-errors)           | Ignore SSL certificate errors when checking links.                                                    | No                                |
-
-### Files to Check
-
-The `files` section specifies the Markdown files that Linkspector should check for broken links. You can add the file paths you want to include in this list. For example:
+### Files to check
 
 ```yaml
 files:
   - README.md
-  - file2.md
-  - file3.md
+  - docs/guide.md
 ```
 
-### Directories to Search
-
-The `dirs` section lists the directories where Linkspector should search for Markdown files. You can specify directories relative to the current working directory. For example:
+### Directories to search
 
 ```yaml
 dirs:
   - ./
-  - folder2
+  - docs/
 ```
 
-### Excluded Files
-
-The `excludedFiles` section allows you to specify Markdown files that should be excluded from the link checking process. Add the paths of the files you want to exclude. For example:
+### Excluded files
 
 ```yaml
 excludedFiles:
-  - ./check.md
-  - excluded-file2.md
+  - ./CHANGELOG.md
+  - vendor/README.md
 ```
 
-### Excluded Directories
-
-The `excludedDirs` section lets you specify directories that should be excluded from the link checking process. Provide the paths of the directories you want to exclude. For example:
+### Excluded directories
 
 ```yaml
 excludedDirs:
-  - ./lib
-  - excluded-folder2
+  - ./node_modules
+  - vendor/
+```
+
+### File extensions
+
+```yaml
+fileExtensions:
+  - md
+  - adoc
 ```
 
 ### Base URL
-
-The `baseUrl` option sets the base URL that will be used when checking relative links in Markdown files. In this example:
 
 ```yaml
 baseUrl: https://example.com
 ```
 
-The base URL is set to `https://example.com`.
-
-### Ignore Patterns
-
-The `ignorePatterns` section allows you to define regular expressions that match URLs to be ignored during the link checking process. For example:
+### Ignore patterns
 
 ```yaml
 ignorePatterns:
@@ -230,25 +218,15 @@ ignorePatterns:
   - pattern: "^(ftp)://[^\\s/$?#]*\\.[^\\s]*$"
 ```
 
-In this example, URLs matching the specified patterns will be skipped during link checking.
-
-### Replacement Patterns
-
-The `replacementPatterns` section lets you define regular expressions and replacement strings to modify URLs during link checking. For example:
+### Replacement patterns
 
 ```yaml
 replacementPatterns:
   - pattern: "(https?://example.com)/(\\w+)/(\\d+)"
     replacement: '$1/id/$3'
-  - pattern: "\\[([^\\]]+)\\]\\((https?://example.com)/file\\)"
-    replacement: '<a href="$2/file">$1</a>'
 ```
 
-These patterns and replacements will be applied to URLs found in the Markdown files.
-
-### Alive Status Codes
-
-The `aliveStatusCodes` section allows you to specify a list of HTTP status codes that are considered as "alive" links. In this example:
+### Alive status codes
 
 ```yaml
 aliveStatusCodes:
@@ -257,238 +235,203 @@ aliveStatusCodes:
   - 204
 ```
 
-Links returning any of these status codes will be considered valid.
-
 ### Use .gitignore
-
-The `useGitIgnore` option, when set to `true`, indicates that Linkspector should use the rules defined in the `.gitignore` file to exclude files and directories. For example:
 
 ```yaml
 useGitIgnore: true
 ```
 
-When enabled, the app will respect the `.gitignore` rules during link checking.
-
-### Check Modified Files Only
-
-The `modifiedFilesOnly` option, when set to `true`, indicates that Linkspector should only check the files that have been modified in the last git commit. For example:
+### Check modified files only
 
 ```yaml
 modifiedFilesOnly: true
 ```
 
-When enabled, Linkspector will use `git` to find the list of modified files and only check those files. Please note that this option requires `git` to be installed and available on your system path. If `git` is not installed or not found in the system path, Linkspector will throw an error.
-
-Also, if no modified files are found in the list of files to check, Linkspector will skip link checking and exit with a message indicating that no modified files have been edited so it will skip checking.
+Requires `git` on your system PATH. Only checks files changed in the last commit.
 
 ### HTTP headers
 
-The `httpHeaders` option allows you to specify HTTP headers for specific URLs that require authorization. You can use environment variables for secure values.
-
-1. Create a `.env` file in the root directory of your project and add the environment variables. For example:
-
-   ```env
-   AUTH_TOKEN=abcdef123456
-   ```
-
-1. Add the `httpHeaders` section to the configuration file and specify the URLs and headers. For example:
-
-   ```yaml
-   httpHeaders:
-     - url:
-         - https://example1.com
-       headers:
-         Foo: Bar
-     - url:
-         - https://example2.com
-       headers:
-         Authorization: ${AUTH_TOKEN}
-         Foo: Bar
-   ```
-
-### Follow Redirects
-
-The `followRedirects` option controls how Linkspector handles HTTP redirects (e.g., status codes 301, 302).
-
-- **Type:** `boolean`
-- **Default:** `true`
-
-**Behavior:**
-
-- When `followRedirects: true` (default):
-  Linkspector will follow HTTP redirects to their final destination. The status of the link will be determined by the status code of this final destination. For example, if `http://example.com/old` redirects to `http://example.com/new` and `/new` returns a 200 OK, the original link `/old` will be reported as 'alive' (200), with a message indicating it was redirected.
-
-- When `followRedirects: false`:
-  Linkspector will _not_ follow HTTP redirects. If a link returns a redirect status code (e.g., 301, 302, 307, 308), it will be reported as an 'error'. The reported status code will be the original redirect status code (e.g., 301), and the error message will indicate that the link redirected but `followRedirects` was set to `false`.
-
-**Example:**
-
-To disable following redirects:
+Use environment variables for secrets:
 
 ```yaml
-followRedirects: false
-```
-
-### Timeout
-
-The `timeout` option sets the maximum time in milliseconds to wait for an HTTP response. This applies to both the fetch pass and the Puppeteer fallback pass.
-
-- **Type:** `number` (integer)
-- **Default:** `30000` (30 seconds)
-- **Range:** `1000` to `120000` (1 second to 2 minutes)
-
-```yaml
-timeout: 60000
-```
-
-This is useful when checking links to slow servers or when running behind a corporate proxy.
-
-### Retry Count
-
-The `retryCount` option sets the number of retry attempts for failed HTTP requests. Retries use exponential backoff (1s, 2s, 4s, ...) and automatically handle rate limiting (HTTP 429) by respecting the `Retry-After` header.
-
-- **Type:** `number` (integer)
-- **Default:** `3`
-- **Range:** `0` to `10`
-
-```yaml
-retryCount: 5
-```
-
-Setting `retryCount: 0` disables retries entirely.
-
-### User Agent
-
-The `userAgent` option sets a custom User-Agent string for all HTTP requests. Some websites block requests from non-browser User-Agents, so customizing this can help reduce false positives.
-
-- **Type:** `string`
-- **Default:** `Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/104.0.5112.79 Safari/537.36`
-
-```yaml
-userAgent: 'MyLinkChecker/1.0'
-```
-
-The User-Agent is applied to both the initial fetch pass and the Puppeteer fallback pass.
-
-### Ignore SSL Errors
-
-The `ignoreSslErrors` option allows Linkspector to skip SSL certificate validation when checking links. This is useful when your documentation links to internal servers with self-signed or expired certificates.
-
-- **Type:** `boolean`
-- **Default:** `false`
-
-```yaml
-ignoreSslErrors: true
-```
-
-When enabled, Linkspector will not fail on SSL certificate errors (such as self-signed certificates, expired certificates, or certificate name mismatches) for both the fetch pass and the Puppeteer fallback pass.
-
-**Warning:** Only enable this option when you trust the servers being checked. Disabling SSL verification removes an important security check.
-
-### Sample configuration
-
-```yml
-files:
-  - README.md
-  - file2.md
-  - file3.md
-dirs:
-  - ./
-  - folder2
-excludedFiles:
-  - ./check.md
-  - excluded-file2.md
-excludedDirs:
-  - ./lib
-  - excluded-folder2
-baseUrl: https://example.com
-ignorePatterns:
-  - pattern: '^https://example.com/skip/.*$'
-  - pattern: "^(ftp)://[^\\s/$?#]*\\.[^\\s]*$"
-replacementPatterns:
-  - pattern: "(https?://example.com)/(\\w+)/(\\d+)"
-    replacement: '$1/id/$3'
-  - pattern: "\\[([^\\]]+)\\]\\((https?://example.com)/file\\)"
-    replacement: '<a href="$2/file">$1</a>'
 httpHeaders:
   - url:
       - https://example1.com
     headers:
-      Authorization: Basic Zm9vOmJhcg==
       Foo: Bar
-aliveStatusCodes:
-  - 200
-  - 201
-  - 204
-useGitIgnore: true
-followRedirects: false # Example of including it in a full config
-timeout: 60000
+  - url:
+      - https://example2.com
+    headers:
+      Authorization: ${AUTH_TOKEN}
+```
+
+### Follow redirects
+
+```yaml
+followRedirects: false # Report redirects as errors instead of following them
+```
+
+- `true` (default): Follows redirects; reports the final destination status.
+- `false`: Reports any redirect (301, 302, etc.) as an error.
+
+### Timeout
+
+```yaml
+timeout: 60000 # 60 seconds
+```
+
+Range: `1000`-`120000` ms. Applies to both fetch and Puppeteer passes.
+
+### Retry count
+
+```yaml
 retryCount: 5
+```
+
+Range: `0`-`10`. Uses exponential backoff (1s, 2s, 4s...) and respects `Retry-After` headers.
+
+### User agent
+
+```yaml
 userAgent: 'MyLinkChecker/1.0'
+```
+
+### Ignore SSL errors
+
+```yaml
 ignoreSslErrors: true
 ```
 
-## Sample output
+> **Warning:** Only enable this for trusted servers (e.g., internal servers with self-signed certificates).
 
-If there are failed links, linkspector shows the output as comma-seprated values and exit with error.
-`File, HTTP status code, Line number, Error message`
+### Full example
 
-```
-REDISTRIBUTED.md, https://unlicense.org/, null, 186, net::ERR_SSL_VERSION_OR_CIPHER_MISMATCH at https://unlicense.org/]
-💥 Error: Some hyperlinks in the specified files are invalid.
+```yaml
+files:
+  - README.md
+dirs:
+  - ./docs
+excludedFiles:
+  - ./CHANGELOG.md
+excludedDirs:
+  - ./vendor
+baseUrl: https://example.com
+ignorePatterns:
+  - pattern: '^https://example.com/skip/.*$'
+replacementPatterns:
+  - pattern: "(https?://example.com)/(\\w+)/(\\d+)"
+    replacement: '$1/id/$3'
+httpHeaders:
+  - url:
+      - https://api.example.com
+    headers:
+      Authorization: ${AUTH_TOKEN}
+aliveStatusCodes:
+  - 200
+  - 204
+useGitIgnore: true
+followRedirects: true
+timeout: 60000
+retryCount: 5
+userAgent: 'MyLinkChecker/1.0'
+ignoreSslErrors: false
 ```
 
-If there are no errors, linkspector shows the following message:
-
-```
-✨ Success: All hyperlinks in the specified files are valid.
-```
+---
 
 ## AsciiDoc Support
 
-Linkspector supports AsciiDoc hyperlink checking through the same CLI flow used for Markdown, including direct URLs and `link:` macros.
+Linkspector checks AsciiDoc files through the same CLI, including direct URLs and `link:` macros. Set `fileExtensions` to include AsciiDoc:
 
-The AsciiDoc parser also extracts additional reference data for:
+```yaml
+fileExtensions:
+  - md
+  - adoc
+```
+
+The AsciiDoc parser handles:
 
 - Anchors (`[[...]]`, `[[[...]]]`, `[#...]`, `anchor:...[]`)
 - Internal references (`<<...>>`, `xref:...[]`)
 - External document references (`file.adoc#anchor`)
-- Local file targets from link macros
-- Comment-aware parsing (ignores `//` and `//// ... ////` content)
+- Link macros (`link:url[text]`)
+- Comment-aware parsing (ignores `//` and `////...////` blocks)
 
-Reference validation utilities for internal/external references and local files are available in the codebase (`lib/validate-asciidoc-references.js`) and are exercised by tests.
+---
 
-## Using Linkspector with Docker
+## Docker
 
-To use Linkspector with Docker, follow these steps:
+```bash
+# Build the image
+git clone git@github.com:UmbrellaDocs/linkspector.git
+cd linkspector
+docker build --no-cache --pull --build-arg LINKSPECTOR_PACKAGE= -t umbrelladocs/linkspector .
 
-1. Clone the Linkspector repository to your local machine and switch to the cloned directory:
-   ```bash
-   git clone git@github.com:UmbrellaDocs/linkspector.git
-   cd linkspector
-   ```
-1. Build the docker image locally, while being at the root (`.`) of this project:
+# Check links (mount your project at /app)
+docker run --rm -it -v $PWD:/app umbrelladocs/linkspector \
+  bash -c 'linkspector check'
 
-   ```bash
-   docker build --no-cache --pull --build-arg LINKSPECTOR_PACKAGE= -t umbrelladocs/linkspector .
-   ```
+# With custom config
+docker run --rm -it -v $PWD:/app umbrelladocs/linkspector \
+  bash -c 'linkspector check -c /app/custom-config.yml'
+```
 
-1. To perform a check using the default configuration, while being at the root (`$PWD`) of the project to be checked:
+---
 
-   ```bash
-   docker run --rm -it -v $PWD:/app \
-          --name linkspector umbrelladocs/linkspector \
-          bash -c 'linkspector check'
-   ```
+## Building from Source
 
-   To specify a custom configuration file path:
+### Prerequisites
 
-   ```bash
-   docker run --rm -it -v $PWD:/app -v $PWD/custom-config.yml:/path/to/custom-config.yml \
-          --name linkspector umbrelladocs/linkspector \
-          bash -c 'linkspector check -c /path/to/custom-config.yml'
-   ```
+- **npm build:** Node.js >= 20
+- **Bun build:** [Bun](https://bun.sh) runtime
+
+### Install dependencies
+
+```bash
+npm install
+```
+
+### Run tests
+
+```bash
+npm test
+```
+
+### Build standalone binaries
+
+Two build systems are available:
+
+| Command                    | Runtime     | TUI Support       | Notes                                      |
+| -------------------------- | ----------- | ----------------- | ------------------------------------------ |
+| `npm run build:binary`     | Node.js SEA | Plain output only | Uses esbuild + postject                    |
+| `npm run build:binary:bun` | Bun         | Full TUI          | Smaller binary, supports cross-compilation |
+
+```bash
+# Node.js SEA binary (plain renderer, no TUI)
+npm run build:binary
+
+# Bun binary (full TUI with ink)
+npm run build:binary:bun
+
+# Bun cross-compilation
+bun scripts/build-bun.mjs --target bun-linux-x64
+bun scripts/build-bun.mjs --target bun-linux-arm64
+bun scripts/build-bun.mjs --target bun-darwin-arm64
+bun scripts/build-bun.mjs --target bun-windows-x64
+```
+
+### Build with Docker
+
+```bash
+# Linux binary for current architecture
+docker build -f Dockerfile.binary -o dist/ .
+
+# Cross-architecture builds
+docker buildx build --platform linux/arm64 -f Dockerfile.binary -o dist/ .
+```
+
+---
 
 ## Contributing
 
-If you would like to contribute to Linkspector, please read the [contributing guidelines](/CONTRIBUTING.md).
+See [CONTRIBUTING.md](/CONTRIBUTING.md) for guidelines.

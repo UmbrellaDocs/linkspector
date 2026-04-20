@@ -10,10 +10,12 @@ test('linkspector should correctly handle GitHub-style line reference links', as
   let currentFile = ''
   let results = []
 
-  for await (const { file, result } of linkspector(
+  for await (const item of linkspector(
     './test/fixtures/markdown/line-references/.lineReferencesTest.yml',
     cmd
   )) {
+    if (item.type === 'meta') continue
+    const { file, result } = item
     currentFile = file
     for (const linkStatusObj of result) {
       if (cmd.json) {

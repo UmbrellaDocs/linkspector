@@ -10,10 +10,12 @@ test('linkspector should check HTML encoded section links using ID attribute', a
   let currentFile = '' // Variable to store the current file name
   let results = [] // Array to store the results if json is true
 
-  for await (const { file, result } of linkspector(
+  for await (const item of linkspector(
     './test/fixtures/markdown/with-html-anchors-id/.withHtmlAnchorsIdTest.yml',
     cmd
   )) {
+    if (item.type === 'meta') continue
+    const { file, result } = item
     currentFile = file
     for (const linkStatusObj of result) {
       if (cmd.json) {

@@ -15,10 +15,9 @@ describe('linkspector index tests', () => {
   beforeAll(async () => {
     const cmd = { json: true }
 
-    for await (const { file, result } of linkspector(
-      './.linkspector.test.yml',
-      cmd
-    )) {
+    for await (const item of linkspector('./.linkspector.test.yml', cmd)) {
+      if (item.type === 'meta') continue
+      const { file, result } = item
       stats.filesChecked++
 
       for (const linkStatusObj of result) {
@@ -68,12 +67,12 @@ describe('linkspector index tests', () => {
 
     expect(relativeLinks.length).toBeGreaterThan(0)
     expect(relativeLinkErrors.length).toBe(0)
-    expect(results.length).toBe(29)
+    expect(results.length).toBe(38)
   })
 
   it('linkspector should track statistics correctly when stats option is enabled', () => {
     expect(stats.filesChecked).toBeGreaterThan(0)
-    expect(stats.totalLinks).toBe(29)
+    expect(stats.totalLinks).toBe(38)
     expect(stats.totalLinks).toBe(
       stats.httpLinks +
         stats.fileLinks +

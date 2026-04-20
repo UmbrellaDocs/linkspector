@@ -61,6 +61,7 @@ describe('followRedirects feature', () => {
       (async () => {
         const collected = []
         for await (const item of linkspector(configFileFollowTrue, {})) {
+          if (item.type === 'meta') continue
           collected.push(...item.result)
         }
         return collected
@@ -68,6 +69,7 @@ describe('followRedirects feature', () => {
       (async () => {
         const collected = []
         for await (const item of linkspector(configFileFollowFalse, {})) {
+          if (item.type === 'meta') continue
           collected.push(...item.result)
         }
         return collected

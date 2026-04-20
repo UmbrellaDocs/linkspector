@@ -94,6 +94,9 @@ dist
 # Node.js SEA build artifacts
 sea-config.json
 
+# Bun build artifacts
+*.bun-build
+
 # Gatsby files
 .cache/
 # Comment in the public line in if your project uses Gatsby and not Next.js

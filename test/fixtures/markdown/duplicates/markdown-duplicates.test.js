@@ -10,10 +10,12 @@ test('linkspector should add back the removed duplicates when returning the resu
   let currentFile = '' // Variable to store the current file name
   let results = [] // Array to store the results if json is true
 
-  for await (const { file, result } of linkspector(
+  for await (const item of linkspector(
     './test/fixtures/markdown/duplicates/duplicateTest.yml',
     cmd
   )) {
+    if (item.type === 'meta') continue
+    const { file, result } = item
     currentFile = file
     for (const linkStatusObj of result) {
       if (cmd.json) {

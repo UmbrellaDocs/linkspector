@@ -23,7 +23,9 @@ describe('RDJSON Integration Tests', () => {
 
     let hasErrors = false
 
-    for await (const { file, result } of linkspector(configFile, cmd)) {
+    for await (const item of linkspector(configFile, cmd)) {
+      if (item.type === 'meta') continue
+      const { file, result } = item
       for (const linkStatusObj of result) {
         if (linkStatusObj.status === 'error') {
           hasErrors = true
@@ -89,7 +91,9 @@ describe('RDJSON Integration Tests', () => {
       diagnostics: [],
     }
 
-    for await (const { file, result } of linkspector(configFile, cmd)) {
+    for await (const item of linkspector(configFile, cmd)) {
+      if (item.type === 'meta') continue
+      const { file, result } = item
       for (const linkStatusObj of result) {
         if (linkStatusObj.status === 'error') {
           results.diagnostics.push({
