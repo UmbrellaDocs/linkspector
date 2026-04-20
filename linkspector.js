@@ -43,29 +43,37 @@ export async function* linkspector(configFile, cmd) {
     // parse configFile
     // Check if the YAML content is empty
     if (!configContent.trim()) {
-      throw new Error('The configuration file is empty.')
-    }
-
-    // Parse the YAML content
-    config = yaml.load(configContent)
-
-    // Check if the parsed YAML object is null or lacks properties
-    if (config === null || Object.keys(config).length === 0) {
-      throw new Error('Failed to parse the YAML content.')
-    }
-
-    // Replace environment variables in the configuration
-    config = replaceEnvVariables(config)
-
-    try {
-      const isValid = await validateConfig(config)
-      if (!isValid) {
-        console.error('Validation failed!')
-        process.exit(1)
+      if (!cmd.json) {
+        console.log('Configuration file is empty. Using default configuration.')
       }
-    } catch (error) {
-      console.error(`💥 Error: Please check your configuration file.`)
-      process.exit(1)
+      config = defaultConfig
+    } else {
+      // Parse the YAML content
+      config = yaml.load(configContent)
+
+      // Check if the parsed YAML object is null or lacks properties
+      if (config === null || Object.keys(config).length === 0) {
+        if (!cmd.json) {
+          console.log(
+            'Configuration file has no valid settings. Using default configuration.'
+          )
+        }
+        config = defaultConfig
+      } else {
+        // Replace environment variables in the configuration
+        config = replaceEnvVariables(config)
+
+        try {
+          const isValid = await validateConfig(config)
+          if (!isValid) {
+            console.error('Validation failed!')
+            process.exit(1)
+          }
+        } catch (error) {
+          console.error(`💥 Error: Please check your configuration file.`)
+          process.exit(1)
+        }
+      }
     }
   } catch (err) {
     if (err.code === 'ENOENT') {

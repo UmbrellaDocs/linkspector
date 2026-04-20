@@ -41,7 +41,7 @@ test('linkspector should check top-level relative links in Markdown file', async
 
   expect(relativeLinks.length).toBeGreaterThan(0)
   expect(relativeLinkErrors.length).toBe(0)
-  expect(results.length).toBe(24)
+  expect(results.length).toBe(25)
 })
 
 test('linkspector should track statistics correctly when stats option is enabled', async () => {
@@ -94,7 +94,7 @@ test('linkspector should track statistics correctly when stats option is enabled
 
   // Verify statistics are being tracked correctly
   expect(stats.filesChecked).toBeGreaterThan(0)
-  expect(stats.totalLinks).toBe(24)
+  expect(stats.totalLinks).toBe(25)
   expect(stats.totalLinks).toBe(
     stats.httpLinks +
       stats.fileLinks +
