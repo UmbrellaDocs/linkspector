@@ -1,0 +1,73 @@
+# Linkspector
+
+> CLI tool that checks for broken hyperlinks in Markdown and AsciiDoc files. Uses Puppeteer headless Chrome as a fallback for JavaScript-rendered pages and bot-protected links.
+
+## Usage
+
+npx @umbrelladocs/linkspector check        # check with defaults
+npx @umbrelladocs/linkspector check -j     # JSON (RDJSON) output for machine consumption
+npx @umbrelladocs/linkspector check -q     # quiet mode, exit code only
+npx @umbrelladocs/linkspector check -s     # show statistics table
+npx @umbrelladocs/linkspector check -c path/to/config.yml  # custom config
+
+## Configuration
+
+Create `.linkspector.yml` in the project root:
+
+```yaml
+dirs:
+  - .
+  - docs/
+excludedDirs:
+  - ./node_modules
+  - ./vendor
+excludedFiles:
+  - ./CHANGELOG.md
+fileExtensions:
+  - md
+  - adoc
+useGitIgnore: true
+ignorePatterns:
+  - pattern: '^https://example\.com/skip/.*$'
+replacementPatterns:
+  - pattern: "(https?://example\.com)/(\w+)/(\d+)"
+    replacement: '$1/id/$3'
+baseUrl: https://example.com
+aliveStatusCodes:
+  - 200
+  - 204
+httpHeaders:
+  - url:
+      - https://api.example.com
+    headers:
+      Authorization: ${AUTH_TOKEN}
+followRedirects: true
+timeout: 30000
+retryCount: 3
+modifiedFilesOnly: false
+```
+
+## Output
+
+Exit code 0 means all links are valid. Non-zero means broken links were found.
+
+With `-j`, outputs RDJSON (ReviewDog JSON) format with file paths, line numbers, column numbers, URLs, and HTTP status codes for each broken link.
+
+## MCP Server
+
+For native AI agent integration via Model Context Protocol, use the MCP server:
+
+npm install -g @umbrelladocs/linkspector-mcp
+
+Exposes two tools:
+- `check_links` — full broken link report in RDJSON format
+- `check_links_summary` — quick pass/fail with statistics
+
+See https://github.com/UmbrellaDocs/linkspector-mcp for setup with Claude Desktop, Claude Code, VS Code, and Cursor.
+
+## Links
+
+- Source: https://github.com/UmbrellaDocs/linkspector
+- npm: https://www.npmjs.com/package/@umbrelladocs/linkspector
+- GitHub Action: https://github.com/UmbrellaDocs/action-linkspector
+- MCP Server: https://github.com/UmbrellaDocs/linkspector-mcp

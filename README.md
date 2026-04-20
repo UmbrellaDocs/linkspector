@@ -432,6 +432,22 @@ docker buildx build --platform linux/arm64 -f Dockerfile.binary -o dist/ .
 
 ---
 
+## AI Agent / LLM Usage
+
+AI coding agents (Claude Code, Cursor, GitHub Copilot, etc.) can use Linkspector directly via `npx`:
+
+```bash
+npx @umbrelladocs/linkspector check -j
+```
+
+The `-j` flag outputs structured [RDJSON](https://github.com/reviewdog/reviewdog/tree/master/proto/rdf#rdjson), ideal for machine consumption. Use `-q` for a simple pass/fail exit code.
+
+This repository includes an [`llms.txt`](llms.txt) file with full usage and configuration details for AI agent discovery.
+
+For deeper integration, use the [Linkspector MCP Server](https://github.com/UmbrellaDocs/linkspector-mcp) to expose Linkspector as a native tool in Claude Desktop, Claude Code, VS Code, Cursor, and other MCP-compatible clients.
+
+---
+
 ## Contributing
 
 See [CONTRIBUTING.md](/CONTRIBUTING.md) for guidelines.
