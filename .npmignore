@@ -1,0 +1,24 @@
+# GitHub
+.github/
+
+# Tests
+test/
+*.test.js
+.linkspector.test.yml
+
+# Docker
+Dockerfile
+Dockerfile.*
+
+# Build scripts
+scripts/
+
+# Config
+.prettierrc.json
+vite.config.ts
+
+# Docs
+CODE_OF_CONDUCT.md
+CONTRIBUTING.md
+DEV_SETUP.md
+SECURITY.md

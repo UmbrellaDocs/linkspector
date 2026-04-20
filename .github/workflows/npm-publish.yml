@@ -17,6 +17,5 @@ jobs:
       - uses: actions/setup-node@v5
         with:
           node-version: '24.x'
-          registry-url: https://registry.npmjs.org/
       - run: npm ci
       - run: npm publish --provenance --access public
