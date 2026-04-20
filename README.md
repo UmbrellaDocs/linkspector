@@ -121,6 +121,15 @@ To check hyperlinks in your markup language files, follow these steps:
      This command shows a summary table with the number of files checked, total links, hyperlinks, file and header links, and the count of correct and failed links.
      Note that this option cannot be used together with the JSON output option (`-j`).
 
+   - To run in quiet mode (no output, only exit code), use the `-q` or `--quiet` option:
+
+     ```bash
+     linkspector check -q
+     ```
+
+     In quiet mode, Linkspector suppresses all output and only communicates results through the exit code (0 for success, 1 for failures). This is useful in CI/CD pipelines where you only need the exit code.
+     Note that this option cannot be used together with `--json` or `--showstat`.
+
 1. If no dead links are found, Linkspector displays a success message, indicating that all links are working.
 
 ## Configuration
@@ -155,6 +164,10 @@ Following are the available configuration options:
 | [`modifiedFilesOnly`](#check-modified-files-only) | Indicates whether to check only the files that have been modified in the last git commit.             | No                                |
 | [`httpHeaders`](#http-headers)                    | The list of URLs and their corresponding HTTP headers to be used during link checking.                | No                                |
 | [`followRedirects`](#follow-redirects)            | Controls how HTTP redirects (e.g., 301, 302) are handled.                                             | No                                |
+| [`timeout`](#timeout)                             | Custom timeout in milliseconds for HTTP requests.                                                     | No                                |
+| [`retryCount`](#retry-count)                      | Number of retry attempts for failed requests with exponential backoff.                                | No                                |
+| [`userAgent`](#user-agent)                        | Custom User-Agent string used for HTTP requests.                                                      | No                                |
+| [`ignoreSslErrors`](#ignore-ssl-errors)           | Ignore SSL certificate errors when checking links.                                                    | No                                |
 
 ### Files to Check
 
@@ -316,6 +329,62 @@ To disable following redirects:
 followRedirects: false
 ```
 
+### Timeout
+
+The `timeout` option sets the maximum time in milliseconds to wait for an HTTP response. This applies to both the fetch pass and the Puppeteer fallback pass.
+
+- **Type:** `number` (integer)
+- **Default:** `30000` (30 seconds)
+- **Range:** `1000` to `120000` (1 second to 2 minutes)
+
+```yaml
+timeout: 60000
+```
+
+This is useful when checking links to slow servers or when running behind a corporate proxy.
+
+### Retry Count
+
+The `retryCount` option sets the number of retry attempts for failed HTTP requests. Retries use exponential backoff (1s, 2s, 4s, ...) and automatically handle rate limiting (HTTP 429) by respecting the `Retry-After` header.
+
+- **Type:** `number` (integer)
+- **Default:** `3`
+- **Range:** `0` to `10`
+
+```yaml
+retryCount: 5
+```
+
+Setting `retryCount: 0` disables retries entirely.
+
+### User Agent
+
+The `userAgent` option sets a custom User-Agent string for all HTTP requests. Some websites block requests from non-browser User-Agents, so customizing this can help reduce false positives.
+
+- **Type:** `string`
+- **Default:** `Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/104.0.5112.79 Safari/537.36`
+
+```yaml
+userAgent: 'MyLinkChecker/1.0'
+```
+
+The User-Agent is applied to both the initial fetch pass and the Puppeteer fallback pass.
+
+### Ignore SSL Errors
+
+The `ignoreSslErrors` option allows Linkspector to skip SSL certificate validation when checking links. This is useful when your documentation links to internal servers with self-signed or expired certificates.
+
+- **Type:** `boolean`
+- **Default:** `false`
+
+```yaml
+ignoreSslErrors: true
+```
+
+When enabled, Linkspector will not fail on SSL certificate errors (such as self-signed certificates, expired certificates, or certificate name mismatches) for both the fetch pass and the Puppeteer fallback pass.
+
+**Warning:** Only enable this option when you trust the servers being checked. Disabling SSL verification removes an important security check.
+
 ### Sample configuration
 
 ```yml
@@ -353,6 +422,10 @@ aliveStatusCodes:
   - 204
 useGitIgnore: true
 followRedirects: false # Example of including it in a full config
+timeout: 60000
+retryCount: 5
+userAgent: 'MyLinkChecker/1.0'
+ignoreSslErrors: true
 ```
 
 ## Sample output

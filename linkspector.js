@@ -32,7 +32,13 @@ function isGitInstalled() {
 }
 
 // Process a single file and return its results
-async function processFile(file, config, urlCache, getBrowser, fetchSkipDomains) {
+async function processFile(
+  file,
+  config,
+  urlCache,
+  getBrowser,
+  fetchSkipDomains
+) {
   const relativeFilePath = path.relative(process.cwd(), file)
   const fileExtension = path.extname(file).substring(1).toLowerCase()
 
@@ -181,13 +187,19 @@ export async function* linkspector(configFile, cmd) {
 
   function getBrowser() {
     if (!browserPromise) {
-      browserPromise = puppeteer.launch({
-        headless: 'new',
-        args: ['--disable-features=DialMediaRouteProvider'],
-      }).then((b) => {
-        browser = b
-        return b
-      })
+      const launchArgs = ['--disable-features=DialMediaRouteProvider']
+      if (config.ignoreSslErrors) {
+        launchArgs.push('--ignore-certificate-errors')
+      }
+      browserPromise = puppeteer
+        .launch({
+          headless: 'new',
+          args: launchArgs,
+        })
+        .then((b) => {
+          browser = b
+          return b
+        })
     }
     return browserPromise
   }
