@@ -67,12 +67,12 @@ describe('linkspector index tests', () => {
 
     expect(relativeLinks.length).toBeGreaterThan(0)
     expect(relativeLinkErrors.length).toBe(0)
-    expect(results.length).toBe(38)
+    expect(results.length).toBe(41)
   })
 
   it('linkspector should track statistics correctly when stats option is enabled', () => {
     expect(stats.filesChecked).toBeGreaterThan(0)
-    expect(stats.totalLinks).toBe(38)
+    expect(stats.totalLinks).toBe(41)
     expect(stats.totalLinks).toBe(
       stats.httpLinks +
         stats.fileLinks +
