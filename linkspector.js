@@ -2,6 +2,7 @@ import { execSync } from 'child_process'
 import { readFileSync } from 'fs'
 import path from 'path'
 import yaml from 'js-yaml'
+import puppeteer from 'puppeteer'
 import { validateConfig } from './lib/validate-config.js'
 import { prepareFilesList } from './lib/prepare-file-list.js'
 import { extractMarkdownHyperlinks } from './lib/extract-markdown-hyperlinks.js'
@@ -27,6 +28,46 @@ function isGitInstalled() {
     return true
   } catch (error) {
     return false
+  }
+}
+
+// Process a single file and return its results
+async function processFile(
+  file,
+  config,
+  urlCache,
+  getBrowser,
+  fetchSkipDomains
+) {
+  const relativeFilePath = path.relative(process.cwd(), file)
+  const fileExtension = path.extname(file).substring(1).toLowerCase()
+
+  let astNodes
+
+  if (
+    ['asciidoc', 'adoc', 'asc'].includes(fileExtension) &&
+    config.fileExtensions &&
+    config.fileExtensions.includes(fileExtension)
+  ) {
+    astNodes = await extractAsciiDocLinks(file, config)
+  } else {
+    const fileContent = readFileSync(file, 'utf8')
+    astNodes = extractMarkdownHyperlinks(fileContent, config)
+  }
+
+  const uniqueLinks = getUniqueLinks(astNodes)
+
+  const linkStatus = await checkHyperlinks(
+    uniqueLinks,
+    { ...config, urlCache, getBrowser, fetchSkipDomains },
+    file
+  )
+
+  const updatedLinkStatus = updateLinkStatusObj(astNodes, linkStatus)
+
+  return {
+    file: relativeFilePath,
+    result: updatedLinkStatus,
   }
 }
 
@@ -134,40 +175,53 @@ export async function* linkspector(configFile, cmd) {
     filesToCheck = modifiedFilesToCheck
   }
 
-  // Process each file
-  for (const file of filesToCheck) {
-    const relativeFilePath = path.relative(process.cwd(), file)
+  // Global URL cache shared across all files
+  const urlCache = new Map()
 
-    // Get the file extension
-    const fileExtension = path.extname(file).substring(1).toLowerCase() // Get the file extension without the leading dot and convert to lowercase
+  // Domain skip-list: domains that fail fetch but succeed with Puppeteer
+  const fetchSkipDomains = new Set()
 
-    let astNodes
+  // Lazy browser launch — only created when first needed by Puppeteer pass
+  let browser = null
+  let browserPromise = null
 
-    // Check the file extension and use the appropriate function to extract links
-    if (
-      ['asciidoc', 'adoc', 'asc'].includes(fileExtension) &&
-      config.fileExtensions &&
-      config.fileExtensions.includes(fileExtension)
-    ) {
-      astNodes = await extractAsciiDocLinks(file, config)
-    } else {
-      const fileContent = readFileSync(file, 'utf8')
-      astNodes = extractMarkdownHyperlinks(fileContent, config)
+  function getBrowser() {
+    if (!browserPromise) {
+      const launchArgs = ['--disable-features=DialMediaRouteProvider']
+      if (config.ignoreSslErrors) {
+        launchArgs.push('--ignore-certificate-errors')
+      }
+      browserPromise = puppeteer
+        .launch({
+          headless: 'new',
+          args: launchArgs,
+        })
+        .then((b) => {
+          browser = b
+          return b
+        })
     }
+    return browserPromise
+  }
 
-    // Get unique hyperlinks
-    const uniqueLinks = getUniqueLinks(astNodes)
+  try {
+    // Process files in parallel batches
+    const fileConcurrency = 5
+    for (let i = 0; i < filesToCheck.length; i += fileConcurrency) {
+      const batch = filesToCheck.slice(i, i + fileConcurrency)
+      const results = await Promise.all(
+        batch.map((file) =>
+          processFile(file, config, urlCache, getBrowser, fetchSkipDomains)
+        )
+      )
 
-    // Check the status of hyperlinks
-    const linkStatus = await checkHyperlinks(uniqueLinks, config, file)
-
-    // Update linkStatusObjects with information about removed links
-    const updatedLinkStatus = updateLinkStatusObj(astNodes, linkStatus)
-
-    // Yield an object with the relative file path and its result
-    yield {
-      file: relativeFilePath,
-      result: updatedLinkStatus,
+      for (const result of results) {
+        yield result
+      }
+    }
+  } finally {
+    if (browser) {
+      await browser.close()
     }
   }
 }

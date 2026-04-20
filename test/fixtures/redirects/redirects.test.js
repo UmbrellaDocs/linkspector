@@ -49,53 +49,62 @@ const serverHandler = (req, res) => {
 }
 
 describe('followRedirects feature', () => {
+  let resultsFollowTrue = []
+  let resultsFollowFalse = []
+
   beforeAll(async () => {
     server = http.createServer(serverHandler)
     await new Promise((resolve) => server.listen(PORT, HOST, resolve))
-  })
+
+    // Run linkspector once per config and share results across tests
+    const [trueResults, falseResults] = await Promise.all([
+      (async () => {
+        const collected = []
+        for await (const item of linkspector(configFileFollowTrue, {})) {
+          collected.push(...item.result)
+        }
+        return collected
+      })(),
+      (async () => {
+        const collected = []
+        for await (const item of linkspector(configFileFollowFalse, {})) {
+          collected.push(...item.result)
+        }
+        return collected
+      })(),
+    ])
+
+    resultsFollowTrue = trueResults
+    resultsFollowFalse = falseResults
+  }, 30000)
 
   afterAll(async () => {
     await new Promise((resolve) => server.close(resolve))
   })
 
   // Scenario 1: followRedirects: true (default) - Permanent Redirect (301)
-  it('should report a permanent redirecting link as alive (200) when followRedirects is true (default)', async () => {
-    const resultsAsync = linkspector(configFileFollowTrue, {})
-    const collectedResults = []
-    for await (const item of resultsAsync) {
-      collectedResults.push(...item.result)
-    }
-    const redirectLink = collectedResults.find(
+  it('should report a permanent redirecting link as alive (200) when followRedirects is true (default)', () => {
+    const redirectLink = resultsFollowTrue.find(
       (r) => r.link === `http://${HOST}:${PORT}/redirect-permanent`
     )
     expect(redirectLink.status).toBe('alive')
-    expect(redirectLink.status_code).toBe(200) // Final destination
+    expect(redirectLink.status_code).toBe(200)
     expect(redirectLink.error_message).toContain('redirected to')
-  }, 10000) // Increased timeout to 10 seconds
+  })
 
   // Scenario 1 (bis): followRedirects: true (default) - Temporary Redirect (302)
-  it('should report a temporary redirecting link as alive (200) when followRedirects is true (default)', async () => {
-    const resultsAsync = linkspector(configFileFollowTrue, {})
-    const collectedResults = []
-    for await (const item of resultsAsync) {
-      collectedResults.push(...item.result)
-    }
-    const redirectLink = collectedResults.find(
+  it('should report a temporary redirecting link as alive (200) when followRedirects is true (default)', () => {
+    const redirectLink = resultsFollowTrue.find(
       (r) => r.link === `http://${HOST}:${PORT}/redirect-temporary`
     )
     expect(redirectLink.status).toBe('alive')
-    expect(redirectLink.status_code).toBe(200) // Final destination
+    expect(redirectLink.status_code).toBe(200)
     expect(redirectLink.error_message).toContain('redirected to')
-  }, 10000) // Increased timeout
+  })
 
   // Scenario 2: followRedirects: false - Permanent Redirect (301)
-  it('should report a permanent redirecting link as error (301) when followRedirects is false', async () => {
-    const resultsAsync = linkspector(configFileFollowFalse, {})
-    const collectedResults = []
-    for await (const item of resultsAsync) {
-      collectedResults.push(...item.result)
-    }
-    const redirectLink = collectedResults.find(
+  it('should report a permanent redirecting link as error (301) when followRedirects is false', () => {
+    const redirectLink = resultsFollowFalse.find(
       (r) => r.link === `http://${HOST}:${PORT}/redirect-permanent`
     )
     expect(redirectLink.status).toBe('error')
@@ -106,13 +115,8 @@ describe('followRedirects feature', () => {
   })
 
   // Scenario 2 (bis): followRedirects: false - Temporary Redirect (302)
-  it('should report a temporary redirecting link as error (302) when followRedirects is false', async () => {
-    const resultsAsync = linkspector(configFileFollowFalse, {})
-    const collectedResults = []
-    for await (const item of resultsAsync) {
-      collectedResults.push(...item.result)
-    }
-    const redirectLink = collectedResults.find(
+  it('should report a temporary redirecting link as error (302) when followRedirects is false', () => {
+    const redirectLink = resultsFollowFalse.find(
       (r) => r.link === `http://${HOST}:${PORT}/redirect-temporary`
     )
     expect(redirectLink.status).toBe('error')
@@ -123,13 +127,8 @@ describe('followRedirects feature', () => {
   })
 
   // Scenario 3: Non-redirecting link with followRedirects: false
-  it('should report a non-redirecting link as alive (200) when followRedirects is false', async () => {
-    const resultsAsync = linkspector(configFileFollowFalse, {})
-    const collectedResults = []
-    for await (const item of resultsAsync) {
-      collectedResults.push(...item.result)
-    }
-    const okLink = collectedResults.find(
+  it('should report a non-redirecting link as alive (200) when followRedirects is false', () => {
+    const okLink = resultsFollowFalse.find(
       (r) => r.link === `http://${HOST}:${PORT}/ok`
     )
     expect(okLink.status).toBe('alive')
@@ -137,13 +136,8 @@ describe('followRedirects feature', () => {
   })
 
   // Scenario 4: Non-redirecting link with followRedirects: true (default)
-  it('should report a non-redirecting link as alive (200) when followRedirects is true (default)', async () => {
-    const resultsAsync = linkspector(configFileFollowTrue, {})
-    const collectedResults = []
-    for await (const item of resultsAsync) {
-      collectedResults.push(...item.result)
-    }
-    const okLink = collectedResults.find(
+  it('should report a non-redirecting link as alive (200) when followRedirects is true (default)', () => {
+    const okLink = resultsFollowTrue.find(
       (r) => r.link === `http://${HOST}:${PORT}/ok`
     )
     expect(okLink.status).toBe('alive')
@@ -151,13 +145,8 @@ describe('followRedirects feature', () => {
   })
 
   // Scenario 5: Link that results in an actual error (404) with followRedirects: false
-  it('should report a 404 link as error (404) when followRedirects is false', async () => {
-    const resultsAsync = linkspector(configFileFollowFalse, {})
-    const collectedResults = []
-    for await (const item of resultsAsync) {
-      collectedResults.push(...item.result)
-    }
-    const notFoundLink = collectedResults.find(
+  it('should report a 404 link as error (404) when followRedirects is false', () => {
+    const notFoundLink = resultsFollowFalse.find(
       (r) => r.link === `http://${HOST}:${PORT}/not-found`
     )
     expect(notFoundLink.status).toBe('error')
@@ -165,13 +154,8 @@ describe('followRedirects feature', () => {
   })
 
   // Scenario: Link that results in an actual error (404) with followRedirects: true (default)
-  it('should report a 404 link as error (404) when followRedirects is true (default)', async () => {
-    const resultsAsync = linkspector(configFileFollowTrue, {})
-    const collectedResults = []
-    for await (const item of resultsAsync) {
-      collectedResults.push(...item.result)
-    }
-    const notFoundLink = collectedResults.find(
+  it('should report a 404 link as error (404) when followRedirects is true (default)', () => {
+    const notFoundLink = resultsFollowTrue.find(
       (r) => r.link === `http://${HOST}:${PORT}/not-found`
     )
     expect(notFoundLink.status).toBe('error')
@@ -179,33 +163,19 @@ describe('followRedirects feature', () => {
   })
 
   // Scenario: External redirect allowed when followRedirects is true
-  it('should report an external redirecting link as alive (200 from example.com) when followRedirects is true', async () => {
-    const resultsAsync = linkspector(configFileFollowTrue, {})
-    const collectedResults = []
-    for await (const item of resultsAsync) {
-      collectedResults.push(...item.result)
-    }
-    const externalRedirectLink = collectedResults.find(
+  it('should report an external redirecting link as alive (200 from example.com) when followRedirects is true', () => {
+    const externalRedirectLink = resultsFollowTrue.find(
       (r) => r.link === `http://${HOST}:${PORT}/redirect-external`
     )
     expect(externalRedirectLink.status).toBe('alive')
-    // Note: status code might be from the final destination (example.com) if HEAD request works,
-    // or could be tricky if example.com blocks HEAD. Puppeteer fallback should handle it.
-    // For now, checking for 'alive' is the primary goal.
-    // expect(externalRedirectLink.status_code).toBe(200) // This can be flaky with external sites
     expect(externalRedirectLink.error_message).toContain(
       'redirected to https://example.com'
     )
-  }, 10000) // Increased timeout
+  })
 
   // Scenario: External redirect disallowed when followRedirects is false
-  it('should report an external redirecting link as error (301) when followRedirects is false', async () => {
-    const resultsAsync = linkspector(configFileFollowFalse, {})
-    const collectedResults = []
-    for await (const item of resultsAsync) {
-      collectedResults.push(...item.result)
-    }
-    const externalRedirectLink = collectedResults.find(
+  it('should report an external redirecting link as error (301) when followRedirects is false', () => {
+    const externalRedirectLink = resultsFollowFalse.find(
       (r) => r.link === `http://${HOST}:${PORT}/redirect-external`
     )
     expect(externalRedirectLink.status).toBe('error')
@@ -216,36 +186,21 @@ describe('followRedirects feature', () => {
   })
 
   // Scenario: Redirect loop when followRedirects is true (Puppeteer should eventually error out)
-  it('should report a redirect loop as error when followRedirects is true', async () => {
-    // This test might take a bit longer due to Puppeteer's retries for loops or timeouts
-    const resultsAsync = linkspector(configFileFollowTrue, {
-      aliveStatusCodes: [200],
-    }) // Ensure only 200 is "assumed alive"
-    const collectedResults = []
-    for await (const item of resultsAsync) {
-      collectedResults.push(...item.result)
-    }
-    const loopLink = collectedResults.find(
+  it('should report a redirect loop as error when followRedirects is true', () => {
+    const loopLink = resultsFollowTrue.find(
       (r) => r.link === `http://${HOST}:${PORT}/redirect-loop1`
     )
     expect(loopLink.status).toBe('error')
-    // The error message might vary depending on how Puppeteer handles max redirects
-    // e.g., "net::ERR_TOO_MANY_REDIRECTS" or similar
     expect(loopLink.error_message).toBeDefined()
-  }, 20000) // Timeout already increased, keeping it
+  })
 
   // Scenario: Redirect loop when followRedirects is false
-  it('should report a redirect loop as error (first redirect status) when followRedirects is false', async () => {
-    const resultsAsync = linkspector(configFileFollowFalse, {})
-    const collectedResults = []
-    for await (const item of resultsAsync) {
-      collectedResults.push(...item.result)
-    }
-    const loopLink = collectedResults.find(
+  it('should report a redirect loop as error (first redirect status) when followRedirects is false', () => {
+    const loopLink = resultsFollowFalse.find(
       (r) => r.link === `http://${HOST}:${PORT}/redirect-loop1`
     )
     expect(loopLink.status).toBe('error')
-    expect(loopLink.status_code).toBe(302) // The first redirect in the loop
+    expect(loopLink.status_code).toBe(302)
     expect(loopLink.error_message).toMatch(
       /redirected.*followRedirects is set to false/i
     )

@@ -21,12 +21,23 @@ program
   .option('-c, --config <path>', 'Specify a custom configuration file path')
   .option('-j, --json', 'Output the results in JSON format')
   .option('-s, --showstat', 'Display statistics about the links checked')
+  .option('-q, --quiet', 'Suppress all output except errors')
   .action(async (cmd) => {
     // Validate that -j and -s options are not used together
     if (cmd.json && cmd.showstat) {
       console.error(
         kleur.red(
           'Error: The --json and --showstat options cannot be used together.'
+        )
+      )
+      process.exit(1)
+    }
+
+    // Validate that -q is not used with -j or -s
+    if (cmd.quiet && (cmd.json || cmd.showstat)) {
+      console.error(
+        kleur.red(
+          'Error: The --quiet option cannot be used with --json or --showstat.'
         )
       )
       process.exit(1)
@@ -48,7 +59,7 @@ program
       failedLinks: 0,
     }
 
-    const spinner = cmd.json ? null : ora().start()
+    const spinner = cmd.json || cmd.quiet ? null : ora().start()
 
     try {
       let hasErrorLinks = false
@@ -123,8 +134,8 @@ program
               )
 
               results.diagnostics.push(diagnostic)
-            } else {
-              // If json is false, print the results in the console
+            } else if (!cmd.quiet) {
+              // If json is false and not quiet, print the results in the console
               spinner.stop()
               console.log(
                 kleur.red(
@@ -235,7 +246,7 @@ program
       }
 
       if (!hasErrorLinks) {
-        if (!cmd.json && !cmd.showstat) {
+        if (!cmd.json && !cmd.showstat && !cmd.quiet) {
           spinner.stop()
           console.log(
             kleur.green(
@@ -245,7 +256,7 @@ program
         }
         process.exit(0)
       } else {
-        if (!cmd.json && !cmd.showstat) {
+        if (!cmd.json && !cmd.showstat && !cmd.quiet) {
           spinner.stop()
           console.error(
             kleur.red(
