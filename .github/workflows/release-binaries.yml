@@ -1,0 +1,89 @@
+name: Build Release Binaries
+
+on:
+  release:
+    types: [published]
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: ubuntu-latest
+            platform: linux
+            arch: x64
+            binary_name: linkspector
+            asset_name: linkspector-linux-x64
+          - os: ubuntu-latest
+            platform: linux
+            arch: arm64
+            binary_name: linkspector
+            asset_name: linkspector-linux-arm64
+            use_docker: true
+          - os: macos-13
+            platform: darwin
+            arch: x64
+            binary_name: linkspector
+            asset_name: linkspector-macos-x64
+          - os: macos-latest
+            platform: darwin
+            arch: arm64
+            binary_name: linkspector
+            asset_name: linkspector-macos-arm64
+          - os: windows-latest
+            platform: win32
+            arch: x64
+            binary_name: linkspector.exe
+            asset_name: linkspector-windows-x64.exe
+
+    runs-on: ${{ matrix.os }}
+    name: Build ${{ matrix.asset_name }}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      # --- Linux ARM64 via Docker ---
+      - name: Build Linux ARM64 binary (Docker)
+        if: matrix.use_docker
+        run: |
+          docker buildx create --use
+          docker buildx build \
+            --platform linux/arm64 \
+            -f Dockerfile.binary \
+            --output type=local,dest=dist/ \
+            .
+
+      # --- Native builds (Linux x64, macOS, Windows) ---
+      - name: Setup Node.js
+        if: '!matrix.use_docker'
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install dependencies
+        if: '!matrix.use_docker'
+        run: npm ci
+
+      - name: Build binary
+        if: '!matrix.use_docker'
+        run: node scripts/build-binary.mjs
+
+      # --- Upload ---
+      - name: Rename binary for release asset
+        shell: bash
+        run: |
+          mv "dist/${{ matrix.binary_name }}" "dist/${{ matrix.asset_name }}"
+
+      - name: Upload binary to release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: dist/${{ matrix.asset_name }}
+          tag_name: ${{ github.event.release.tag_name }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

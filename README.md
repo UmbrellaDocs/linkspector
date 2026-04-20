@@ -25,13 +25,55 @@ Linkspector is a powerful tool for anyone who creates content using markup langu
 
 ## Installation
 
-Before you can use Linkspector, you need to install it. You can do this using the following command:
+### Using npm
 
 ```bash
 npm install -g @umbrelladocs/linkspector
 ```
 
-This command installs Linkspector globally, allowing you to use it from anywhere in your terminal. If you don't want to install using `npm` you can download the binary from GitHub releases.
+This command installs Linkspector globally, allowing you to use it from anywhere in your terminal.
+
+### Using standalone binary
+
+You can download a standalone binary from [GitHub Releases](https://github.com/UmbrellaDocs/linkspector/releases). No Node.js or npm installation required.
+
+Available binaries:
+
+| Platform | Architecture | File                          |
+| -------- | ------------ | ----------------------------- |
+| Linux    | x64          | `linkspector-linux-x64`       |
+| Linux    | ARM64        | `linkspector-linux-arm64`     |
+| macOS    | x64 (Intel)  | `linkspector-macos-x64`       |
+| macOS    | ARM64 (M1+)  | `linkspector-macos-arm64`     |
+| Windows  | x64          | `linkspector-windows-x64.exe` |
+
+After downloading, make the binary executable (Linux/macOS) and move it to a directory in your `PATH`:
+
+```bash
+chmod +x linkspector-linux-x64
+sudo mv linkspector-linux-x64 /usr/local/bin/linkspector
+```
+
+#### Chrome/Chromium requirement
+
+The standalone binary requires **Google Chrome** or **Chromium** installed on your system. Linkspector uses it in headless mode to check links.
+
+Linkspector auto-detects Chrome/Chromium in common installation paths. If Chrome is installed in a non-standard location, set the `PUPPETEER_EXECUTABLE_PATH` environment variable:
+
+```bash
+# Linux/macOS
+export PUPPETEER_EXECUTABLE_PATH=/path/to/chrome
+linkspector check
+
+# Or inline
+PUPPETEER_EXECUTABLE_PATH=/path/to/chrome linkspector check
+```
+
+```powershell
+# Windows (PowerShell)
+$env:PUPPETEER_EXECUTABLE_PATH="C:\path\to\chrome.exe"
+linkspector check
+```
 
 ### GitHub action
 

@@ -39,6 +39,7 @@
   "scripts": {
     "prettier:check": "npx prettier --check .",
     "prettier:format": "npx prettier --write .",
+    "build:binary": "node scripts/build-binary.mjs",
     "test": "vitest --run --testTimeout=60000",
     "test:watch": "vitest"
   },
@@ -66,6 +67,8 @@
     "unist-util-visit": "^5.1.0"
   },
   "devDependencies": {
+    "esbuild": "^0.25.0",
+    "postject": "^1.0.0-alpha.6",
     "prettier": "^3.8.1",
     "vite": "^7.3.1",
     "vitest": "^4.0.18"
