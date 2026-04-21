@@ -18,6 +18,94 @@ Linkspector is a CLI tool that checks for dead hyperlinks in your files. It supp
 - **Built for CI/CD** - First-class [GitHub Action](https://github.com/UmbrellaDocs/action-linkspector) with [RDJSON](https://github.com/reviewdog/reviewdog/tree/master/proto/rdf#rdjson) output for reviewdog integration.
 - **Standalone binaries** - Download a single executable from [Releases](https://github.com/UmbrellaDocs/linkspector/releases). No Node.js required.
 
+## Trusted by
+
+<table>
+<tr>
+<td align="center" width="150">
+<a href="https://github.com/dotnet/source-build/blob/main/.github/workflows/check-markdown-links.yml">
+<img src="https://github.com/dotnet.png" width="50" height="50" alt="dotnet" /><br />
+<b>.NET</b><br />
+<sub>source-build</sub>
+</a>
+</td>
+<td align="center" width="150">
+<a href="https://github.com/SAP/abap-file-formats/blob/main/.github/workflows/markdown-link-check.yml">
+<img src="https://github.com/SAP.png" width="50" height="50" alt="SAP" /><br />
+<b>SAP</b><br />
+<sub>abap-file-formats</sub>
+</a>
+</td>
+<td align="center" width="150">
+<a href="https://github.com/open-telemetry/opentelemetry-ruby/blob/main/.github/workflows/ci-markdown-link.yml">
+<img src="https://github.com/open-telemetry.png" width="50" height="50" alt="OpenTelemetry" /><br />
+<b>OpenTelemetry</b><br />
+<sub>opentelemetry-ruby</sub>
+</a>
+</td>
+<td align="center" width="150">
+<a href="https://github.com/finos/spring-bot/blob/spring-bot-master/.github/workflows/checklinks.yml">
+<img src="https://github.com/finos.png" width="50" height="50" alt="FINOS" /><br />
+<b>FINOS</b><br />
+<sub>spring-bot</sub>
+</a>
+</td>
+<td align="center" width="150">
+<a href="https://github.com/dotnet/dotnet-docker/blob/main/.github/workflows/check-markdown-links.yml">
+<img src="https://github.com/dotnet.png" width="50" height="50" alt="dotnet" /><br />
+<b>.NET</b><br />
+<sub>dotnet-docker</sub>
+</a>
+</td>
+</tr>
+<tr>
+<td align="center" width="150">
+<a href="https://github.com/Azure-Samples/azure-spring-boot-samples/blob/main/.github/workflows/markdown-link-check.yml">
+<img src="https://github.com/Azure-Samples.png" width="50" height="50" alt="Azure" /><br />
+<b>Azure</b><br />
+<sub>spring-boot-samples</sub>
+</a>
+</td>
+<td align="center" width="150">
+<a href="https://github.com/solarwinds/apm-ruby/blob/main/.github/workflows/ci-markdown-link.yml">
+<img src="https://github.com/solarwinds.png" width="50" height="50" alt="SolarWinds" /><br />
+<b>SolarWinds</b><br />
+<sub>apm-ruby</sub>
+</a>
+</td>
+<td align="center" width="150">
+<a href="https://github.com/jenkinsci/autograding-plugin/blob/main/.github/workflows/check-md-links.yml">
+<img src="https://github.com/jenkinsci.png" width="50" height="50" alt="Jenkins" /><br />
+<b>Jenkins</b><br />
+<sub>autograding-plugin</sub>
+</a>
+</td>
+<td align="center" width="150">
+<a href="https://github.com/riscv/learn/blob/main/.github/workflows/linkcheck.yml">
+<img src="https://github.com/riscv.png" width="50" height="50" alt="RISC-V" /><br />
+<b>RISC-V</b><br />
+<sub>learn</sub>
+</a>
+</td>
+<td align="center" width="150">
+<a href="https://github.com/vllm-project/llm-compressor/blob/main/.github/workflows/linkcheck.yml">
+<img src="https://github.com/vllm-project.png" width="50" height="50" alt="vLLM" /><br />
+<b>vLLM</b><br />
+<sub>llm-compressor</sub>
+</a>
+</td>
+</tr>
+<tr>
+<td align="center" colspan="5">
+<a href="https://github.com/search?q=uses%3A+umbrelladocs%2Faction-linkspector%40v1&type=code">
+<b>and many more...</b>
+</a>
+</td>
+</tr>
+</table>
+
+If you are using this on production, consider [buying me a coffee](https://liberapay.com/gaurav-nelson/) ☕.
+
 ---
 
 ## Table of Contents
