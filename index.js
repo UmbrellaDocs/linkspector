@@ -89,6 +89,7 @@ program
       httpLinks: 0,
       fileLinks: 0,
       emailLinks: 0,
+      anchors: 0,
       correctLinks: 0,
       failedLinks: 0,
     }
@@ -114,10 +115,11 @@ program
         }
 
         // Handle file result yield
-        const { file, result } = item
+        const { file, result, anchorCount } = item
         renderer.onFileStart(file)
 
         stats.filesChecked++
+        stats.anchors += anchorCount || 0
 
         for (const linkStatusObj of result) {
           stats.totalLinks++

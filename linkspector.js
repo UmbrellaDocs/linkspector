@@ -43,16 +43,21 @@ async function processFile(
   const fileExtension = path.extname(file).substring(1).toLowerCase()
 
   let astNodes
+  let anchorCount = 0
 
   if (
     ['asciidoc', 'adoc', 'asc'].includes(fileExtension) &&
     config.fileExtensions &&
     config.fileExtensions.includes(fileExtension)
   ) {
-    astNodes = await extractAsciiDocLinks(file, config)
+    const extracted = await extractAsciiDocLinks(file, config)
+    astNodes = extracted.links
+    anchorCount = extracted.anchorCount
   } else {
     const fileContent = readFileSync(file, 'utf8')
-    astNodes = extractMarkdownHyperlinks(fileContent, config)
+    const extracted = extractMarkdownHyperlinks(fileContent, config)
+    astNodes = extracted.links
+    anchorCount = extracted.anchorCount
   }
 
   const uniqueLinks = getUniqueLinks(astNodes)
@@ -68,6 +73,7 @@ async function processFile(
   return {
     file: relativeFilePath,
     result: updatedLinkStatus,
+    anchorCount,
   }
 }
 
@@ -223,7 +229,7 @@ export async function* linkspector(configFile, cmd) {
       )
 
       for (const result of results) {
-        yield { type: 'file', file: result.file, result: result.result }
+        yield { type: 'file', file: result.file, result: result.result, anchorCount: result.anchorCount }
       }
     }
   } finally {
