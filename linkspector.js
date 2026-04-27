@@ -135,6 +135,11 @@ export async function* linkspector(configFile, cmd) {
     }
   }
 
+  // Merge CLI flag for archived repo checking
+  if (cmd.checkArchived) {
+    config.checkGithubArchived = true
+  }
+
   // Prepare the list of files to check
   let filesToCheck = prepareFilesList(config)
 

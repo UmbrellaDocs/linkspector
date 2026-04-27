@@ -1,0 +1,3 @@
+files:
+  - test/fixtures/archived-repos/archived-repos.md
+checkGithubArchived: true
