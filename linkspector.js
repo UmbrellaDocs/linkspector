@@ -229,7 +229,12 @@ export async function* linkspector(configFile, cmd) {
       )
 
       for (const result of results) {
-        yield { type: 'file', file: result.file, result: result.result, anchorCount: result.anchorCount }
+        yield {
+          type: 'file',
+          file: result.file,
+          result: result.result,
+          anchorCount: result.anchorCount,
+        }
       }
     }
   } finally {
