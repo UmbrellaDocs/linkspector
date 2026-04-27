@@ -124,6 +124,8 @@ If you are using this on production, consider [buying me a coffee](https://liber
 
 ### npm (recommended)
 
+> **Prerequisites:** Node.js 18.18.0+ and a supported Chromium/Chrome installation are required. On Linux you may also need system libraries. See [PREREQUISITES.md](PREREQUISITES.md) for full details.
+
 ```bash
 npm install -g @umbrelladocs/linkspector
 ```
@@ -513,10 +515,10 @@ bun scripts/build-bun.mjs --target bun-windows-x64
 
 ```bash
 # Linux binary for current architecture
-docker build -f Dockerfile.binary -o dist/ .
+docker build -f Dockerfile.buildbinary -o dist/ .
 
 # Cross-architecture builds
-docker buildx build --platform linux/arm64 -f Dockerfile.binary -o dist/ .
+docker buildx build --platform linux/arm64 -f Dockerfile.buildbinary -o dist/ .
 ```
 
 ---

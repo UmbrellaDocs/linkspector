@@ -1,0 +1,35 @@
+# Multi-stage Dockerfile for building linkspector standalone binaries.
+#
+# Builds Linux binaries using Bun with full TUI support.
+# Use with Docker buildx for multi-arch builds:
+#
+#   # Build for linux/amd64:
+#   docker build --platform linux/amd64 -f Dockerfile.buildbinary -o dist/ .
+#
+#   # Build for linux/arm64:
+#   docker build --platform linux/arm64 -f Dockerfile.buildbinary -o dist/ .
+#
+#   # Build for both architectures:
+#   docker buildx build --platform linux/amd64,linux/arm64 -f Dockerfile.buildbinary -o dist/ .
+
+# --- Stage 1: Build the binary ---
+FROM oven/bun:latest AS builder
+
+WORKDIR /build
+
+# Copy package files first for better layer caching
+COPY package.json bun.lock* package-lock.json* ./
+RUN bun install
+
+# Copy source code
+COPY index.js linkspector.js ./
+COPY lib/ lib/
+COPY scripts/ scripts/
+
+# Build the standalone binary
+RUN bun scripts/build-bun.mjs
+
+# --- Stage 2: Output the binary ---
+# Using scratch so `docker build -o` exports just the binary
+FROM scratch
+COPY --from=builder /build/dist/linkspector /linkspector
