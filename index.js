@@ -148,11 +148,11 @@ program
                     range: {
                       start: {
                         line: linkStatusObj.line_number,
-                        column: linkStatusObj.position.start.column,
+                        column: linkStatusObj.position?.start?.column ?? 1,
                       },
                       end: {
-                        line: linkStatusObj.position.end.line,
-                        column: linkStatusObj.position.end.column,
+                        line: linkStatusObj.position?.end?.line ?? linkStatusObj.line_number,
+                        column: linkStatusObj.position?.end?.column ?? 1,
                       },
                     },
                   },
