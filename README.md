@@ -169,12 +169,13 @@ linkspector check [options]
 
 ### Options
 
-| Flag                  | Description                                                  |
-| --------------------- | ------------------------------------------------------------ |
-| `-c, --config <path>` | Custom configuration file path (default: `.linkspector.yml`) |
-| `-j, --json`          | Output results in RDJSON format                              |
-| `-s, --showstat`      | Display link check statistics                                |
-| `-q, --quiet`         | No output, exit code only                                    |
+| Flag                   | Description                                                  |
+| ---------------------- | ------------------------------------------------------------ |
+| `-c, --config <path>`  | Custom configuration file path (default: `.linkspector.yml`) |
+| `-j, --json`           | Output results in RDJSON format                              |
+| `-s, --showstat`       | Display link check statistics                                |
+| `-q, --quiet`          | No output, exit code only                                    |
+| `-a, --check-archived` | Warn about links to archived GitHub repos                    |
 
 ### Examples
 
@@ -193,6 +194,9 @@ linkspector check -s
 
 # Quiet mode (exit code only, useful in scripts)
 linkspector check -q
+
+# Warn about archived GitHub repos
+linkspector check --check-archived
 ```
 
 ### Output modes
@@ -254,6 +258,7 @@ useGitIgnore: true
 | [`retryCount`](#retry-count)                      | Retry attempts with exponential backoff (default: `3`) | No                         |
 | [`userAgent`](#user-agent)                        | Custom User-Agent string                               | No                         |
 | [`ignoreSslErrors`](#ignore-ssl-errors)           | Skip SSL certificate validation                        | No                         |
+| [`checkGithubArchived`](#check-github-archived)   | Warn about archived GitHub repos                       | No                         |
 
 ### Files to check
 
@@ -395,6 +400,34 @@ ignoreSslErrors: true
 
 > **Warning:** Only enable this for trusted servers (e.g., internal servers with self-signed certificates).
 
+### Check GitHub archived
+
+```yaml
+checkGithubArchived: true
+```
+
+When enabled, Linkspector checks whether GitHub repository links point to archived repos. Archived repos return HTTP 200 (they're still reachable) but are no longer maintained. These are reported as warnings, not errors, so they don't affect the exit code.
+
+Uses the [GitHub API](https://docs.github.com/en/rest/repos/repos#get-a-repository) and requires a `GITHUB_TOKEN` for large repos (see [GitHub Token](#github-token) below).
+
+You can also enable this via the `--check-archived` CLI flag without modifying your config file.
+
+### GitHub Token
+
+Set the `GITHUB_TOKEN` environment variable to authenticate requests to GitHub:
+
+```bash
+export GITHUB_TOKEN=ghp_your_token_here
+linkspector check
+```
+
+When set, the token is used for:
+
+- **Regular link checking** — Authenticates requests to `github.com` to avoid HTTP 429 (Too Many Requests) rate limiting. This is especially important in CI/CD environments and when checking files with many GitHub links.
+- **Archived repo detection** — Increases the GitHub API rate limit from 60 to 5,000 requests/hour for the `checkGithubArchived` feature.
+
+In GitHub Actions, the token is available automatically as `${{ github.token }}`.
+
 ### Full example
 
 ```yaml
@@ -426,6 +459,7 @@ timeout: 60000
 retryCount: 5
 userAgent: 'MyLinkChecker/1.0'
 ignoreSslErrors: false
+checkGithubArchived: true
 ```
 
 ---

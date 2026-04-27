@@ -37,6 +37,8 @@ test('linkspector should check HTML encoded section links using ID attribute', a
 
   // Test expectations for link checks
   expect(hasErrorLinks).toBe(false)
-  expect(results.length).toBe(1)
-  expect(results[0].status).toBe('alive')
+  expect(results.length).toBe(3)
+  expect(results[0].status).toBe('alive') // <a id="...">
+  expect(results[1].status).toBe('alive') // <span id="..."/>
+  expect(results[2].status).toBe('alive') // <div id="...">
 })

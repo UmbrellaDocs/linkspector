@@ -37,6 +37,7 @@ program
   .option('-j, --json', 'Output the results in JSON format')
   .option('-s, --showstat', 'Display statistics about the links checked')
   .option('-q, --quiet', 'Suppress all output except errors')
+  .option('-a, --check-archived', 'Warn about links to archived GitHub repos')
   .action(async (cmd) => {
     // Validate that -j and -s options are not used together
     if (cmd.json && cmd.showstat) {
@@ -92,6 +93,7 @@ program
       anchors: 0,
       correctLinks: 0,
       failedLinks: 0,
+      warningLinks: 0,
     }
 
     // JSON results accumulator
@@ -148,11 +150,13 @@ program
                     range: {
                       start: {
                         line: linkStatusObj.line_number,
-                        column: linkStatusObj.position.start.column,
+                        column: linkStatusObj.position?.start?.column ?? 1,
                       },
                       end: {
-                        line: linkStatusObj.position.end.line,
-                        column: linkStatusObj.position.end.column,
+                        line:
+                          linkStatusObj.position?.end?.line ??
+                          linkStatusObj.line_number,
+                        column: linkStatusObj.position?.end?.column ?? 1,
                       },
                     },
                   },
@@ -165,6 +169,36 @@ program
               renderer.onError(file, linkStatusObj)
             }
             hasErrorLinks = true
+          } else if (linkStatusObj.status === 'warning') {
+            stats.warningLinks++
+            stats.correctLinks++
+            if (cmd.json) {
+              const diagnostic = validateDiagnostic(
+                {
+                  message: `Archived repo: ${linkStatusObj.link}${linkStatusObj.error_message ? ` (${linkStatusObj.error_message})` : ''}`,
+                  location: {
+                    path: file,
+                    range: {
+                      start: {
+                        line: linkStatusObj.line_number,
+                        column: linkStatusObj.position?.start?.column ?? 1,
+                      },
+                      end: {
+                        line:
+                          linkStatusObj.position?.end?.line ??
+                          linkStatusObj.line_number,
+                        column: linkStatusObj.position?.end?.column ?? 1,
+                      },
+                    },
+                  },
+                  severity: 'WARNING',
+                },
+                file
+              )
+              results.diagnostics.push(diagnostic)
+            } else {
+              renderer.onWarning(file, linkStatusObj)
+            }
           } else if (
             linkStatusObj.status === 'alive' ||
             linkStatusObj.status === 'assumed alive'
