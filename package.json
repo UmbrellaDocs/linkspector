@@ -1,6 +1,6 @@
 {
   "name": "@umbrelladocs/linkspector",
-  "version": "0.5.2",
+  "version": "0.5.3",
   "description": "Uncover broken links in your content.",
   "type": "module",
   "main": "linkspector.js",
@@ -46,6 +46,9 @@
   },
   "author": "Gaurav Nelson",
   "license": "Apache-2.0",
+  "engines": {
+    "node": ">=18.18.0"
+  },
   "bugs": {
     "url": "https://github.com/UmbrellaDocs/linkspector/issues"
   },

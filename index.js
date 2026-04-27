@@ -9,8 +9,24 @@ import {
   validateDiagnostic,
 } from './lib/validate-rdjson.js'
 import { createRequire } from 'module'
-const require = createRequire(import.meta.url)
-const pkg = require('./package.json')
+import { readFileSync } from 'fs'
+import { dirname, join } from 'path'
+import { fileURLToPath } from 'url'
+
+let pkg
+try {
+  const require = createRequire(import.meta.url)
+  pkg = require('./package.json')
+} catch {
+  // Fallback for standalone binaries (e.g. Bun-compiled) where createRequire
+  // cannot resolve package.json from the virtual filesystem.
+  try {
+    const __dirname = dirname(fileURLToPath(import.meta.url))
+    pkg = JSON.parse(readFileSync(join(__dirname, 'package.json'), 'utf8'))
+  } catch {
+    pkg = { version: 'unknown' }
+  }
+}
 
 program
   .version(pkg.version)

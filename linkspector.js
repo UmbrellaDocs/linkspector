@@ -191,6 +191,10 @@ export async function* linkspector(configFile, cmd) {
       if (config.ignoreSslErrors) {
         launchArgs.push('--ignore-certificate-errors')
       }
+      // Running Chrome as root requires --no-sandbox (common in containers)
+      if (process.getuid && process.getuid() === 0) {
+        launchArgs.push('--no-sandbox')
+      }
       browserPromise = puppeteer
         .launch({
           headless: 'new',

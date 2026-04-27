@@ -1,35 +1,61 @@
-# Multi-stage Dockerfile for building linkspector standalone binaries.
+# Lightweight Dockerfile that runs linkspector using a pre-built binary
+# from GitHub Releases. No Node.js or npm required.
 #
-# Builds Linux binaries using Bun with full TUI support.
-# Use with Docker buildx for multi-arch builds:
+# Build (defaults to latest release, auto-detects architecture):
+#   docker build -f Dockerfile.binary -t linkspector .
 #
-#   # Build for linux/amd64:
-#   docker build --platform linux/amd64 -f Dockerfile.binary -o dist/ .
+# Build a specific version:
+#   docker build -f Dockerfile.binary --build-arg LINKSPECTOR_VERSION=v0.5.2 -t linkspector .
 #
-#   # Build for linux/arm64:
-#   docker build --platform linux/arm64 -f Dockerfile.binary -o dist/ .
-#
-#   # Build for both architectures:
-#   docker buildx build --platform linux/amd64,linux/arm64 -f Dockerfile.binary -o dist/ .
+# Run:
+#   docker run --rm -v "$PWD:/app" linkspector check
 
-# --- Stage 1: Build the binary ---
-FROM oven/bun:latest AS builder
+FROM debian:bookworm-slim
 
-WORKDIR /build
+ARG LINKSPECTOR_VERSION=latest
+ARG TARGETARCH
 
-# Copy package files first for better layer caching
-COPY package.json bun.lock* package-lock.json* ./
-RUN bun install
+# Install Chromium and minimal dependencies
+RUN apt-get update \
+    && DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
+    ca-certificates \
+    chromium \
+    curl \
+    git \
+    upower \
+    && apt-get clean && rm -rf /var/lib/apt/lists/*
 
-# Copy source code
-COPY index.js linkspector.js ./
-COPY lib/ lib/
-COPY scripts/ scripts/
+# Set up Chromium for Puppeteer (same approach as the npm Dockerfile)
+ENV PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=true
+ENV PUPPETEER_EXECUTABLE_PATH=/usr/bin/chromium.wrapper
 
-# Build the standalone binary
-RUN bun scripts/build-bun.mjs
+RUN echo '#!/bin/sh' > /usr/bin/chromium.wrapper \
+    && echo 'exec /usr/bin/chromium --no-sandbox --headless=new --disable-gpu --enable-chrome-browser-cloud-management --remote-debugging-port=0 "$@"' >> /usr/bin/chromium.wrapper \
+    && chmod ugo+x /usr/bin/chromium.wrapper
 
-# --- Stage 2: Output the binary ---
-# Using scratch so `docker build -o` exports just the binary
-FROM scratch
-COPY --from=builder /build/dist/linkspector /linkspector
+# Map Docker TARGETARCH to release asset names
+# TARGETARCH is "amd64" or "arm64"; release assets use "x64" or "arm64"
+RUN ARCH=$(case "${TARGETARCH}" in amd64) echo "x64" ;; arm64) echo "arm64" ;; *) echo "x64" ;; esac) \
+    && if [ "${LINKSPECTOR_VERSION}" = "latest" ]; then \
+         URL="https://github.com/UmbrellaDocs/linkspector/releases/latest/download/linkspector-linux-${ARCH}"; \
+       else \
+         URL="https://github.com/UmbrellaDocs/linkspector/releases/download/${LINKSPECTOR_VERSION}/linkspector-linux-${ARCH}"; \
+       fi \
+    && echo "Downloading ${URL}" \
+    && curl -fSL -o /usr/local/bin/linkspector "${URL}" \
+    && chmod +x /usr/local/bin/linkspector
+
+# Create a non-root user
+RUN useradd --create-home --shell /bin/bash linkspector
+ENV USER=linkspector
+
+# Create app directory for mounting host files
+RUN mkdir /app && chown linkspector:linkspector /app
+
+USER linkspector
+WORKDIR /app
+
+# Sanity check — verify the binary is executable
+RUN linkspector --help > /dev/null 2>&1 || linkspector --version || true
+
+ENTRYPOINT ["linkspector"]
