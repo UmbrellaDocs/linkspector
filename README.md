@@ -1,6 +1,7 @@
 [![GitHub Marketplace](https://img.shields.io/badge/GitHub%20Marketplace-action%20linkspector-brightgreen?style=for-the-badge)](https://github.com/marketplace/actions/run-linkspector-with-reviewdog)
 [![NPM](https://img.shields.io/npm/v/@umbrelladocs/linkspector?style=for-the-badge)](https://www.npmjs.com/package/@umbrelladocs/linkspector)
 [![MCP](https://img.shields.io/badge/MCP%20Server-Linkspector_MCP-brightgreen?logo=modelcontextprotocol&style=for-the-badge)](https://github.com/UmbrellaDocs/linkspector-mcp)
+[![Sponsor](https://img.shields.io/badge/Sponsor-UmbrellaDocs-ea4aaa?style=for-the-badge&logo=githubsponsors)](https://github.com/sponsors/UmbrellaDocs)
 <a href="https://liberapay.com/gaurav-nelson/donate"><img alt="Donate using Liberapay" src="https://liberapay.com/assets/widgets/donate.svg"></a>
 
 <p align="center">
@@ -22,35 +23,42 @@ Linkspector is a CLI tool that checks for dead hyperlinks in your files. It supp
 
 <table>
 <tr>
-<td align="center" width="150">
-<a href="https://github.com/dotnet/source-build/blob/main/.github/workflows/check-markdown-links.yml">
-<img src="https://github.com/dotnet.png" width="50" height="50" alt="dotnet" /><br />
-<b>.NET</b><br />
-<sub>source-build</sub>
+<td align="center" width="120">
+<a href="https://github.com/OAI/OpenAPI-Specification/blob/main/.github/workflows/validate-markdown.yaml">
+<img src="https://github.com/OAI.png" width="50" height="50" alt="OAI" /><br />
+<b>OAI</b><br />
+<sub>OpenAPI-Specification ⭐ 31K</sub>
 </a>
 </td>
-<td align="center" width="150">
-<a href="https://github.com/SAP/abap-file-formats/blob/main/.github/workflows/markdown-link-check.yml">
-<img src="https://github.com/SAP.png" width="50" height="50" alt="SAP" /><br />
-<b>SAP</b><br />
-<sub>abap-file-formats</sub>
+<td align="center" width="120">
+<a href="https://github.com/deviantony/docker-elk/blob/main/.github/workflows/docs.yml">
+<img src="https://github.com/deviantony.png" width="50" height="50" alt="deviantony" /><br />
+<b>deviantony</b><br />
+<sub>docker-elk ⭐ 18K</sub>
 </a>
 </td>
-<td align="center" width="150">
-<a href="https://github.com/open-telemetry/opentelemetry-ruby/blob/main/.github/workflows/ci-markdown-link.yml">
-<img src="https://github.com/open-telemetry.png" width="50" height="50" alt="OpenTelemetry" /><br />
-<b>OpenTelemetry</b><br />
-<sub>opentelemetry-ruby</sub>
+<td align="center" width="120">
+<a href="https://github.com/coder/coder/blob/main/.github/workflows/weekly-docs.yaml">
+<img src="https://github.com/coder.png" width="50" height="50" alt="Coder" /><br />
+<b>Coder</b><br />
+<sub>coder ⭐ 13K</sub>
 </a>
 </td>
-<td align="center" width="150">
-<a href="https://github.com/finos/spring-bot/blob/spring-bot-master/.github/workflows/checklinks.yml">
-<img src="https://github.com/finos.png" width="50" height="50" alt="FINOS" /><br />
-<b>FINOS</b><br />
-<sub>spring-bot</sub>
+<td align="center" width="120">
+<a href="https://github.com/microsoft/winget-pkgs">
+<img src="https://github.com/microsoft.png" width="50" height="50" alt="Microsoft" /><br />
+<b>Microsoft</b><br />
+<sub>winget-pkgs ⭐ 10K</sub>
 </a>
 </td>
-<td align="center" width="150">
+<td align="center" width="120">
+<a href="https://github.com/fmhy/edit">
+<img src="https://github.com/fmhy.png" width="50" height="50" alt="FMHY" /><br />
+<b>FMHY</b><br />
+<sub>edit ⭐ 10K</sub>
+</a>
+</td>
+<td align="center" width="120">
 <a href="https://github.com/dotnet/dotnet-docker/blob/main/.github/workflows/check-markdown-links.yml">
 <img src="https://github.com/dotnet.png" width="50" height="50" alt="dotnet" /><br />
 <b>.NET</b><br />
@@ -59,44 +67,132 @@ Linkspector is a CLI tool that checks for dead hyperlinks in your files. It supp
 </td>
 </tr>
 <tr>
-<td align="center" width="150">
-<a href="https://github.com/Azure-Samples/azure-spring-boot-samples/blob/main/.github/workflows/markdown-link-check.yml">
-<img src="https://github.com/Azure-Samples.png" width="50" height="50" alt="Azure" /><br />
-<b>Azure</b><br />
-<sub>spring-boot-samples</sub>
+<td align="center" width="120">
+<a href="https://github.com/sayanarijit/xplr/blob/main/.github/workflows/ci.yml">
+<img src="https://github.com/sayanarijit.png" width="50" height="50" alt="sayanarijit" /><br />
+<b>sayanarijit</b><br />
+<sub>xplr</sub>
 </a>
 </td>
-<td align="center" width="150">
-<a href="https://github.com/solarwinds/apm-ruby/blob/main/.github/workflows/ci-markdown-link.yml">
-<img src="https://github.com/solarwinds.png" width="50" height="50" alt="SolarWinds" /><br />
-<b>SolarWinds</b><br />
-<sub>apm-ruby</sub>
+<td align="center" width="120">
+<a href="https://github.com/JabRef/jabref/blob/main/.github/workflows/check-links.yml">
+<img src="https://github.com/JabRef.png" width="50" height="50" alt="JabRef" /><br />
+<b>JabRef</b><br />
+<sub>jabref</sub>
 </a>
 </td>
-<td align="center" width="150">
-<a href="https://github.com/jenkinsci/autograding-plugin/blob/main/.github/workflows/check-md-links.yml">
-<img src="https://github.com/jenkinsci.png" width="50" height="50" alt="Jenkins" /><br />
-<b>Jenkins</b><br />
-<sub>autograding-plugin</sub>
+<td align="center" width="120">
+<a href="https://github.com/morrownr/USB-WiFi/blob/main/.github/workflows/markdown-ci.yml">
+<img src="https://github.com/morrownr.png" width="50" height="50" alt="morrownr" /><br />
+<b>morrownr</b><br />
+<sub>USB-WiFi</sub>
 </a>
 </td>
-<td align="center" width="150">
-<a href="https://github.com/riscv/learn/blob/main/.github/workflows/linkcheck.yml">
-<img src="https://github.com/riscv.png" width="50" height="50" alt="RISC-V" /><br />
-<b>RISC-V</b><br />
-<sub>learn</sub>
+<td align="center" width="120">
+<a href="https://github.com/GradleUp/shadow/blob/main/.github/workflows/links.yml">
+<img src="https://github.com/GradleUp.png" width="50" height="50" alt="GradleUp" /><br />
+<b>GradleUp</b><br />
+<sub>shadow</sub>
 </a>
 </td>
-<td align="center" width="150">
+<td align="center" width="120">
+<a href="https://github.com/openthread/openthread">
+<img src="https://github.com/openthread.png" width="50" height="50" alt="OpenThread" /><br />
+<b>OpenThread</b><br />
+<sub>openthread</sub>
+</a>
+</td>
+<td align="center" width="120">
+<a href="https://github.com/wild-linker/wild">
+<img src="https://github.com/wild-linker.png" width="50" height="50" alt="wild-linker" /><br />
+<b>wild-linker</b><br />
+<sub>wild</sub>
+</a>
+</td>
+</tr>
+<tr>
+<td align="center" width="120">
+<a href="https://github.com/ddev/ddev/blob/main/.github/workflows/docs-check.yml">
+<img src="https://github.com/ddev.png" width="50" height="50" alt="DDEV" /><br />
+<b>DDEV</b><br />
+<sub>ddev</sub>
+</a>
+</td>
+<td align="center" width="120">
 <a href="https://github.com/vllm-project/llm-compressor/blob/main/.github/workflows/linkcheck.yml">
 <img src="https://github.com/vllm-project.png" width="50" height="50" alt="vLLM" /><br />
 <b>vLLM</b><br />
 <sub>llm-compressor</sub>
 </a>
 </td>
+<td align="center" width="120">
+<a href="https://github.com/ava-labs/avalanchego">
+<img src="https://github.com/ava-labs.png" width="50" height="50" alt="Ava Labs" /><br />
+<b>Ava Labs</b><br />
+<sub>avalanchego</sub>
+</a>
+</td>
+<td align="center" width="120">
+<a href="https://github.com/dotnet/source-build/blob/main/.github/workflows/check-markdown-links.yml">
+<img src="https://github.com/dotnet.png" width="50" height="50" alt="dotnet" /><br />
+<b>.NET</b><br />
+<sub>source-build</sub>
+</a>
+</td>
+<td align="center" width="120">
+<a href="https://github.com/SAP/abap-file-formats/blob/main/.github/workflows/markdown-link-check.yml">
+<img src="https://github.com/SAP.png" width="50" height="50" alt="SAP" /><br />
+<b>SAP</b><br />
+<sub>abap-file-formats</sub>
+</a>
+</td>
+<td align="center" width="120">
+<a href="https://github.com/open-telemetry/opentelemetry-ruby/blob/main/.github/workflows/ci-markdown-link.yml">
+<img src="https://github.com/open-telemetry.png" width="50" height="50" alt="OpenTelemetry" /><br />
+<b>OpenTelemetry</b><br />
+<sub>opentelemetry-ruby</sub>
+</a>
+</td>
 </tr>
 <tr>
-<td align="center" colspan="5">
+<td align="center" width="120">
+<a href="https://github.com/finos/spring-bot/blob/spring-bot-master/.github/workflows/checklinks.yml">
+<img src="https://github.com/finos.png" width="50" height="50" alt="FINOS" /><br />
+<b>FINOS</b><br />
+<sub>spring-bot</sub>
+</a>
+</td>
+<td align="center" width="120">
+<a href="https://github.com/Azure-Samples/azure-spring-boot-samples/blob/main/.github/workflows/markdown-link-check.yml">
+<img src="https://github.com/Azure-Samples.png" width="50" height="50" alt="Azure" /><br />
+<b>Azure</b><br />
+<sub>spring-boot-samples</sub>
+</a>
+</td>
+<td align="center" width="120">
+<a href="https://github.com/solarwinds/apm-ruby/blob/main/.github/workflows/ci-markdown-link.yml">
+<img src="https://github.com/solarwinds.png" width="50" height="50" alt="SolarWinds" /><br />
+<b>SolarWinds</b><br />
+<sub>apm-ruby</sub>
+</a>
+</td>
+<td align="center" width="120">
+<a href="https://github.com/jenkinsci/autograding-plugin/blob/main/.github/workflows/check-md-links.yml">
+<img src="https://github.com/jenkinsci.png" width="50" height="50" alt="Jenkins" /><br />
+<b>Jenkins</b><br />
+<sub>autograding-plugin</sub>
+</a>
+</td>
+<td align="center" width="120">
+<a href="https://github.com/riscv/learn/blob/main/.github/workflows/linkcheck.yml">
+<img src="https://github.com/riscv.png" width="50" height="50" alt="RISC-V" /><br />
+<b>RISC-V</b><br />
+<sub>learn</sub>
+</a>
+</td>
+</tr>
+<tr>
+<td align="center" colspan="6">
 <a href="https://github.com/search?q=uses%3A+umbrelladocs%2Faction-linkspector%40v1&type=code">
 <b>and many more...</b>
 </a>
@@ -104,7 +200,9 @@ Linkspector is a CLI tool that checks for dead hyperlinks in your files. It supp
 </tr>
 </table>
 
-If you are using this on production, consider [buying me a coffee](https://liberapay.com/gaurav-nelson/) ☕.
+Linkspector is free and actively maintained. If it saves you time, or catches that one broken link before your users do, please consider sponsoring. Your support keeps the project alive, funds new features, and helps me dedicate more time to it.
+
+[**Sponsor on GitHub**](https://github.com/sponsors/UmbrellaDocs) · [Donate via Liberapay](https://liberapay.com/gaurav-nelson/)
 
 ---
 
