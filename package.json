@@ -74,10 +74,10 @@
     "unist-util-visit": "^5.1.0"
   },
   "devDependencies": {
-    "esbuild": "^0.25.0",
+    "esbuild": "^0.28.1",
     "postject": "^1.0.0-alpha.6",
     "prettier": "^3.8.1",
-    "vite": "^7.3.1",
+    "vite": "^8.0.16",
     "vitest": "^4.0.18"
   }
 }
