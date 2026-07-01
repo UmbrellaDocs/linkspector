@@ -211,6 +211,7 @@ Linkspector is free and actively maintained. If it saves you time, or catches th
 - [Installation](#installation)
 - [Usage](#usage)
 - [Configuration](#configuration)
+  - [Inline ignore comments](#inline-ignore-comments)
 - [AsciiDoc Support](#asciidoc-support)
 - [Docker](#docker)
 - [Building from Source](#building-from-source)
@@ -357,6 +358,53 @@ useGitIgnore: true
 | [`userAgent`](#user-agent)                        | Custom User-Agent string                               | No                         |
 | [`ignoreSslErrors`](#ignore-ssl-errors)           | Skip SSL certificate validation                        | No                         |
 | [`checkGithubArchived`](#check-github-archived)   | Warn about archived GitHub repos                       | No                         |
+
+### Inline ignore comments
+
+You can disable link checking for specific lines or sections of Markdown using HTML comments. This is useful when links are expected to be temporarily broken, for example in a changelog that references a tag not yet created.
+
+Linkspector also recognizes comments from `markdown-link-check` and `markdownlint`, so you do not need to change existing comments if you are migrating from those tools.
+
+#### Disable a block of links
+
+```markdown
+<!-- linkspector-disable -->
+[This link is not checked](https://example.com/not-yet-created)
+[Neither is this one](https://example.com/also-pending)
+<!-- linkspector-enable -->
+```
+
+If there is no matching `enable` comment, checking stays disabled for the rest of the file.
+
+#### Disable the next line only
+
+```markdown
+<!-- linkspector-disable-next-line -->
+[This link is not checked](https://example.com/future-tag)
+
+[This link IS checked](https://example.com)
+```
+
+#### Disable the current line
+
+```markdown
+[This link is not checked](https://example.com/skip) <!-- linkspector-disable-line -->
+```
+
+#### Compatible comment formats
+
+The following comments from other tools are also recognized:
+
+| Comment | Effect |
+| ------- | ------ |
+| `<!-- markdown-link-check-disable -->` | Same as `linkspector-disable` |
+| `<!-- markdown-link-check-enable -->` | Same as `linkspector-enable` |
+| `<!-- markdown-link-check-disable-next-line -->` | Same as `linkspector-disable-next-line` |
+| `<!-- markdown-link-check-disable-line -->` | Same as `linkspector-disable-line` |
+| `<!-- markdownlint-disable-next-line -->` | Same as `linkspector-disable-next-line` |
+| `<!-- markdownlint-disable-line -->` | Same as `linkspector-disable-line` |
+
+Extra text after the directive is allowed and ignored, so existing comments like `<!-- markdownlint-disable-next-line MD001 -->` work without changes.
 
 ### Files to check
 
