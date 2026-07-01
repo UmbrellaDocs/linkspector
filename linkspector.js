@@ -1,7 +1,7 @@
 import { execSync } from 'child_process'
 import { readFileSync } from 'fs'
 import path from 'path'
-import yaml from 'js-yaml'
+import { load as yamlLoad } from 'js-yaml'
 import puppeteer from 'puppeteer'
 import { validateConfig } from './lib/validate-config.js'
 import { prepareFilesList } from './lib/prepare-file-list.js'
@@ -96,7 +96,7 @@ export async function* linkspector(configFile, cmd) {
       config = defaultConfig
     } else {
       // Parse the YAML content
-      config = yaml.load(configContent)
+      config = yamlLoad(configContent)
 
       // Check if the parsed YAML object is null or lacks properties
       if (config === null || Object.keys(config).length === 0) {
