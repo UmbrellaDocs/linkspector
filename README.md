@@ -369,6 +369,7 @@ Linkspector also recognizes comments from `markdown-link-check` and `markdownlin
 
 ```markdown
 <!-- linkspector-disable -->
+
 [This link is not checked](https://example.com/not-yet-created)
 [Neither is this one](https://example.com/also-pending)
 <!-- linkspector-enable -->
@@ -380,6 +381,7 @@ If there is no matching `enable` comment, checking stays disabled for the rest o
 
 ```markdown
 <!-- linkspector-disable-next-line -->
+
 [This link is not checked](https://example.com/future-tag)
 
 [This link IS checked](https://example.com)
@@ -395,14 +397,14 @@ If there is no matching `enable` comment, checking stays disabled for the rest o
 
 The following comments from other tools are also recognized:
 
-| Comment | Effect |
-| ------- | ------ |
-| `<!-- markdown-link-check-disable -->` | Same as `linkspector-disable` |
-| `<!-- markdown-link-check-enable -->` | Same as `linkspector-enable` |
+| Comment                                          | Effect                                  |
+| ------------------------------------------------ | --------------------------------------- |
+| `<!-- markdown-link-check-disable -->`           | Same as `linkspector-disable`           |
+| `<!-- markdown-link-check-enable -->`            | Same as `linkspector-enable`            |
 | `<!-- markdown-link-check-disable-next-line -->` | Same as `linkspector-disable-next-line` |
-| `<!-- markdown-link-check-disable-line -->` | Same as `linkspector-disable-line` |
-| `<!-- markdownlint-disable-next-line -->` | Same as `linkspector-disable-next-line` |
-| `<!-- markdownlint-disable-line -->` | Same as `linkspector-disable-line` |
+| `<!-- markdown-link-check-disable-line -->`      | Same as `linkspector-disable-line`      |
+| `<!-- markdownlint-disable-next-line -->`        | Same as `linkspector-disable-next-line` |
+| `<!-- markdownlint-disable-line -->`             | Same as `linkspector-disable-line`      |
 
 Extra text after the directive is allowed and ignored, so existing comments like `<!-- markdownlint-disable-next-line MD001 -->` work without changes.
 
