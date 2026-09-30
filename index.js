@@ -208,6 +208,7 @@ program
             // Skipped links don't count towards failed links
           } else {
             stats.failedLinks++
+            hasErrorLinks = true
           }
         }
 
